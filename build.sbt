@@ -12,7 +12,6 @@ libraryDependencies ++= Seq(
   cache,
   javaWs,
   javaJdbc,
-  javaEbean,
   "mysql" % "mysql-connector-java" % "5.1.35",
   "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final"
 
