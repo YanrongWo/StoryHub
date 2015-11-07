@@ -12,6 +12,10 @@ public class Application extends Controller {
     AppController myAppController = new AppController();
 
     public Result index() {
+
+        Story s = new Story();
+        Ebean.save(s);
+
         return ok(index.render("ASDFASFASDF World."));
     }
 
