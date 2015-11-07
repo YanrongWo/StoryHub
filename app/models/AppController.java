@@ -1,7 +1,6 @@
 package models;
 
 import play.db.*;
-import java.lang.StringBuffer;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.DriverManager;
