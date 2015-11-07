@@ -10,3 +10,10 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 POST	/FacebookName				controllers.Application.facebookName()
 
+GET		/NewStory					controllers.Application.newStory()
+
+POST	/NewStory                   controllers.Application.newStorySubmit()
+
+GET		/NewFork					controllers.Application.newFork()
+
+POST	/newFork                    controllers.Application.newForkSubmit()

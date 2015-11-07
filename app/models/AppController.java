@@ -64,4 +64,9 @@ public class AppController{
     public void setCurrentUser(String user) {
         this.currentUser = user;
     }
+
+    public String getCurrentUser()
+    {
+        return this.currentUser;
+    }
 }

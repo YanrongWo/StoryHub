@@ -1,6 +1,5 @@
 package models;
 
-import java.lang.StringBuffer;
 import java.util.ArrayList;
 import play.db.ebean.*;
 import javax.persistence.*;
@@ -14,12 +13,12 @@ public class Segment extends Model{
 
 	private String title;
 	private String author;
-	private StringBuffer content;  
-	private ArrayList<String> tags;
+	private String content;  
+	private String[] tags;
 	private Segment parentSeg;
 	private ArrayList<Segment> childSegs;
 	
-	public Segment(Segment parentSeg, String title, String author, StringBuffer content, int id, ArrayList<String> tags) {
+	public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags) {
 		this.parentSeg = parentSeg;
         this.title = title;
         this.author = author;
@@ -46,7 +45,7 @@ public class Segment extends Model{
         return this.author;
     }
     
-    public StringBuffer getContent() {
+    public String getContent() {
         return this.content;
     }
     
@@ -54,7 +53,7 @@ public class Segment extends Model{
         return this.id;
     }
     
-    public ArrayList<String> getTags() {
+    public String[] getTags() {
         return this.tags;
     }
     

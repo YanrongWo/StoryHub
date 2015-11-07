@@ -1,0 +1,15 @@
+#toolbar{
+	border:1px solid #ccc;
+	padding: 5px 15px;
+	box-sizing: border-box;
+
+}
+
+#quillcontainer{
+	box-shadow: 0px 0px 10px #ccc;
+	border:1px solid #ccc;
+}
+
+#editor{
+	border:1px solid #ccc;	
+}
