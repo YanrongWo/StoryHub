@@ -5,6 +5,7 @@ import models.*;
 import play.data.DynamicForm;
 import play.data.Form;
 import views.html.*;
+import java.sql.SQLException;
 
 
 public class Application extends Controller {
@@ -13,8 +14,8 @@ public class Application extends Controller {
 
     public Result index() {
 
-        Story s = new Story();
-        Ebean.save(s);
+        //Story s = new Story();
+        //Ebean.save(s);
 
         return ok(index.render("ASDFASFASDF World."));
     }
@@ -35,7 +36,7 @@ public class Application extends Controller {
     }
 
     /* create a new story from form data */
-    public Result newStorySubmit(){
+    public Result newStorySubmit() throws SQLException{
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
@@ -43,7 +44,7 @@ public class Application extends Controller {
             String title = form.get("title");
             String content = form.get("content");
             String tagsRaw = form.get("tags");
-            String tags[] = tagsRaw.replaceAll("#", "").split(" ");
+            String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             Segment seg = new Segment(null, title, myAppController.getCurrentUser(),
                 content, 0, tags);
             Story myStory = myAppController.createStory(seg);
@@ -64,7 +65,7 @@ public class Application extends Controller {
             String title = form.get("title");
             String content = form.get("content");
             String tagsRaw = form.get("tags");
-            String tags[] = tagsRaw.replaceAll("#", "").split(" ");
+            String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             Segment seg = new Segment(null, title, myAppController.getCurrentUser(),
                 content, 0, tags);
             //add segment to story
