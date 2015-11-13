@@ -6,6 +6,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import views.html.*;
 import java.sql.SQLException;
+import java.util.*;
 
 
 
@@ -17,8 +18,14 @@ public class Application extends Controller {
 
         //Story s = new Story();
         //Ebean.save(s);
+        ArrayList<Segment> segmentList = new ArrayList<Segment>();
+        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
+        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
+        segmentList.add(test1);
+        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
+        segmentList.add(test2);
 
-        return ok(index.render("ASDFASFASDF World."));
+        return ok(index.render("Homepage", segmentList));
     }
 
     /* Make controller object and set form.get("name") */
