@@ -2,8 +2,9 @@ package models;
 
 import java.util.ArrayList;
 import javax.persistence.*;
+import java.io.*;
 
-public class Segment{
+public class Segment implements Serializable{
 
 	private int id;
 

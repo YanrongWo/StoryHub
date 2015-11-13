@@ -1,8 +1,9 @@
 package models;
 import java.util.*;
 import javax.persistence.*;
+import java.io.*;
 
-public class Story{
+public class Story implements Serializable{
 	private int id;
 
 	private Segment root;

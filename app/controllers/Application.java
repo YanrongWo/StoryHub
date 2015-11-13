@@ -44,9 +44,12 @@ public class Application extends Controller {
             return badRequest("Form Error");
         } else {
             String title = form.get("title");
+            System.out.println(title);
             String content = form.get("content");
+            System.out.println(content);
             String tagsRaw = form.get("tags");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
+            System.out.println(tags);
             System.out.println(session("name"));
             Segment seg = new Segment(null, title, session("name"),
                 content, 0, tags);
@@ -69,7 +72,7 @@ public class Application extends Controller {
             String content = form.get("content");
             String tagsRaw = form.get("tags");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            //Segment seg = new Segment(null, title, myAppController.getCurrentUser(), content, 0, tags);
+            Segment seg = new Segment(null, title, session("name"), content, 0, tags);
             //add segment to story
 
             return ok("Submitted");
