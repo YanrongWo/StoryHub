@@ -6,6 +6,14 @@ body {
   font: 12px/1.5 'PT Sans', serif;
   margin: 25px;
 }
+.homepage {
+	font-size: 2vw;
+	font-family: 'Kalam', cursive;
+	color: black;
+}
+a,a:hover {
+	text-decoration:none;
+}
 .storytitle{
 	font-size: 2vw;
 }

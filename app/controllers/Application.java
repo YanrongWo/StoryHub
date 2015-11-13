@@ -18,14 +18,34 @@ public class Application extends Controller {
 
         //Story s = new Story();
         //Ebean.save(s);
-        ArrayList<Segment> segmentList = new ArrayList<Segment>();
+
+        //Get all stories
+        ArrayList<Story> storyList = new ArrayList<Story>();
+        //For each story, add to storyList 
         //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
         Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
-        segmentList.add(test1);
         Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
-        segmentList.add(test2);
+        Story s1 = new Story(test1, 1);
+        storyList.add(s1);
+        Story s2 = new Story(test2, 2);
+        storyList.add(s2);   
 
-        return ok(index.render("Homepage", segmentList));
+        return ok(index.render("Homepage", storyList));
+    }
+
+    public Result search(){
+        //Get all stories
+        ArrayList<Story> storyList = new ArrayList<Story>();
+        //For each story, add to storyList 
+        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
+        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
+        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
+        Story s1 = new Story(test1, 1);
+        storyList.add(s1);
+        Story s2 = new Story(test2, 2);
+        storyList.add(s2);
+        
+        return ok(index.render("Results", storyList));
     }
 
     /* Make controller object and set form.get("name") */

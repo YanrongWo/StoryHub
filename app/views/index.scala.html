@@ -1,4 +1,4 @@
-@(title: String, segmentList: List[Segment])
+@(title: String, storyList: List[Story])
 
 @main("Welcome to StoryHub"){ }{
 
@@ -7,11 +7,12 @@
 			@title
 		</p>
 		<div class="storylist">
-			@for(segment <- segmentList){
-			<div class="storytitle"> @segment.getTitle()</div>
-			<div class="storyauthor"> @segment.getAuthor()</div>
+			@for(story <- storyList){
+			<a class="storytitle" href="/story/@story.getStoryId()"> @story.getRoot().getTitle()</a>
+			<div class="storyauthor"> @story.getRoot().getAuthor()</div>
+			<br>
 			<ul class="tags">
-				@for(tag <- segment.getTags()){
+				@for(tag <- story.getRoot().getTags()){
 					<li><a href="#" class="tag">@tag</a></li>
 			}
 			</ul>

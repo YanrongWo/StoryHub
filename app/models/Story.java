@@ -53,6 +53,10 @@ public class Story implements Serializable{
 		return this.id;
 	}
 
+	public Segment getRoot(){
+		return this.root;
+	}
+
 	// Adds Segment seg as a child to Segment with segId
 	public boolean fork(Segment seg, int segId){
 		int currentId = this.id;
