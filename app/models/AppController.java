@@ -17,14 +17,12 @@ public class AppController{
     private int max; //max stories on front page
     private ArrayList<Story> stories;
     private int storyIndex;
-    private String currentUser;
     private Connection connection;
     
 	
     public AppController() {
         this.max = 10;
         //this.stornew ArrayList<Story>();
-        this.currentUser = null;
         this.storyIndex = 0;
         this.connection = play.db.DB.getConnection();
         this.stories = new ArrayList<Story>();
@@ -144,12 +142,4 @@ public class AppController{
         pstmt.close();
     }
     
-    public void setCurrentUser(String user) {
-        this.currentUser = user;
-    }
-    
-    public String getCurrentUser()
-    {
-        return this.currentUser;
-    }
 }
