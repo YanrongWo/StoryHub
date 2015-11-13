@@ -1,6 +1,23 @@
-@(message: String)
+@(title: String, storyList: List[Story])
 
 @main("Welcome to StoryHub"){ }{
 
-	@message
+	<div class="container">
+		<p class="title">
+			@title
+		</p>
+		<div class="storylist">
+			@for(story <- storyList){
+			<a class="storytitle" href="/story/@story.getStoryId()"> @story.getRoot().getTitle()</a>
+			<div class="storyauthor"> @story.getRoot().getAuthor()</div>
+			<br>
+			<ul class="tags">
+				@for(tag <- story.getRoot().getTags()){
+					<li><a href="#" class="tag">@tag</a></li>
+			}
+			</ul>
+			<hr>
+			}
+		</div>
+	</div>
 }

@@ -62,6 +62,18 @@ public class Segment implements Serializable{
         return this.childSegs;
     }
 
+    // Returns Segment with aId
+    public Segment getSegment(int aId){
+        if(this.getSegmentId() == aId){
+            return this;
+        } else {
+            for (Segment child : this.getChildSegs()){
+                return child.getSegment(aId);
+            }
+            return null;
+        }
+    }
+
     public boolean isLeafNode(){
     	return this.childSegs.isEmpty();
     }

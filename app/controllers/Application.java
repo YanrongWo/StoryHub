@@ -18,7 +18,33 @@ public class Application extends Controller {
         //Story s = new Story();
         //Ebean.save(s);
 
-        return ok(index.render("ASDFASFASDF World."));
+        //Get all stories
+        ArrayList<Story> storyList = new ArrayList<Story>();
+        //For each story, add to storyList 
+        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
+        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
+        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
+        Story s1 = new Story(test1, 1);
+        storyList.add(s1);
+        Story s2 = new Story(test2, 2);
+        storyList.add(s2);   
+
+        return ok(index.render("Homepage", storyList));
+    }
+
+    public Result search(){
+        //Get all stories
+        ArrayList<Story> storyList = new ArrayList<Story>();
+        //For each story, add to storyList 
+        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
+        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
+        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
+        Story s1 = new Story(test1, 1);
+        storyList.add(s1);
+        Story s2 = new Story(test2, 2);
+        storyList.add(s2);
+        
+        return ok(index.render("Results", storyList));
     }
 
     /* Make controller object and set form.get("name") */
@@ -81,7 +107,6 @@ public class Application extends Controller {
 
     public Result story(int id){
         System.out.println(id);
-        //Story myStory = myAppController.getStory((int) id);
         return ok(story.render(id));
     }
 
@@ -90,36 +115,55 @@ public class Application extends Controller {
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } else {
-            Integer storyId = form.get("storyId");
-            Integer segmentId = form.get("segmentId");
-            Story myStory = myAppController.getStory((int) storyId);
-            Segment mySegment = myStory.getRoot().getSegment((int) segmentId);
-            String result = "{";
-            result += "\"title\": \"" + mySegment.getTitle() + "\",";
-            result += "\"author\": \"" + mySegment.getAuthor() + "\",";
-            result += "\"tags\": [";
-            String[] tags = mySegment.getTags();
-            for (int i = 0; i < tags.length; i++){
-                result += "\"" + tags[i] + "\",";
-            }
-            result = result.substring(0, result.length() - 1);
-            result += "],";
-            result += "\"content\": \"" + mySegment.getContent() + "\",";
-            ArrayList<Segment> children = mySegment.getChildSegs();
-            String childrenId = "\"childrenid\":[";
-            String childrenTitle = "\"childrentitle\":[";
-            for(int i = 0; i < children.size(); i++){
-                child = children.get(i);
-                childrenId += "\"" + child.getSegmentId() + "\",";
-                childrenTitle += "\"" + child.getTitle() + "\",";
-            }
-            childrenId = childrenId.substring(0, childrenId.length() - 1);
-            childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
-            childrenId += "],";
-            childrenTitle += "]";
-            result += chilrenId + childrenTitle + "}";
 
-            return ok(result);
+            String result = "{";
+            Integer storyId = Integer.parseInt(form.get("storyId"));
+            Integer segmentId = Integer.parseInt(form.get("segmentId"));
+            try{
+                Story myStory = myAppController.getStory(Integer.valueOf(storyId));
+                Segment mySegment = myStory.getRoot().getSegment((int) segmentId);
+
+                result += "\"title\": \"" + mySegment.getTitle() + "\",";
+                result += "\"author\": \"" + mySegment.getAuthor() + "\",";
+                result += "\"tags\": [";
+                String[] tags = mySegment.getTags();
+                for (int i = 0; i < tags.length; i++){
+                    result += "\"" + tags[i] + "\",";
+                }
+                result = result.substring(0, result.length() - 1);
+                result += "],";
+                result += "\"content\": \"" + mySegment.getContent() + "\",";
+                ArrayList<Segment> children = mySegment.getChildSegs();
+                String childrenId = "\"childrenid\":[";
+                String childrenTitle = "\"childrentitle\":[";
+                for(int i = 0; i < children.size(); i++){
+                    child = children.get(i);
+                    childrenId += "\"" + child.getSegmentId() + "\",";
+                    childrenTitle += "\"" + child.getTitle() + "\",";
+                }
+                childrenId = childrenId.substring(0, childrenId.length() - 1);
+                childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
+                childrenId += "],";
+                childrenTitle += "]";
+                result += chilrenId + childrenTitle + "}";
+
+                return ok(result);
+
+            }
+            catch (IOException e){
+                return badRequest("IOException");
+            }
+            catch(SQLException e){
+                return badRequest("SQLException");
+            }
+            catch(ClassNotFoundException e){
+                return badRequest("ClassNotFoundException");
+            }
+            catch(Exception e){
+                return badRequest("Exception");
+            }
+            
+
         }
     }
 }

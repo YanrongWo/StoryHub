@@ -13,10 +13,6 @@ public class Story implements Serializable{
 		this.root = aRoot;
 		this.id = aId;
 	}
-
-	public Segment getRoot(){
-		return root;
-	}
 	
 	public ArrayList<Segment> traverse(int segId){
 		ArrayList<Segment> allSegments = new ArrayList<Segment>();
@@ -55,6 +51,10 @@ public class Story implements Serializable{
 
 	public int getStoryId(){
 		return this.id;
+	}
+
+	public Segment getRoot(){
+		return this.root;
 	}
 
 	// Adds Segment seg as a child to Segment with segId
