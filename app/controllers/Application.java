@@ -8,6 +8,7 @@ import views.html.*;
 import java.sql.SQLException;
 
 
+
 public class Application extends Controller {
 
     AppController myAppController = new AppController();
@@ -25,8 +26,9 @@ public class Application extends Controller {
     	DynamicForm form = Form.form().bindFromRequest();
     	if (form.data().size() != 0)
     	{
-    		myAppController.setCurrentUser(form.get("name"));
-    		return ok("Got name!");
+            System.out.println(form.get("name"));
+            session("name", form.get("name"));
+    		return ok("Sucess");
     	}
     	return badRequest();
     }
@@ -45,7 +47,8 @@ public class Application extends Controller {
             String content = form.get("content");
             String tagsRaw = form.get("tags");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            Segment seg = new Segment(null, title, myAppController.getCurrentUser(),
+            System.out.println(session("name"));
+            Segment seg = new Segment(null, title, session("name"),
                 content, 0, tags);
             Story myStory = myAppController.createStory(seg);
             return ok("Submitted");
