@@ -14,6 +14,10 @@ public class Story implements Serializable{
 		this.id = aId;
 	}
 
+	public Segment getRoot(){
+		return root;
+	}
+	
 	public ArrayList<Segment> traverse(int segId){
 		ArrayList<Segment> allSegments = new ArrayList<Segment>();
 		int currentId = this.id;

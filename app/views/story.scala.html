@@ -1,0 +1,66 @@
+@(myStory: Integer, isMain: Boolean)
+
+@main(""){
+	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/story.css")">
+} {
+	<div id="all_segments">
+		<div class="segment">
+			<table>
+				<col style="width:90%"><col style="width:10%">
+				<tr>
+					<td>
+						<div class="title"> Title </div>
+					</td>
+					<td>
+						<button type="button" class="fork btn btn-primary"> Fork </button> 
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="author"> Author </dv>
+					</td>
+				</tr>
+				<tr> 
+					<td>
+						<div class="tags">	Tag1, Tag2 </div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="content">	This is my amazing story of amazingness....Oh wait...I can just copy in a story instead. But it's too late now cuz I've already written a bunch of shit</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="children">	
+							<button type="button" class="btn btn-primary"> Child 1</button> 
+							<button type="button" class="btn btn-primary"> Child 2</button> 
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<script>
+		var storyId = @{myStory};
+		function addSegment(int segmentId){
+			$.ajax({
+	          	type: 'POST',
+	          	url: '/AddSegment',
+	          	data: 
+	          	{
+	              	storyId: storyId,
+	              	segmentId: segmentId
+	          	},
+	          	success: function(JSONstory) 
+	          	{       
+	              	var story = JSON.parse(JSONstory);
+	              	$('.all_segments').append(JSONstory);
+	          	}
+	      	});
+		}
+		$( document ).ready(function() {
+    		console.log( "ready!" );
+		});
+	</script>
+}
