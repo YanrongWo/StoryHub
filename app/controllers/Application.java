@@ -69,8 +69,7 @@ public class Application extends Controller {
             String content = form.get("content");
             String tagsRaw = form.get("tags");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            Segment seg = new Segment(null, title, myAppController.getCurrentUser(),
-                content, 0, tags);
+            //Segment seg = new Segment(null, title, myAppController.getCurrentUser(), content, 0, tags);
             //add segment to story
 
             return ok("Submitted");

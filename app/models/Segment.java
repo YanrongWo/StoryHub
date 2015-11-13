@@ -1,15 +1,11 @@
 package models;
 
 import java.util.ArrayList;
-import play.db.ebean.*;
 import javax.persistence.*;
 
-@Entity
-public class Segment extends Model{
-	@Id
-	private int id;
+public class Segment{
 
-	public static Finder<Integer, Segment> find = new Finder<Integer, Segment>(Integer.class, Segment.class);
+	private int id;
 
 	private String title;
 	private String author;
@@ -69,7 +65,4 @@ public class Segment extends Model{
     	return this.childSegs.isEmpty();
     }
     
-    public static Segment findById(int id) {
-		return find.ref(id);
-	}
 }

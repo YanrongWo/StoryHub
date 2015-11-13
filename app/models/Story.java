@@ -1,14 +1,9 @@
 package models;
 import java.util.*;
-import play.db.ebean.*;
 import javax.persistence.*;
 
-@Entity
-public class Story extends Model{
-	@Id
+public class Story{
 	private int id;
-
-	public static Finder<Integer, Story> find = new Finder<Integer, Story>(Integer.class, Story.class);
 
 	private Segment root;
 	private int nextSegId;
@@ -25,7 +20,7 @@ public class Story extends Model{
 		while(currentId != segId){
 			allSegments.add(currentSeg);
 			currentId = this.nextSegId;
-			currentSeg = Segment.findById(nextSegId);
+			//currentSeg = Segment.findById(nextSegId);
 		}
 		return allSegments;
 	}
@@ -43,7 +38,7 @@ public class Story extends Model{
 					}
 				}
 			}
-			currentSeg = Segment.findById(nextSegId);
+			//currentSeg = Segment.findById(nextSegId);
 		}
 		return leafSegIds;
 	}
@@ -60,18 +55,11 @@ public class Story extends Model{
 	// Adds Segment seg as a child to Segment with segId
 	public boolean fork(Segment seg, int segId){
 		int currentId = this.id;
-		Segment segToFork = Segment.findById(segId);
+		Segment segToFork = null;
+		//Segment segToFork = Segment.findById(segId);
 		if(segToFork != null){
 			return segToFork.addChild(seg);
 		}
 		return false;
-	}
-
-	public static void create(Story story) {
-		story.save();
-	}
-
-	public static Story findById(int id) {
-		return find.ref(id);
 	}
 }
