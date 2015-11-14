@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-
 public class Application extends Controller {
 
     AppController myAppController = new AppController();
@@ -106,6 +105,68 @@ public class Application extends Controller {
             //add segment to story
 
             return ok("Submitted");
+        }
+    }
+
+    public Result story(int id){
+        System.out.println(id);
+        return ok(story.render(id));
+    }
+
+    public Result getSegmentInfo(){
+        DynamicForm form = Form.form().bindFromRequest();
+        if (form.data().size() == 0) {
+            return badRequest("Form Error");
+        } else {
+
+            String result = "{";
+            Integer storyId = Integer.parseInt(form.get("storyId"));
+            Integer segmentId = Integer.parseInt(form.get("segmentId"));
+            try{
+                Story myStory = myAppController.getStory(Integer.valueOf(storyId));
+                Segment mySegment = myStory.getRoot().getSegment((int) segmentId);
+
+                result += "\"title\": \"" + mySegment.getTitle() + "\",";
+                result += "\"author\": \"" + mySegment.getAuthor() + "\",";
+                result += "\"tags\": [";
+                String[] tags = mySegment.getTags();
+                for (int i = 0; i < tags.length; i++){
+                    result += "\"" + tags[i] + "\",";
+                }
+                result = result.substring(0, result.length() - 1);
+                result += "],";
+                result += "\"content\": \"" + mySegment.getContent() + "\",";
+                ArrayList<Segment> children = mySegment.getChildSegs();
+                String childrenId = "\"childrenid\":[";
+                String childrenTitle = "\"childrentitle\":[";
+                for(int i = 0; i < children.size(); i++){
+                    child = children.get(i);
+                    childrenId += "\"" + child.getSegmentId() + "\",";
+                    childrenTitle += "\"" + child.getTitle() + "\",";
+                }
+                childrenId = childrenId.substring(0, childrenId.length() - 1);
+                childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
+                childrenId += "],";
+                childrenTitle += "]";
+                result += chilrenId + childrenTitle + "}";
+
+                return ok(result);
+
+            }
+            catch (IOException e){
+                return badRequest("IOException");
+            }
+            catch(SQLException e){
+                return badRequest("SQLException");
+            }
+            catch(ClassNotFoundException e){
+                return badRequest("ClassNotFoundException");
+            }
+            catch(Exception e){
+                return badRequest("Exception");
+            }
+            
+
         }
     }
 }

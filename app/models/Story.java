@@ -14,34 +14,73 @@ public class Story implements Serializable{
 		this.id = aId;
 	}
 
-	public ArrayList<Segment> traverse(int segId){
-		ArrayList<Segment> allSegments = new ArrayList<Segment>();
-		int currentId = this.id;
-		Segment currentSeg = this.root;
-		while(currentId != segId){
-			allSegments.add(currentSeg);
-			currentId = this.nextSegId;
-			//currentSeg = Segment.findById(nextSegId);
+	//returns the segment with segId
+	private Segment recursiveSearchSegId(int segId, Segment seg){
+		if (seg.getSegmentId()==segId)
+		    return seg;
+		ArrayList<Segment> children = seg.getChildSegs(); 
+		Segment result = null;
+		for (int i = 0; result == null && i < children.size(); i++) {         
+		    result = recursiveSearchSegId(segId, children.get(i));
 		}
-		return allSegments;
+		return result;
 	}
+
+	public Segment findSegId(int segId) {
+		return this.recursiveSearchSegId(segId, this.root);
+	}
+
+	// public ArrayList<Segment> traverse(int segId){
+	// 	ArrayList<Segment> allSegments = new ArrayList<Segment>();
+	// 	int currentId = this.id;
+	// 	Segment currentSeg = this.root;
+	// 	while(currentId != segId){
+	// 		allSegments.add(currentSeg);
+	// 		currentId = this.nextSegId;
+	// 	}
+	// 	return allSegments;
+	// }
 
 	// Returns list of segment ids of leaf nodes that are matching the tag
 	public ArrayList<Integer> findTags(String searchWord){
-		ArrayList<Integer> leafSegIds = new ArrayList<Integer>();
-		Segment currentSeg = this.root;
-		while(currentSeg != null){
-			if(currentSeg.isLeafNode()){
-				for (String tag : currentSeg.getTags()){
-					if(tag.equals(searchWord)){
-						leafSegIds.add(currentSeg.getSegmentId());
-						break;
-					}
-				}
+		ArrayList<Integer> segIds = new ArrayList<Integer>();
+		recurseSearchSegTag(segIds, this.root, searchWord);
+		return segIds;
+	}
+
+	private void recurseSearchSegTag(ArrayList<Integer> segIds, Segment seg, String searchWord) {
+		for (String tag : seg.getTags()){
+			if(tag.equals(searchWord)){
+				segIds.add(seg.getSegmentId());
+				break;
 			}
-			//currentSeg = Segment.findById(nextSegId);
 		}
-		return leafSegIds;
+		if (seg.isLeafNode()) {
+			return;
+		} else {
+			ArrayList<Segment> children = seg.getChildSegs();
+			for (int i = 0; i < children.size(); i++) {         
+			    recurseSearchSegTag(segIds, children.get(i), searchWord);
+			}
+		}
+	}
+
+	//returns arraylist of parents of the given segment seg
+	public ArrayList<Segment> getParents(Segment seg) {
+		ArrayList<Segment> parents = new ArrayList<Segment>();
+		recursiveParents(parents, seg);
+		return parents;
+	}
+
+	private void recursiveParents(ArrayList<Segment> parents, Segment seg)
+	{
+		Segment parent = seg.getParentSeg();
+		if (parent != null) {
+			parents.add(parent);
+			recursiveParents(parents, parent);
+		} else {
+			return;
+		}
 	}
 
 	public boolean hasTag(String aTag){
@@ -63,10 +102,9 @@ public class Story implements Serializable{
 
 	// Adds Segment seg as a child to Segment with segId
 	public boolean fork(Segment seg, int segId){
-		int currentId = this.id;
-		Segment segToFork = null;
-		//Segment segToFork = Segment.findById(segId);
+		Segment segToFork = this.findSegId(segId);
 		if(segToFork != null){
+			seg.setParentSeg(segToFork);
 			return segToFork.addChild(seg);
 		}
 		return false;

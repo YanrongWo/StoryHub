@@ -6,17 +6,17 @@ import java.io.*;
 
 public class Segment implements Serializable{
 
-	private int id;
+    private int id;
 
-	private String title;
-	private String author;
-	private String content;  
-	private String[] tags;
-	private Segment parentSeg;
-	private ArrayList<Segment> childSegs;
-	
-	public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags) {
-		this.parentSeg = parentSeg;
+    private String title;
+    private String author;
+    private String content;  
+    private String[] tags;
+    private Segment parentSeg;
+    private ArrayList<Segment> childSegs;
+    
+    public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags) {
+        this.parentSeg = parentSeg;
         this.title = title;
         this.author = author;
         this.content = content;
@@ -24,14 +24,14 @@ public class Segment implements Serializable{
         this.tags = tags;
         this.childSegs = new ArrayList<Segment>();
         
-	}
-	
-	public boolean addChild(Segment child) {
-		return childSegs.add(child);
-	}
-	
-    public Segment getParent() {
-        return this.parentSeg;
+    }
+    
+    public boolean addChild(Segment child) {
+        return childSegs.add(child);
+    }
+
+    public void setParentSeg(Segment seg) {
+        this.parentSeg = seg;
     }
     
     public String getTitle() {
@@ -71,7 +71,11 @@ public class Segment implements Serializable{
         return this.childSegs;
     }
 
-    // Returns Segment with aId
+    public boolean isLeafNode(){
+        return this.childSegs.isEmpty();
+    }
+
+        // Returns Segment with aId
     public Segment getSegment(int aId){
         if(this.getSegmentId() == aId){
             return this;
@@ -81,10 +85,6 @@ public class Segment implements Serializable{
             }
             return null;
         }
-    }
-
-    public boolean isLeafNode(){
-    	return this.childSegs.isEmpty();
     }
     
 }

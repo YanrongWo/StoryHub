@@ -80,7 +80,7 @@ public class AppController{
         }
         return results;
     }
-    
+
     public Story getStory(int storyId) throws SQLException, IOException, ClassNotFoundException {
         //do table query
         return (Story) deserializeObjectFromDB(storyId);
@@ -123,6 +123,7 @@ public class AppController{
         rs.close();
         pstmt.close();
         return deSerializedObject;
+        //return null;
     }
     
     public void loadAll() throws SQLException, IOException, ClassNotFoundException {
