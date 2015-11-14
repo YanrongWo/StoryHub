@@ -111,7 +111,7 @@ public class Application extends Controller {
         }
     }
 
-    public Result story(int id, int segid){
+    public Result story(int id, int segid)throws SQLException, IOException, ClassNotFoundException{
         boolean loggedIn = (session("name") != null);
         Segment mySeg = myAppController.getStory(id).findSegById(segid);
         ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
