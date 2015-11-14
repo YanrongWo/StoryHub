@@ -3,8 +3,83 @@
 @main(""){
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/story.css")">
 } {
+<h4>@myStory</h4>
 	<div id="all_segments">
-		<div class="segment">
+		
+	</div>
+	<script>
+		var storyId = @{myStory};
+		function addSegment(segmentId){
+			$.ajax({
+	          	type: 'POST',
+	          	url: '/AddSegment',
+	          	data: 
+	          	{
+	              	storyId: storyId,
+	              	segmentId: segmentId
+	          	},
+	          	success: function(JSONstory, segmentId) 
+	          	{       
+	              	var story = JSON.parse(JSONstory, segmentId);
+	              	console.log(story);
+	              	addJSONcontent(story);
+	          	}
+	      	});
+		}
+		function addJSONcontent(storyJSON, segmentId){
+			// NewFork URL: /story/:storyId/:segmentId/NewFork
+			var newForkURL = "/story/" + @myStory + "/" + segmentId + "/NewFork";
+			var story = '<div class="segment"> \
+			<table> \
+				<col style="width:90%"><col style="width:10%"> \
+				<tr> \
+					<td> \
+						<div class="title">' + storyJSON["title"] + '</div> \
+					</td> \
+					<td> \
+						<button type="button" class="fork btn btn-primary" href="' + newForkURL + '</button> \
+					</td> \
+				</tr> \
+				<tr> \
+					<td> \
+						<div class="author">' + storyJSON["author"] + '</div> \
+					</td> \
+				</tr> \
+				<tr> \
+					<td> \
+						<ul class="tags">';
+			for (var i = 0; i < storyJSON["tags"].length; i++){
+				story += '<li><a href="#" class="tag">' + storyJSON["tags"][i] + '</a></li>';
+			}
+			story += '</ul> \
+					</td> \
+				</tr> \
+				<tr> \
+					<td> \
+						<div class="content">' + storyJSON["content"] + '</div> \
+					</td> \
+				</tr> \
+				<tr> \
+					<td> \
+						<div class="children">';
+			for (var i = 0; i < storyJSON["childrenid"].length; i++){
+				story += '<button type="button" id="1" class="btn btn-primary" onclick="' + "addSegment(" + storyJSON["childrenid"][i] + ');">' + storyJSON["childrentitle"][i] + '</button>';
+			}
+			story += '</div> \
+					</td> \
+				</tr> \
+			</table> \
+		</div>';
+			$('.all_segments').append(story);
+		}
+		$( document ).ready(function() {
+    		console.log( "ready!" );
+    		addSegment(0);
+		});
+	</script>
+}
+
+<!-- <div class="segment">
 			<table>
 				<col style="width:90%"><col style="width:10%">
 				<tr>
@@ -17,12 +92,15 @@
 				</tr>
 				<tr>
 					<td>
-						<div class="author"> Author </dv>
+						<div class="author"> Author </div>
 					</td>
 				</tr>
 				<tr> 
 					<td>
-						<div class="tags">	Tag1, Tag2 </div>
+						<ul class="tags">
+							<li><a href="#" class="tag">Tag1</a></li>
+							<li><a href="#" class="tag">Tag2</a></li>
+						</ul>
 					</td>
 				</tr>
 				<tr>
@@ -39,28 +117,4 @@
 					</td>
 				</tr>
 			</table>
-		</div>
-	</div>
-	<script>
-		var storyId = @{myStory};
-		function addSegment(int segmentId){
-			$.ajax({
-	          	type: 'POST',
-	          	url: '/AddSegment',
-	          	data: 
-	          	{
-	              	storyId: storyId,
-	              	segmentId: segmentId
-	          	},
-	          	success: function(JSONstory) 
-	          	{       
-	              	var story = JSON.parse(JSONstory);
-	              	$('.all_segments').append(JSONstory);
-	          	}
-	      	});
-		}
-		$( document ).ready(function() {
-    		console.log( "ready!" );
-		});
-	</script>
-}
+		</div> -->
