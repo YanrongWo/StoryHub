@@ -45,6 +45,13 @@ public class Segment implements Serializable{
     public String getContent() {
         return this.content;
     }
+
+    public String displayContent(){
+        if(this.content.length() > 251){
+            return this.content.substring(0, 250) + "...";
+        }
+        return this.content;
+    }
     
     public int getSegmentId() {
         return this.id;

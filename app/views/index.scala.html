@@ -6,18 +6,38 @@
 		<p class="title">
 			@title
 		</p>
-		<div class="storylist">
+		<div id="all_stories">
 			@for(story <- storyList){
-			<a class="storytitle" href="/story/@story.getStoryId()"> @story.getRoot().getTitle()</a>
-			<div class="storyauthor"> @story.getRoot().getAuthor()</div>
-			<br>
-			<ul class="tags">
+			<div class="story">
+				<table>
+				<col style="width:90%"><col style="width:10%">
+				<tr>
+					<td>
+						<a class="title" href="/Story/@story.getStoryId()"> @story.getRoot().getTitle()</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="author"> @story.getRoot().getAuthor() </dv>
+					</td>
+				</tr>
+				<tr> 
+					<td>
+						<ul class="tags">
 				@for(tag <- story.getRoot().getTags()){
 					<li><a href="#" class="tag">@tag</a></li>
 			}
 			</ul>
-			<hr>
-			}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="content"> @story.getRoot().displayContent()</div>
+					</td>
+				</tr>
+			</table>
+			</div>
+		}
 		</div>
 	</div>
 }

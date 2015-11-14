@@ -7,25 +7,25 @@ import play.data.Form;
 import views.html.*;
 import java.sql.SQLException;
 import java.util.*;
-
+import java.io.*;
 
 public class Application extends Controller {
 
     AppController myAppController = new AppController();
 
     public Result index() {
-        myAppController.loadAll();
+        //myAppController.loadAll();
         //Story s = new Story();
         //Ebean.save(s);
 
         //Get all stories
-        ArrayList<Story> storyList = myAppController.getFrontPageStories();
-        //ArrayList<Story> storyList = new ArrayList<Story>();
+        //ArrayList<Story> storyList = myAppController.getFrontPageStories();
+        ArrayList<Story> storyList = new ArrayList<Story>();
 
         //For each story, add to storyList 
         //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
         Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
+        Segment test2 = new Segment(null, "Title 2", "Author 2", "This is 250 characters. Story content is great. Read more about this riveting story. You'll never guess what happens because I don't know what will happen. You can determine the ending. Or will there not be an ending? Who knows... Java Play is the worst. Would not recommend", 100, new String[] {"x", "y"});
         Story s1 = new Story(test1, 1);
         storyList.add(s1);
         Story s2 = new Story(test2, 2);
@@ -139,7 +139,7 @@ public class Application extends Controller {
                 String childrenId = "\"childrenid\":[";
                 String childrenTitle = "\"childrentitle\":[";
                 for(int i = 0; i < children.size(); i++){
-                    child = children.get(i);
+                    Segment child = children.get(i);
                     childrenId += "\"" + child.getSegmentId() + "\",";
                     childrenTitle += "\"" + child.getTitle() + "\",";
                 }
@@ -147,7 +147,7 @@ public class Application extends Controller {
                 childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
                 childrenId += "],";
                 childrenTitle += "]";
-                result += chilrenId + childrenTitle + "}";
+                result += childrenId + childrenTitle + "}";
 
                 return ok(result);
 
