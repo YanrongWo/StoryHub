@@ -29,7 +29,7 @@ public class Story implements Serializable{
 		return result;
 	}
 
-	public Segment findSegId(int segId) {
+	public Segment findSegById(int segId) {
 		return this.recursiveSearchSegId(segId, this.root);
 	}
 
@@ -116,13 +116,13 @@ public class Story implements Serializable{
 	}
 
 	public boolean fork(Segment seg, int segId) {
-		Segment segToFork = this.findSegId(segId);
+		Segment segToFork = this.findSegById(segId);
 		return addSegment(seg, segToFork.getParentSeg().getSegmentId());
 	}
 
 	// Adds Segment seg as a child to Segment with segId
 	public boolean addSegment(Segment seg, int segId){
-		Segment segToFork = this.findSegId(segId);
+		Segment segToFork = this.findSegById(segId);
 		if(segToFork != null){
 			seg.setParentSeg(segToFork);
 			seg.setSegmentId(this.nextSegId);

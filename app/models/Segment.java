@@ -26,6 +26,11 @@ public class Segment implements Serializable{
         
     }
     
+    public ArrayList<Integer> getParentSegIds(){
+        ArrayList<Integer> parentSegIds = new ArrayList<Integer>();
+        return 0;
+    }
+
     public boolean addChild(Segment child) {
         return childSegs.add(child);
     }

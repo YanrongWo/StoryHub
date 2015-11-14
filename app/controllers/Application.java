@@ -107,9 +107,10 @@ public class Application extends Controller {
         }
     }
 
-    public Result story(int id){
-        System.out.println(id);
-        return ok(story.render(id));
+    public Result story(int id, int segid){
+        Segment mySeg = myAppController.getStory(id).findSegById(segid);
+        ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
+        return ok(story.render(id, segsToParent));
     }
 
     //Returns all stories with tags
@@ -214,7 +215,7 @@ public class Application extends Controller {
             Integer segmentId = Integer.parseInt(form.get("segmentId"));
             try{
                 Story myStory = myAppController.getStory(Integer.valueOf(storyId));
-                Segment mySegment = myStory.getRoot().getSegment((int) segmentId);
+                Segment mySegment = myStory.findSegById((int) segmentId);
 
                 result += "\"title\": \"" + mySegment.getTitle() + "\",";
                 result += "\"author\": \"" + mySegment.getAuthor() + "\",";

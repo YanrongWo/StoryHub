@@ -19,7 +19,7 @@ GET		/NewFork					controllers.Application.newFork()
 
 POST	/newFork                    controllers.Application.newForkSubmit()
 
-GET		/Story/:id 					controllers.Application.story(id: Integer)
+GET		/Story/:id/:segid			controllers.Application.story(id: Integer, segid: Integer)
 
 POST	/AddSegment					controllers.Application.getSegmentInfo()
 

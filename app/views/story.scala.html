@@ -1,4 +1,4 @@
-@(myStory: Integer)
+@(myStory: Integer)(mySegs: List[Integer])
 
 @main(""){
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/story.css")">
@@ -74,7 +74,9 @@
 		}
 		$( document ).ready(function() {
     		console.log( "ready!" );
-    		addSegment(0);
+    		@for(mySeg <- mySegs){
+    			addSegment(mySeg);
+    		}
 		});
 	</script>
 }
