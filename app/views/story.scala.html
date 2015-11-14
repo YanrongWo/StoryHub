@@ -76,10 +76,10 @@
 		</div>';
 			$('#all_segments').append(story);
 		}
-		$( document ).ready(function() {
+		$(document).ready(function() {
     		console.log( "ready!" );
     		@for(mySeg <- mySegs){
-    			addSegment(mySeg);
+    			addSegment(@mySeg);
     		}
 		});
 	</script>
