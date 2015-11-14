@@ -1,4 +1,4 @@
-@(title: String)
+@(title: String, postForm: String)
 
 @main(title){
 	<link rel="stylesheet" href="//cdn.quilljs.com/latest/quill.snow.css" />
@@ -11,7 +11,7 @@
 		<p class="title">
 			@title
 		</p>
-		<form method="POST" name="newStory" role="form">
+		<form method="POST" name="@postForm" role="form">
 			<div class="form-group">
 				<input type="hidden" name="content" value="" id="content">
 			</div>

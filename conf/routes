@@ -15,12 +15,12 @@ GET		/NewStory					controllers.Application.newStory()
 
 POST	/NewStory                   controllers.Application.newStorySubmit()
 
-GET		/NewFork					controllers.Application.newFork()
-
-POST	/newFork                    controllers.Application.newForkSubmit()
-
 GET		/Story/:id 					controllers.Application.story(id: Integer)
 
 POST	/AddSegment					controllers.Application.getSegmentInfo()
 
-POST	/Search/:query					controllers.Application.getTaggedStories(query:String)
+GET		/Search/:query				controllers.Application.getTaggedStories(query: String)
+
+GET		/Story/:storyId/:segmentId/NewSegment				controllers.Application.newFork(storyId: Integer, segmentId: Integer)
+
+POST	/Story/:storyId/:segmentId/NewSegment                   controllers.Application.newForkSubmit(storyId: Integer, segmentId: Integer)

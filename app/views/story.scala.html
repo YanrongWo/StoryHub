@@ -1,4 +1,4 @@
-@(myStory: Integer)
+@(myStory: Integer, loggedIn: Boolean)
 
 @main(""){
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/story.css")">
@@ -28,7 +28,7 @@
 		}
 		function addJSONcontent(storyJSON, segmentId){
 			// NewFork URL: /story/:storyId/:segmentId/NewFork
-			var newForkURL = "/story/" + @myStory + "/" + segmentId + "/NewFork";
+			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewFork";
 			console.log("newForkURL");
 			console.log(newForkURL);
 			var story = '<div class="segment"> \
@@ -37,11 +37,15 @@
 				<tr> \
 					<td> \
 						<div class="title">' + storyJSON["title"] + '</div> \
-					</td> \
-					<td> \
-						<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">Fork</button> \
-					</td> \
-				</tr> \
+					</td>';
+			console.log("logged in?");
+			console.log(@loggedIn);
+			if(@loggedIn){
+				story += '<td> \
+						<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment</button> \
+					</td>';
+			}
+			story += '</tr> \
 				<tr> \
 					<td> \
 						<div class="author">' + storyJSON["author"] + '</div> \

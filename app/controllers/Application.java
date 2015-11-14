@@ -63,7 +63,7 @@ public class Application extends Controller {
     }
 
     public Result newStory(){
-    	return ok(newStory.render("New Story"));
+    	return ok(newStory.render("New Story", "newStory"));
     }
 
     /* create a new story from form data */
@@ -87,12 +87,12 @@ public class Application extends Controller {
         }
     }
 
-    public Result newFork(){
-        return  ok(newStory.render("New Fork"));
+    public Result newFork(int storyId, int segmentId){
+        return  ok(newStory.render("New Segment", "newFork"));
     }
 
     /* create a new fork from form data */
-    public Result newForkSubmit(){
+    public Result newForkSubmit(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
@@ -103,13 +103,19 @@ public class Application extends Controller {
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             Segment seg = new Segment(null, title, session("name"), content, tags);
             //add segment to story
+            Story myStory = myAppController.getStory(storyId);
+            Segment parentSegment = myStory.getRoot().getSegment(segmentId);
+
+            parentSegment.addChild(seg);
             return ok("Submitted");
         }
     }
 
     public Result story(int id){
         System.out.println(id);
-        return ok(story.render(id));
+        System.out.println("session name = " + session("name"));
+        boolean loggedIn = (session("name") != null);
+        return ok(story.render(id, loggedIn));
     }
 
     //Returns all stories with tags
