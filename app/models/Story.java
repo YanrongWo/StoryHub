@@ -8,6 +8,7 @@ public class Story implements Serializable{
 
 	private Segment root;
 	private int nextSegId;
+	private static final long serialVersionUID = 1L;
 
 	public Story(Segment aRoot, int aId){
 		this.root = aRoot;

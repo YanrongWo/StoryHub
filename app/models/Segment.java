@@ -14,6 +14,7 @@ public class Segment implements Serializable{
     private String[] tags;
     private Segment parentSeg;
     private ArrayList<Segment> childSegs;
+    private static final long serialVersionUID = 1L;
     
     public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags) {
         this.parentSeg = parentSeg;

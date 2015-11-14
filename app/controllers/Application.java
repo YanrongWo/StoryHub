@@ -14,23 +14,21 @@ public class Application extends Controller {
 
     AppController myAppController = new AppController();
 
-    public Result index() {
+    public Result index() throws SQLException, IOException, ClassNotFoundException{
+
         myAppController.loadAll();
-        //Story s = new Story();
-        //Ebean.save(s);
 
         //Get all stories
         ArrayList<Story> storyList = myAppController.getFrontPageStories();
         //ArrayList<Story> storyList = new ArrayList<Story>();
 
         //For each story, add to storyList 
-        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
-        Story s1 = new Story(test1, 1);
-        storyList.add(s1);
-        Story s2 = new Story(test2, 2);
-        storyList.add(s2);   
+        // Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
+        // Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
+        // Story s1 = new Story(test1, 1);
+        // storyList.add(s1);
+        // Story s2 = new Story(test2, 2);
+        // storyList.add(s2);
 
         return ok(index.render("Homepage", storyList));
     }
