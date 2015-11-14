@@ -7,12 +7,7 @@ import play.data.Form;
 import views.html.*;
 import java.sql.SQLException;
 import java.util.*;
-<<<<<<< HEAD
-import java.io.*;
-=======
 import java.io.IOException;
-
->>>>>>> cf07fd10e4c4d2fd18d6cba5078f68eb08024a40
 
 public class Application extends Controller {
 
