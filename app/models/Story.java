@@ -8,6 +8,7 @@ public class Story implements Serializable{
 
 	private Segment root;
 	private int nextSegId;
+	private static final long serialVersionUID = 1L;
 
 	public Story(Segment aRoot, int aId){
 		this.root = aRoot;
@@ -100,8 +101,13 @@ public class Story implements Serializable{
 		return this.root;
 	}
 
+	public boolean fork(Segment seg, int segId) {
+		Segment segToFork = this.findSegId(segId);
+		return addSegment(seg, segToFork.getParentSeg().getSegmentId());
+	}
+
 	// Adds Segment seg as a child to Segment with segId
-	public boolean fork(Segment seg, int segId){
+	public boolean addSegment(Segment seg, int segId){
 		Segment segToFork = this.findSegId(segId);
 		if(segToFork != null){
 			seg.setParentSeg(segToFork);

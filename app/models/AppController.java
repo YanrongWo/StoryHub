@@ -104,7 +104,11 @@ public class AppController{
     }
     
     public ArrayList<Story> getFrontPageStories() {
-        return new ArrayList<Story>(stories.subList(0, max));
+        if (stories.size() < max) {
+            return stories;
+        } else {
+            return new ArrayList<Story>(stories.subList(0, max));
+        }
     }
     
     //http://javapapers.com/core-java/serialize-de-serialize-java-object-from-database/
@@ -138,6 +142,7 @@ public class AppController{
                 Object deSerializedObject = objectIn.readObject();
                 this.stories.add((Story) deSerializedObject);
             }
+            System.out.println("Ho ho");
         }
         rs.close();
         pstmt.close();
