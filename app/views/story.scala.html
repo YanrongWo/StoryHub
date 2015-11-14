@@ -39,13 +39,10 @@
 					<td> \
 						<div class="title">' + storyJSON["title"] + '</div> \
 					</td>';
-			console.log("logged in?");
-			console.log(@loggedIn);
-			if(@loggedIn){
-				story += '<td> \
-						<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment</button> \
-					</td>';
-			}
+			story += '<td> \
+					<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment</button> \
+				</td>';
+		
 			story += '</tr> \
 				<tr> \
 					<td> \
