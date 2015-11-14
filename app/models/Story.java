@@ -83,6 +83,10 @@ public class Story implements Serializable{
 		}
 	}
 
+	public boolean hasTag(String aTag){
+		return this.root.hasTag(aTag);
+	}
+
 	public int setStoryId(int aId){
 		this.id = aId;
 		return this.id;
