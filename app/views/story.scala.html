@@ -20,9 +20,9 @@
 	          	},
 	          	success: function(JSONstory, segmentId) 
 	          	{       
-	              	var story = JSON.parse(JSONstory, segmentId);
+	              	var story = JSON.parse(JSONstory);
 	              	console.log(story);
-	              	addJSONcontent(story);
+	              	//addJSONcontent(story, segmentId);
 	          	}
 	      	});
 		}

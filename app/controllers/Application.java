@@ -103,7 +103,6 @@ public class Application extends Controller {
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             Segment seg = new Segment(null, title, session("name"), content, tags);
             //add segment to story
-
             return ok("Submitted");
         }
     }
@@ -118,6 +117,8 @@ public class Application extends Controller {
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } else {
+            // String result = "{\"hi\": \"ho\"}";
+            // return ok(result);
 
             String result = "{";
             Integer storyId = Integer.parseInt(form.get("storyId"));
@@ -133,7 +134,9 @@ public class Application extends Controller {
                 for (int i = 0; i < tags.length; i++){
                     result += "\"" + tags[i] + "\",";
                 }
-                result = result.substring(0, result.length() - 1);
+                if (tags.length>0) {
+                    result = result.substring(0, result.length() - 1);
+                }
                 result += "],";
                 result += "\"content\": \"" + mySegment.getContent() + "\",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
@@ -144,11 +147,14 @@ public class Application extends Controller {
                     childrenId += "\"" + child.getSegmentId() + "\",";
                     childrenTitle += "\"" + child.getTitle() + "\",";
                 }
-                childrenId = childrenId.substring(0, childrenId.length() - 1);
-                childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
+                if(children.size()>0) {
+                    childrenId = childrenId.substring(0, childrenId.length() - 1);
+                    childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
+                }
                 childrenId += "],";
                 childrenTitle += "]";
                 result += childrenId + childrenTitle + "}";
+                System.out.println(result);
 
                 return ok(result);
 
