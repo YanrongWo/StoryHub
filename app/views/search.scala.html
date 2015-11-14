@@ -1,0 +1,43 @@
+@(searchQuery: String, taggedStories: List[Story])
+
+@main("Searching Storyhub..."){ }{
+
+	<div class="container">
+		<p class="title">
+			@searchQuery
+		</p>
+		<div id="all_stories">
+			@for(story <- taggedStories){
+			<div class="story">
+				<table>
+				<col style="width:90%"><col style="width:10%">
+				<tr>
+					<td>
+						<a class="title" href="/Story/@story.getStoryId()"> @story.getRoot().getTitle()</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="author"> @story.getRoot().getAuthor() </dv>
+					</td>
+				</tr>
+				<tr> 
+					<td>
+						<ul class="tags">
+				@for(tag <- story.getRoot().getTags()){
+					<li><a href="#" class="tag">@tag</a></li>
+			}
+			</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="content"> @story.getRoot().displayContent()</div>
+					</td>
+				</tr>
+			</table>
+			</div>
+		}
+		</div>
+	</div>
+}

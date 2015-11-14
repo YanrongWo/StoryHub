@@ -71,6 +71,7 @@ public class AppController{
     }
     
     public ArrayList<StorySeg> find(String search) {
+        System.out.println("Finding!!!");
         ArrayList<StorySeg> results = new ArrayList<StorySeg>();
         for(int i=0; i<stories.size(); i++) {
             ArrayList<Integer> hits = stories.get(i).findTags(search);

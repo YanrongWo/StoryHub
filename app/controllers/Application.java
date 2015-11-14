@@ -112,6 +112,95 @@ public class Application extends Controller {
         return ok(story.render(id));
     }
 
+    //Returns all stories with tags
+    public Result getTaggedStories(String query){
+        System.out.println("Function is called!!!");
+
+        System.out.println(query);
+        ArrayList<StorySeg> tagged = myAppController.find(query);
+
+        ArrayList<Story> taggedStories = new ArrayList<Story>();
+
+        for ( int i = 0; i < tagged.size();i++ ){
+           taggedStories.add(myAppController.getStories().get(tagged.get(i).getStoryInt()));
+        }
+
+        String searchString = "Search results for tag \""+query+"\"";
+        
+        return ok(search.render(searchString,taggedStories));
+    }
+    //  //Returns a JSON string with information about the (story, segment)
+    // public String getSegmentJson(Story myStory, Segment mySegment){
+    //     String result = "{";
+            
+    //     result += "\"title\": \"" + mySegment.getTitle() + "\",";
+    //     result += "\"author\": \"" + mySegment.getAuthor() + "\",";
+    //     result += "\"tags\": [";
+    //     String[] tags = mySegment.getTags();
+    //     for (int i = 0; i < tags.length; i++){
+    //         result += "\"" + tags[i] + "\",";
+    //     }
+    //     result = result.substring(0, result.length() - 1);
+    //     result += "],";
+    //     result += "\"content\": \"" + mySegment.getContent() + "\",";
+    //     ArrayList<Segment> children = mySegment.getChildSegs();
+    //     String childrenId = "\"childrenid\":[";
+    //     String childrenTitle = "\"childrentitle\":[";
+    //     for(int i = 0; i < children.size(); i++){
+    //         Segment child = children.get(i);
+    //         childrenId += "\"" + child.getSegmentId() + "\",";
+    //         childrenTitle += "\"" + child.getTitle() + "\",";
+    //     }
+    //     childrenId = childrenId.substring(0, childrenId.length() - 1);
+    //     childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
+    //     childrenId += "],";
+    //     childrenTitle += "]";
+    //     result += childrenId + childrenTitle + "}";
+
+    //     return(result);
+    // }
+
+
+    // public Result getTaggedStories(){
+    //     System.out.println("Function is called!!!");
+    //     DynamicForm form = Form.form().bindFromRequest();
+    //     if (form.data().size() == 0) {
+    //         System.out.println("Bad Request");
+    //         return badRequest("Form Error");
+    //     } else {
+    //         String searchWord = form.get("searchWord");
+    //         System.out.println(searchWord);
+    //         ArrayList<StorySeg> tagged = myAppController.find(searchWord);
+
+    //         String searchResult = "{"; 
+    //         //Transform each StorySeg into corresponding JSON
+    //         for(int a = 0;a < tagged.size();a++){
+    //             try{
+    //                 Story myStory = myAppController.getStory(Integer.valueOf(tagged.get(a).getStoryInt()));
+    //                 Segment mySegment = myStory.getRoot().getSegment(tagged.get(a).getSegInt());
+    //                 String json = getSegmentJson(myStory,mySegment);
+    //                 searchResult += "\"" + a + ":\"" + json;
+    //             }
+    //             catch (IOException e){
+    //                 return badRequest("IOException");
+    //             }
+    //             catch(SQLException e){
+    //                 return badRequest("SQLException");
+    //             }
+    //             catch(ClassNotFoundException e){
+    //                 return badRequest("ClassNotFoundException");
+    //             }
+    //             catch(Exception e){
+    //                 return badRequest("Exception");
+    //             }
+    //         }
+
+    //         searchResult += "}";
+    //         System.out.println("Search:"+searchResult);
+    //         return ok(searchResult);
+    //     }
+    // }
+
     public Result getSegmentInfo(){
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
