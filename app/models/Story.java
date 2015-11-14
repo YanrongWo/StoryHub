@@ -11,6 +11,7 @@ public class Story implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	public Story(Segment aRoot, int aId){
+		aRoot.setStoryId(this.id);
 		aRoot.setSegmentId(this.nextSegId);
 		this.root = aRoot;
 		this.id = aId;
@@ -29,7 +30,7 @@ public class Story implements Serializable{
 		return result;
 	}
 
-	public Segment findSegId(int segId) {
+	public Segment findSegById(int segId) {
 		return this.recursiveSearchSegId(segId, this.root);
 	}
 
@@ -61,16 +62,16 @@ public class Story implements Serializable{
 	// }
 
 	// Returns list of segment ids of leaf nodes that are matching the tag
-	public ArrayList<Integer> findTags(String searchWord){
-		ArrayList<Integer> segIds = new ArrayList<Integer>();
-		recurseSearchSegTag(segIds, this.root, searchWord);
-		return segIds;
+	public ArrayList<Segment> findTags(String searchWord){
+		ArrayList<Segment> segments = new ArrayList<Segment>();
+		recurseSearchSegTag(segments, this.root, searchWord);
+		return segments;
 	}
 
-	private void recurseSearchSegTag(ArrayList<Integer> segIds, Segment seg, String searchWord) {
+	private void recurseSearchSegTag(ArrayList<Segment> segments, Segment seg, String searchWord) {
 		for (String tag : seg.getTags()){
 			if(tag.equals(searchWord)){
-				segIds.add(seg.getSegmentId());
+				segments.add(seg);
 				break;
 			}
 		}
@@ -79,7 +80,7 @@ public class Story implements Serializable{
 		} else {
 			ArrayList<Segment> children = seg.getChildSegs();
 			for (int i = 0; i < children.size(); i++) {         
-			    recurseSearchSegTag(segIds, children.get(i), searchWord);
+			    recurseSearchSegTag(segments, children.get(i), searchWord);
 			}
 		}
 	}
@@ -116,14 +117,15 @@ public class Story implements Serializable{
 	}
 
 	public boolean fork(Segment seg, int segId) {
-		Segment segToFork = this.findSegId(segId);
+		Segment segToFork = this.findSegById(segId);
 		return addSegment(seg, segToFork.getParentSeg().getSegmentId());
 	}
 
 	// Adds Segment seg as a child to Segment with segId
 	public boolean addSegment(Segment seg, int segId){
-		Segment segToFork = this.findSegId(segId);
+		Segment segToFork = this.findSegById(segId);
 		if(segToFork != null){
+			seg.setStoryId(this.id);
 			seg.setParentSeg(segToFork);
 			seg.setSegmentId(this.nextSegId);
 			this.nextSegId++;
