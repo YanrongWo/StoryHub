@@ -7,6 +7,7 @@ import java.io.*;
 public class Segment implements Serializable{
 
     private int id = 0; //default
+    private int storyId = 0;
 
     private String title;
     private String author;
@@ -24,6 +25,14 @@ public class Segment implements Serializable{
         this.tags = tags;
         this.childSegs = new ArrayList<Segment>();
         
+    }
+
+    public void setStoryId(int storyId) {
+        this.storyId = storyId;
+    }
+
+    public int getStoryId() {
+        return this.storyId;
     }
     
     public boolean addChild(Segment child) {

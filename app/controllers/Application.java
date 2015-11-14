@@ -121,19 +121,17 @@ public class Application extends Controller {
     //Returns all stories with tags
     public Result getTaggedStories(String query){
         System.out.println("Function is called!!!");
+        System.out.println("Query:"+query);
 
-        System.out.println(query);
-        ArrayList<StorySeg> tagged = myAppController.find(query);
 
-        ArrayList<Story> taggedStories = new ArrayList<Story>();
+        ArrayList<Segment> tagged = myAppController.find(query.trim());
+        // ArrayList<Segment> taggedSegments = new ArrayList<Segment>();
+        // for ( int i = 0 ; i < tagged.size(); i ++){
+        //     taggedSegments.addAll(tagged.getSegments());
+        // }
 
-        for ( int i = 0; i < tagged.size();i++ ){
-           taggedStories.add(myAppController.getStories().get(tagged.get(i).getStoryInt()));
-        }
-
-        String searchString = "Search results for tag \""+query+"\"";
-        
-        return ok(search.render(searchString,taggedStories));
+        String searchString = "Search results for tag \""+query+"\"";     
+        return ok(search.render(searchString,tagged));
     }
     //  //Returns a JSON string with information about the (story, segment)
     // public String getSegmentJson(Story myStory, Segment mySegment){
