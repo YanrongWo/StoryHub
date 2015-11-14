@@ -18,14 +18,16 @@ public class Application extends Controller {
         myAppController.loadAll();
 
         //Get all stories
-        //ArrayList<Story> storyList = myAppController.getFrontPageStories();
-        ArrayList<Story> storyList = new ArrayList<Story>();
+        ArrayList<Story> storyList = myAppController.getFrontPageStories();
+        //ArrayList<Story> storyList = new ArrayList<Story>();
 
         //For each story, add to storyList 
         //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        // Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
-        // Segment test2 = new Segment(null, "Title 2", "Author 2", "This is 250 characters. Story content is great. Read more about this riveting story. You'll never guess what happens because I don't know what will happen. You can determine the ending. Or will there not be an ending? Who knows... Java Play is the worst. Would not recommend", 100, new String[] {"x", "y"});
-        // Story s1 = new Story(test1, 1);
+        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
+        Segment test2 = new Segment(null, "Title 2", "Author 2", "This is 250 characters. Story content is great. Read more about this riveting story. You'll never guess what happens because I don't know what will happen. You can determine the ending. Or will there not be an ending? Who knows... Java Play is the worst. Would not recommend", new String[] {"x", "y"});
+        //Story s1 = new Story(test1, 1);
+        //myAppController.createStory(test1);
+        //myAppController.createStory(test2);
         // storyList.add(s1);
         // Story s2 = new Story(test2, 2);
         // storyList.add(s2);   

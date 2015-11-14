@@ -18,6 +18,9 @@
 			    <input type="text" class="form-control" placeholder="Search">
 			  </div>
 			  <button type="submit" class="btn btn-default">Submit</button>
+      <button type="button" class="btn btn-primary" onclick="new1Story()" style="margin-left: 20px;">
+        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> New Story
+      </button>
 			</form>
 		</div>
 		<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" scope="public_profile,email" onlogin="checkLoginState();" style="float:right"></div>
@@ -31,6 +34,22 @@
 
 
 <script>
+  function new1Story() {
+    console.log("New story");
+    //window.location = "/NewStory";
+    FB.getLoginStatus(function(response) {
+      if(response.status === 'connected') {
+          console.log("conected");
+          window.location = "/NewStory";
+            // $.ajax({
+            //       type: "GET",
+            //       url: "/NewStory",
+            // });
+      } else {
+        alert("To make a new story, you must be logged in");
+      }
+    });
+}
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
