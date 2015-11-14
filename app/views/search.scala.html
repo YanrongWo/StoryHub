@@ -1,4 +1,4 @@
-@(searchQuery: String, taggedStories: List[Story])
+@(searchQuery: String, taggedSegments: List[Segment])
 
 @main("Searching Storyhub..."){ }{
 
@@ -7,24 +7,24 @@
 			@searchQuery
 		</p>
 		<div id="all_stories">
-			@for(story <- taggedStories){
+			@for(segment <- taggedSegments){
 			<div class="story">
 				<table>
 				<col style="width:90%"><col style="width:10%">
 				<tr>
 					<td>
-						<a class="title" href="/Story/@story.getStoryId()"> @story.getRoot().getTitle()</a>
+						<a class="title" href="/Story/@segment.getStoryId()/Segment/@segment.getSegmentId()"> @segment.getTitle()</a>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<div class="author"> @story.getRoot().getAuthor() </dv>
+						<div class="author"> @segment.getAuthor() </dv>
 					</td>
 				</tr>
 				<tr> 
 					<td>
 						<ul class="tags">
-				@for(tag <- story.getRoot().getTags()){
+				@for(tag <- segment.getTags()){
 					<li><a href="#" class="tag">@tag</a></li>
 			}
 			</ul>
@@ -32,7 +32,7 @@
 				</tr>
 				<tr>
 					<td>
-						<div class="content"> @story.getRoot().displayContent()</div>
+						<div class="content"> @segment.displayContent()</div>
 					</td>
 				</tr>
 			</table>

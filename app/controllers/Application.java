@@ -63,7 +63,7 @@ public class Application extends Controller {
     }
 
     public Result newStory(){
-    	return ok(newStory.render("New Story"));
+    	return ok(newStory.render("New Story", "newStory"));
     }
 
     /* create a new story from form data */
@@ -87,12 +87,12 @@ public class Application extends Controller {
         }
     }
 
-    public Result newFork(){
-        return  ok(newStory.render("New Fork"));
+    public Result newFork(int storyId, int segmentId){
+        return  ok(newStory.render("New Segment", "newFork"));
     }
 
     /* create a new fork from form data */
-    public Result newForkSubmit(){
+    public Result newForkSubmit(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
@@ -103,11 +103,16 @@ public class Application extends Controller {
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             Segment seg = new Segment(null, title, session("name"), content, tags);
             //add segment to story
+            Story myStory = myAppController.getStory(storyId);
+            Segment parentSegment = myStory.getRoot().getSegment(segmentId);
+
+            parentSegment.addChild(seg);
             return ok("Submitted");
         }
     }
 
     public Result story(int id, int segid){
+        boolean loggedIn = (session("name") != null);
         Segment mySeg = myAppController.getStory(id).findSegById(segid);
         ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
         return ok(story.render(id, segsToParent));
@@ -116,19 +121,17 @@ public class Application extends Controller {
     //Returns all stories with tags
     public Result getTaggedStories(String query){
         System.out.println("Function is called!!!");
+        System.out.println("Query:"+query);
 
-        System.out.println(query);
-        ArrayList<StorySeg> tagged = myAppController.find(query);
 
-        ArrayList<Story> taggedStories = new ArrayList<Story>();
+        ArrayList<Segment> tagged = myAppController.find(query.trim());
+        // ArrayList<Segment> taggedSegments = new ArrayList<Segment>();
+        // for ( int i = 0 ; i < tagged.size(); i ++){
+        //     taggedSegments.addAll(tagged.getSegments());
+        // }
 
-        for ( int i = 0; i < tagged.size();i++ ){
-           taggedStories.add(myAppController.getStories().get(tagged.get(i).getStoryInt()));
-        }
-
-        String searchString = "Search results for tag \""+query+"\"";
-        
-        return ok(search.render(searchString,taggedStories));
+        String searchString = "Search results for tag \""+query+"\"";     
+        return ok(search.render(searchString,tagged));
     }
     //  //Returns a JSON string with information about the (story, segment)
     // public String getSegmentJson(Story myStory, Segment mySegment){
