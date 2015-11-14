@@ -7,12 +7,14 @@ public class Story implements Serializable{
 	private int id;
 
 	private Segment root;
-	private int nextSegId;
+	private int nextSegId = 0;
 	private static final long serialVersionUID = 1L;
 
 	public Story(Segment aRoot, int aId){
+		aRoot.setSegmentId(this.nextSegId);
 		this.root = aRoot;
 		this.id = aId;
+		this.nextSegId++;
 	}
 
 	//returns the segment with segId
@@ -29,6 +31,22 @@ public class Story implements Serializable{
 
 	public Segment findSegId(int segId) {
 		return this.recursiveSearchSegId(segId, this.root);
+	}
+
+	public boolean hasTag(String aTag){
+		return recurseHasTag(aTag, this.root);
+	}
+
+	public boolean recurseHasTag(String aTag, Segment seg) {
+		if (seg.hasTag(aTag)) {
+			return true;
+		} else {
+			ArrayList<Segment> children = seg.getChildSegs();
+			for (int i = 0; i < children.size(); i++) {         
+		    	recurseHasTag(aTag, children.get(i));
+			}
+		}
+		return false;
 	}
 
 	// public ArrayList<Segment> traverse(int segId){
@@ -84,10 +102,6 @@ public class Story implements Serializable{
 		}
 	}
 
-	public boolean hasTag(String aTag){
-		return this.root.hasTag(aTag);
-	}
-
 	public int setStoryId(int aId){
 		this.id = aId;
 		return this.id;
@@ -111,6 +125,8 @@ public class Story implements Serializable{
 		Segment segToFork = this.findSegId(segId);
 		if(segToFork != null){
 			seg.setParentSeg(segToFork);
+			seg.setSegmentId(this.nextSegId);
+			this.nextSegId++;
 			return segToFork.addChild(seg);
 		}
 		return false;

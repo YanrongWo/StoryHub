@@ -6,7 +6,7 @@ import java.io.*;
 
 public class Segment implements Serializable{
 
-    private int id;
+    private int id = 0; //default
 
     private String title;
     private String author;
@@ -16,12 +16,11 @@ public class Segment implements Serializable{
     private ArrayList<Segment> childSegs;
     private static final long serialVersionUID = 1L;
     
-    public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags) {
+    public Segment(Segment parentSeg, String title, String author, String content, String[] tags) {
         this.parentSeg = parentSeg;
         this.title = title;
         this.author = author;
         this.content = content;
-        this.id = id;
         this.tags = tags;
         this.childSegs = new ArrayList<Segment>();
         
@@ -94,5 +93,8 @@ public class Segment implements Serializable{
             return null;
         }
     }
-    
+
+    public void setSegmentId(int segId) {
+        this.id = segId;
+    }
 }

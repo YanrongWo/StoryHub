@@ -142,7 +142,6 @@ public class AppController{
                 Object deSerializedObject = objectIn.readObject();
                 this.stories.add((Story) deSerializedObject);
             }
-            System.out.println("Ho ho");
         }
         rs.close();
         pstmt.close();
