@@ -23,12 +23,12 @@ public class Application extends Controller {
 
         //For each story, add to storyList 
         //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "This is 250 characters. Story content is great. Read more about this riveting story. You'll never guess what happens because I don't know what will happen. You can determine the ending. Or will there not be an ending? Who knows... Java Play is the worst. Would not recommend", 100, new String[] {"x", "y"});
-        Story s1 = new Story(test1, 1);
-        storyList.add(s1);
-        Story s2 = new Story(test2, 2);
-        storyList.add(s2);   
+        // Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
+        // Segment test2 = new Segment(null, "Title 2", "Author 2", "This is 250 characters. Story content is great. Read more about this riveting story. You'll never guess what happens because I don't know what will happen. You can determine the ending. Or will there not be an ending? Who knows... Java Play is the worst. Would not recommend", 100, new String[] {"x", "y"});
+        // Story s1 = new Story(test1, 1);
+        // storyList.add(s1);
+        // Story s2 = new Story(test2, 2);
+        // storyList.add(s2);   
 
         return ok(index.render("Homepage", storyList));
     }
@@ -38,8 +38,8 @@ public class Application extends Controller {
         ArrayList<Story> storyList = new ArrayList<Story>();
         //For each story, add to storyList 
         //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", 100, new String[] {"x", "y"});
+        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
+        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", new String[] {"x", "y"});
         Story s1 = new Story(test1, 1);
         storyList.add(s1);
         Story s2 = new Story(test2, 2);
@@ -79,7 +79,7 @@ public class Application extends Controller {
             System.out.println(tags);
             System.out.println(session("name"));
             Segment seg = new Segment(null, title, session("name"),
-                content, 0, tags);
+                content, tags);
             Story myStory = myAppController.createStory(seg);
             return ok("Submitted");
         }
@@ -99,7 +99,7 @@ public class Application extends Controller {
             String content = form.get("content");
             String tagsRaw = form.get("tags");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            Segment seg = new Segment(null, title, session("name"), content, 0, tags);
+            Segment seg = new Segment(null, title, session("name"), content, tags);
             //add segment to story
 
             return ok("Submitted");
