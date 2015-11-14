@@ -115,15 +115,31 @@ public class Application extends Controller {
     //Returns all stories with tags
     public Result getTaggedStories(String query){
         System.out.println("Function is called!!!");
+        System.out.println("Query:"+query);
+
 
         System.out.println(query);
-        ArrayList<StorySeg> tagged = myAppController.find(query);
+        ArrayList<StorySeg> tagged = myAppController.find(query.trim());
+        for(int i = 0;i < tagged.size(); i ++){
+            System.out.println(tagged);
+        }
 
         ArrayList<Story> taggedStories = new ArrayList<Story>();
 
-        for ( int i = 0; i < tagged.size();i++ ){
-           taggedStories.add(myAppController.getStories().get(tagged.get(i).getStoryInt()));
+        ArrayList<Story> stories = myAppController.getStories();
+
+        // Iterate through list of stories, 
+        for ( int p =0; p < stories.size(); p ++){
+            Story story = stories.get(p);
+            //Iterate through IDs of stories found with the tags, if equal then add to tagged
+            for( int i = 0 ; i < tagged.size(); i++){
+                int storyID = tagged.get(i).getStoryInt();
+                if(storyID == story.getStoryId()){
+                    taggedStories.add(story);
+                }
+            }
         }
+        System.out.println(taggedStories.size());
 
         String searchString = "Search results for tag \""+query+"\"";
         

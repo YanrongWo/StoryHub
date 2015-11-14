@@ -79,6 +79,12 @@ public class AppController{
                 results.add(new StorySeg(stories.get(i).getStoryId(), hits.get(j)));
             }
         }
+
+        //Debug
+        System.out.println("The returned story segs");
+        for( int i = 0 ;i < results.size(); i++){
+            System.out.println(results.get(i));
+        }
         return results;
     }
 

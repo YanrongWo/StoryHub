@@ -13,7 +13,7 @@
 	    <!-- Brand and toggle get grouped for better mobile display -->
 	    <div class="navbar-header">
         <a class="navbar-left homepage" href="/index.html">StoryHub</a>
-	    	<form class="navbar-form navbar-left" role="search">
+	    	<form name = "searchform" class="navbar-form navbar-left" role="search" method="POST" action="">
 			  <div class="form-group">
 			    <input id="search-text" value="Tags" type="text" onclick="this.select()" class="form-control" placeholder="Search">
 			  </div>
@@ -37,13 +37,11 @@
   //Returns search results when search button is clicked
   function returnSearch(){
     search = $('#search-text').val();
-    console.log("Search query:" + search)
-    window.location = "/Search/" + search;
-    console.log("Window:" + "/Search/" + search);
-    return
+      console.log("Search query:" + search)
+    document.searchform.action = "/Search/" + search;
   }
   // function returnSearch(){
-  //   
+    
   //   search = $('#search-text').val()
   //   console.log(search)
   //   $.ajax({
@@ -56,11 +54,11 @@
   //       },
   //       success: function(JSONtagged)
   //       {
-  //               console.log(JSON.stringify(JSONtagged));
-  //         var length = Object.keys(JSONtagged).length;
-  //               console.log(length);
-  //         for ( i = 0; i < length; i++){
-  //               console.log(JSONtagged[i])
+  //           //       console.log(JSON.stringify(JSONtagged));
+  //           // var length = Object.keys(JSONtagged).length;
+  //           //       console.log(length);
+  //           // for ( i = 0; i < length; i++){
+  //           //       console.log(JSONtagged[i])
   //           //addSearchResult(JSONtagged[i])
   //         }
   //       }

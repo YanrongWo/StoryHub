@@ -23,4 +23,4 @@ GET		/Story/:id 					controllers.Application.story(id: Integer)
 
 POST	/AddSegment					controllers.Application.getSegmentInfo()
 
-GET		/Search/:query				controllers.Application.getTaggedStories(query: String)
+POST	/Search/:query					controllers.Application.getTaggedStories(query:String)

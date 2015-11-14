@@ -18,4 +18,7 @@ public class StorySeg{
         return this.segInt;
     }
     
+    @Override public String toString(){
+        return "StoryInt:"+this.storyInt+" SegInt"+this.segInt;
+    }
 }
