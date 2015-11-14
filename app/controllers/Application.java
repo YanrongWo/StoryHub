@@ -118,32 +118,14 @@ public class Application extends Controller {
         System.out.println("Query:"+query);
 
 
-        System.out.println(query);
         ArrayList<StorySeg> tagged = myAppController.find(query.trim());
-        for(int i = 0;i < tagged.size(); i ++){
-            System.out.println(tagged);
+        ArrayList<Segment> taggedSegments = new ArrayList<Segment>();
+        for ( int i = 0 ; i < tagged.size(); i ++){
+            taggedSegments.addAll(tagged.getSegments())
         }
 
-        ArrayList<Story> taggedStories = new ArrayList<Story>();
-
-        ArrayList<Story> stories = myAppController.getStories();
-
-        // Iterate through list of stories, 
-        for ( int p =0; p < stories.size(); p ++){
-            Story story = stories.get(p);
-            //Iterate through IDs of stories found with the tags, if equal then add to tagged
-            for( int i = 0 ; i < tagged.size(); i++){
-                int storyID = tagged.get(i).getStoryInt();
-                if(storyID == story.getStoryId()){
-                    taggedStories.add(story);
-                }
-            }
-        }
-        System.out.println(taggedStories.size());
-
-        String searchString = "Search results for tag \""+query+"\"";
-        
-        return ok(search.render(searchString,taggedStories));
+        String searchString = "Search results for tag \""+query+"\"";     
+        return ok(search.render(searchString,taggedSegments));
     }
     //  //Returns a JSON string with information about the (story, segment)
     // public String getSegmentJson(Story myStory, Segment mySegment){
