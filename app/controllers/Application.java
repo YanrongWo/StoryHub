@@ -118,14 +118,14 @@ public class Application extends Controller {
         System.out.println("Query:"+query);
 
 
-        ArrayList<StorySeg> tagged = myAppController.find(query.trim());
-        ArrayList<Segment> taggedSegments = new ArrayList<Segment>();
-        for ( int i = 0 ; i < tagged.size(); i ++){
-            taggedSegments.addAll(tagged.getSegments())
-        }
+        ArrayList<Segment> tagged = myAppController.find(query.trim());
+        // ArrayList<Segment> taggedSegments = new ArrayList<Segment>();
+        // for ( int i = 0 ; i < tagged.size(); i ++){
+        //     taggedSegments.addAll(tagged.getSegments());
+        // }
 
         String searchString = "Search results for tag \""+query+"\"";     
-        return ok(search.render(searchString,taggedSegments));
+        return ok(search.render(searchString,tagged));
     }
     //  //Returns a JSON string with information about the (story, segment)
     // public String getSegmentJson(Story myStory, Segment mySegment){
