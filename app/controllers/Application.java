@@ -12,10 +12,9 @@ import java.util.*;
 public class Application extends Controller {
 
     AppController myAppController = new AppController();
-    myAppController.loadAll();
 
     public Result index() {
-
+        myAppController.loadAll();
         //Story s = new Story();
         //Ebean.save(s);
 
