@@ -3,13 +3,13 @@
 @main(""){
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/story.css")">
 } {
-<h4>@myStory</h4>
 	<div id="all_segments">
 		
 	</div>
 	<script>
 		var storyId = @{myStory};
 		function addSegment(segmentId){
+			console.log("addSegment() method");
 			$.ajax({
 	          	type: 'POST',
 	          	url: '/AddSegment',
@@ -18,17 +18,19 @@
 	              	storyId: storyId,
 	              	segmentId: segmentId
 	          	},
-	          	success: function(JSONstory, segmentId) 
+	          	success: function(JSONstory) 
 	          	{       
 	              	var story = JSON.parse(JSONstory);
 	              	console.log(story);
-	              	//addJSONcontent(story, segmentId);
+	              	addJSONcontent(story, segmentId);
 	          	}
 	      	});
 		}
 		function addJSONcontent(storyJSON, segmentId){
 			// NewFork URL: /story/:storyId/:segmentId/NewFork
 			var newForkURL = "/story/" + @myStory + "/" + segmentId + "/NewFork";
+			console.log("newForkURL");
+			console.log(newForkURL);
 			var story = '<div class="segment"> \
 			<table> \
 				<col style="width:90%"><col style="width:10%"> \
@@ -37,7 +39,7 @@
 						<div class="title">' + storyJSON["title"] + '</div> \
 					</td> \
 					<td> \
-						<button type="button" class="fork btn btn-primary" href="' + newForkURL + '</button> \
+						<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">Fork</button> \
 					</td> \
 				</tr> \
 				<tr> \
@@ -70,7 +72,7 @@
 				</tr> \
 			</table> \
 		</div>';
-			$('.all_segments').append(story);
+			$('#all_segments').append(story);
 		}
 		$( document ).ready(function() {
     		console.log( "ready!" );
