@@ -137,7 +137,7 @@ public class Application extends Controller {
                 String childrenId = "\"childrenid\":[";
                 String childrenTitle = "\"childrentitle\":[";
                 for(int i = 0; i < children.size(); i++){
-                    child = children.get(i);
+                    Segment child = children.get(i);
                     childrenId += "\"" + child.getSegmentId() + "\",";
                     childrenTitle += "\"" + child.getTitle() + "\",";
                 }
@@ -145,7 +145,7 @@ public class Application extends Controller {
                 childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
                 childrenId += "],";
                 childrenTitle += "]";
-                result += chilrenId + childrenTitle + "}";
+                result += childrenId + childrenTitle + "}";
 
                 return ok(result);
 
