@@ -132,6 +132,7 @@ public class AppController{
     }
     
     public void loadAll() throws SQLException, IOException, ClassNotFoundException {
+        this.stories = new ArrayList<Story>();
         String SQL_DESERIALIZE_OBJECT = "SELECT serialized_object FROM stories";
         PreparedStatement pstmt = this.connection.prepareStatement(SQL_DESERIALIZE_OBJECT);
         ResultSet rs = pstmt.executeQuery();
