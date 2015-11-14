@@ -53,6 +53,15 @@ public class Segment implements Serializable{
     public String[] getTags() {
         return this.tags;
     }
+
+    public boolean hasTag(String aTag){
+        for(String tag : this.tags){
+            if(tag.equals(aTag)){
+                return true;
+            }
+        }
+        return false;
+    }
     
     public Segment getParentSeg() {
         return this.parentSeg;

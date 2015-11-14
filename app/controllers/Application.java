@@ -13,6 +13,7 @@ import java.util.*;
 public class Application extends Controller {
 
     AppController myAppController = new AppController();
+    myAppController.loadAll();
 
     public Result index() {
 
@@ -20,7 +21,9 @@ public class Application extends Controller {
         //Ebean.save(s);
 
         //Get all stories
-        ArrayList<Story> storyList = new ArrayList<Story>();
+        ArrayList<Story> storyList = myAppController.getFrontPageStories();
+        //ArrayList<Story> storyList = new ArrayList<Story>();
+
         //For each story, add to storyList 
         //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
         Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", 100, new String[] {"a", "b"});
