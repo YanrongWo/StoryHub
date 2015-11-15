@@ -65,12 +65,17 @@ public class Application extends Controller {
     }
 
     public Result newStory(){
-    	return ok(newStory.render("New Story", "newStory"));
+        if (session("name") != null)
+        {
+            return ok(newStory.render("New Story", "newStory"));
+        }
+        return badRequest(error.render("You must be logged in to add a story"));
     }
 
     /* create a new story from form data */
     public Result newStorySubmit() throws SQLException{
-        DynamicForm form = Form.form().bindFromRequest();
+        if (session("name") != null){
+            DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } else {
@@ -102,16 +107,23 @@ public class Application extends Controller {
             String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(0);
             return ok(result);
         }
+        }
+        return badRequest(error.render("You must be logged in to add a story"));
     }
 
     public Result newFork(int storyId, int segmentId){
-        return  ok(newStory.render("New Segment", "newFork"));
-    }
+            if (session("name") != null)
+            {
+                return  ok(newStory.render("New Segment", "newFork"));
+            }
+            return badRequest(error.render("You must be logged in to add a segment"));
+        }
 
     /* create a new fork from form data */
     // Adds segment to story with storyId, parent will be segment with segmentId
     public Result newForkSubmit(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
-        DynamicForm form = Form.form().bindFromRequest();
+        if (session("name") != null) {
+            DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } else {
@@ -131,6 +143,8 @@ public class Application extends Controller {
             }
             return notFound(views.html.error.render("Page Not Found"));
         }
+        }
+        return badRequest(error.render("You must be logged in to add a segment"));
     }
 
     public Result story(int id, int segid)throws SQLException, IOException, ClassNotFoundException{
@@ -222,8 +236,6 @@ public class Application extends Controller {
             catch(Exception e){
                 return badRequest(views.html.error.render("Something went wrong! :("));
             }
-            
-
         }
     }
 }
