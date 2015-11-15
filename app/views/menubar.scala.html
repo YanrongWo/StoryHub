@@ -15,7 +15,7 @@
         <a class="navbar-left homepage" href="/">StoryHub</a>
 	    	<form name = "searchform" class="navbar-form navbar-left" role="search" method="POST" action="">
 			  <div class="form-group">
-          <a href="#" title="Search" data-toggle="popover" data-trigger="focus" data-content="This field is required! Cannot be whitespace!" data-placement="bottom"><input id="search-text" type="text" onclick="this.select()" class="form-control" placeholder="Search" required></a>
+          <a href="#" title="Search" data-toggle="popover" data-trigger="focus" data-content="This field is required! Cannot be whitespace!" data-placement="bottom"><input id="search-text" type="text" onclick="this.select()" class="form-control" placeholder="Search e.g. Paris, tbt" required></a>
 			    
 			  </div>
 			  <button type="submit" onclick="returnSearchByTag(event)" class="btn btn-default" >Search Tags</button>
@@ -44,7 +44,21 @@
       event.preventDefault();
       setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
     }
-    document.searchform.action = "/SearchTags/" + search;
+
+    searchQueries = search.split(",");
+    console.log(searchQueries);
+    var searchURL = "/SearchTags/";
+    for(var i = 0 ;i <searchQueries.length; i++){
+      //Remove white space from searches 
+      searchQueries[i] = searchQueries[i].replace(/^\s+|\s+$/g, "")
+
+      //Add queries to URL
+      if(i == searchQueries.length -1){
+        searchURL += searchQueries[i];
+      } else{ searchURL += searchQueries[i]+"+"; }
+    }
+    console.log("Search URL"+searchURL);
+    document.searchform.action = searchURL;
   }
 
   function returnSearchByTitle(event){
@@ -54,7 +68,21 @@
       event.preventDefault();
       setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
     }
-    document.searchform.action = "/SearchTitles/" + search;
+    searchQueries = search.split(",");
+    console.log(searchQueries);
+    var searchURL = "/SearchTitles/";
+    for(var i = 0 ;i <searchQueries.length; i++){
+      console.log("i is"+i);
+      console.log("Query is "+ searchQueries[i]);
+      //Signal white space in url
+      searchQueries[i] = searchQueries[i].replace(/^\s+|\s+$/g, "");
+      //Add queries to URL
+      if(i == searchQueries.length-1){
+        searchURL += searchQueries[i];
+      } else{ searchURL += searchQueries[i]+"+"; }
+    }
+    console.log("Search URL:"+searchURL);
+    document.searchform.action = searchURL;
   }
 
   function new1Story() {

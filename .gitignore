@@ -2,3 +2,4 @@ target/
 *.cache
 *.class
 projects/target/
+/logs/*
