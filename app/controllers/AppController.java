@@ -13,6 +13,11 @@ import java.io.ObjectInputStream;
 import java.io.ByteArrayInputStream;
 import models.*;
 
+/**
+ * AppController controls the storylist and connecting to the database
+ * @author      Java the Hutt
+ * @version     0.1
+ */
 public class AppController{
 
     private int max; //max stories on front page
@@ -23,18 +28,20 @@ public class AppController{
 	
     public AppController() {
         this.max = 10;
-        //this.stornew ArrayList<Story>();
         this.storyIndex = 0;
         this.connection = play.db.DB.getConnection();
         this.stories = new ArrayList<Story>();
         
 	}
     
+   /**
+    * Creates story and saves it into the stories list and stores it in the database
+    * @param Segment to create story with
+    * @return Story created
+    */
     public Story createStory(Segment seg) throws SQLException{
         //add null to table and gets last inserted id
         int sId = getNextStoryId();
-        //int sId = 0;
-        //new Story(Segment )
         Story newOne = new Story(seg, sId);
         stories.add(newOne);
         //save the story to database
@@ -42,10 +49,10 @@ public class AppController{
         return newOne;
     }
 
-    public int getMax() {
-        return this.max;
-    }
-    
+   /**
+    * Executes a query in the database to get the next story id
+    * @return next story id
+    */
     public int getNextStoryId() throws SQLException {
         int storyId = -1;
         String INSERT_COMMAND = "INSERT INTO stories(storyid, serialized_object) VALUES (NULL, NULL)";
@@ -63,7 +70,13 @@ public class AppController{
         return storyId;
     }
     
-    //not tested
+   /**
+    * Adds a segment to story at segment with segmentId
+    * @param story to add it to
+    * @param segment to add
+    * @param segment id at which to add the segment
+    * @return true if adding segment was successful
+    */
     public boolean fork(Story sto, Segment seg, int segmentId) throws SQLException {
         if (sto.addSegment(seg, segmentId)) {
             storeStory(sto);
@@ -73,8 +86,12 @@ public class AppController{
         
     }
     
+   /**
+    * finds and returns all segments with matching tag
+    * @param string tag to search
+    * @return arraylist of segments with matching tag
+    */
     public ArrayList<Segment> findByTag(String search) {
-        System.out.println("Finding!!!");
         ArrayList<Segment> results = new ArrayList<Segment>();
         for(int i=0; i<stories.size(); i++) {
             results.addAll(stories.get(i).findTags(search));
@@ -82,6 +99,11 @@ public class AppController{
         return results;
     }
 
+   /**
+    * finds and returns all segments with matching title
+    * @param string title keyword to search
+    * @return arraylist of segments with matching title
+    */
     public ArrayList<Segment> findByTitle(String search){
         ArrayList<Segment> results = new ArrayList<Segment>();
         for (int i = 0 ; i < stories.size(); i ++){
@@ -90,28 +112,10 @@ public class AppController{
         return results;
     }
 
-    public Story getStory(int storyId) throws SQLException, IOException, ClassNotFoundException {
-        //do table query
-        return (Story) deserializeObjectFromDB(storyId);
-    }
-    
-    public ArrayList<Story> getStories() {
-        return this.stories;
-    }
-    
-    public void storeStory(Story sto) throws SQLException {
-        serializeJavaObjectToDB(sto, sto.getStoryId());
-    }
-    
-    public void serializeJavaObjectToDB(Object objectToSerialize, int storyId) throws SQLException {
-        String SQL_SERIALIZE_OBJECT = "UPDATE stories SET serialized_object=? WHERE storyid=?";
-        PreparedStatement pstmt = this.connection.prepareStatement(SQL_SERIALIZE_OBJECT);
-        pstmt.setInt(2, storyId);
-        pstmt.setObject(1, objectToSerialize);
-        pstmt.executeUpdate();
-        pstmt.close();
-    }
-
+   /**
+    * Executes a query to find the total number of stories in the database
+    * @return story size
+    */
     public int getStoryListSize() throws SQLException {
         int storySize = -1;
         String SIZE_COMMAND = "SELECT count(serialized_object) from stories";
@@ -124,17 +128,35 @@ public class AppController{
         pstmt.close();
         return storySize;
     }
+
+   /**
+    * stores story by serializing and saving to database
+    * @param story object
+    */
+    public void storeStory(Story sto) throws SQLException {
+        serializeJavaObjectToDB(sto, sto.getStoryId());
+    }
     
+   /**
+    * Executes a query in the database to save an object with story id by serializing it
+    * @param Object to serialize
+    * @param story id of object
+    */
+    public void serializeJavaObjectToDB(Object objectToSerialize, int storyId) throws SQLException {
+        String SQL_SERIALIZE_OBJECT = "UPDATE stories SET serialized_object=? WHERE storyid=?";
+        PreparedStatement pstmt = this.connection.prepareStatement(SQL_SERIALIZE_OBJECT);
+        pstmt.setInt(2, storyId);
+        pstmt.setObject(1, objectToSerialize);
+        pstmt.executeUpdate();
+        pstmt.close();
+    }
+    
+   /**
+    * Executes a query to the number of stories within the offset
+    * @param offset
+    * @return arraylist of stories with story ids within the offset
+    */
     public ArrayList<Story> getFrontPageStories(int i) throws SQLException, IOException, ClassNotFoundException {
-        // if (stories.size() < max) {
-        //     return stories;
-        // } else {
-        //     int maxLoad = i+max;
-        //     if(maxLoad>stories.size()) {
-        //         maxLoad = stories.size();
-        //     }
-        //     return new ArrayList<Story>(stories.subList(i, maxLoad));
-        // }
         int storySize = getStoryListSize();
         int maxLoad = i+this.max;
         if(maxLoad>storySize) {
@@ -159,8 +181,22 @@ public class AppController{
         pstmt.close();
         return frontStories;
     }
+
+   /**
+    * gets story with story id by deserializing it from the database
+    * @param story id
+    * @return story object
+    */
+    public Story getStory(int storyId) throws SQLException, IOException, ClassNotFoundException {
+        //do table query
+        return (Story) deserializeObjectFromDB(storyId);
+    }
     
-    //http://javapapers.com/core-java/serialize-de-serialize-java-object-from-database/
+   /**
+    * Executes a query in the database to get an object with story id by deserializing it
+    * @param story id
+    * @return Object that was deserialized
+    */
     public Object deserializeObjectFromDB(int storyId) throws SQLException, IOException, ClassNotFoundException {
         String SQL_DESERIALIZE_OBJECT = "SELECT serialized_object FROM stories WHERE storyId = ?";
         PreparedStatement pstmt = this.connection.prepareStatement(SQL_DESERIALIZE_OBJECT);
@@ -179,9 +215,12 @@ public class AppController{
         rs.close();
         pstmt.close();
         return deSerializedObject;
-        //return null;
     }
     
+   /**
+    * Executes a query in the database to retrieve all objects in table stories and saving it
+    * to stories arraylist in AppController
+    */
     public void loadAll() throws SQLException, IOException, ClassNotFoundException {
         this.stories = new ArrayList<Story>();
         String SQL_DESERIALIZE_OBJECT = "SELECT serialized_object FROM stories";
@@ -199,5 +238,16 @@ public class AppController{
         rs.close();
         pstmt.close();
     }
+
+    //accessors
+    public int getMax() {
+        return this.max;
+    }
+
+    public ArrayList<Story> getStories() {
+        return this.stories;
+    }
+
+
     
 }
