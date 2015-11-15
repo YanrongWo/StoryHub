@@ -102,17 +102,53 @@ public class AppController{
         pstmt.executeUpdate();
         pstmt.close();
     }
-    
-    public ArrayList<Story> getFrontPageStories(int i) {
-        if (stories.size() < max) {
-            return stories;
-        } else {
-            int maxLoad = i+max;
-            if(maxLoad>stories.size()) {
-                maxLoad = stories.size();
-            }
-            return new ArrayList<Story>(stories.subList(i, maxLoad));
+
+    public int getStoryListSize() throws SQLException {
+        int storySize = -1;
+        String SIZE_COMMAND = "SELECT count(serialized_object) from stories";
+        PreparedStatement pstmt = this.connection.prepareStatement(SIZE_COMMAND);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            storySize = rs.getInt(1);
         }
+        rs.close();
+        pstmt.close();
+        return storySize;
+    }
+    
+    public ArrayList<Story> getFrontPageStories(int i) throws SQLException, IOException, ClassNotFoundException {
+        // if (stories.size() < max) {
+        //     return stories;
+        // } else {
+        //     int maxLoad = i+max;
+        //     if(maxLoad>stories.size()) {
+        //         maxLoad = stories.size();
+        //     }
+        //     return new ArrayList<Story>(stories.subList(i, maxLoad));
+        // }
+        int storySize = getStoryListSize();
+        int maxLoad = i+this.max;
+        if(maxLoad>storySize) {
+            maxLoad = storySize;
+        }
+        ArrayList<Story> frontStories = new ArrayList<Story>();
+        String SQL_DESERIALIZE_OBJECT = "SELECT serialized_object FROM stories WHERE storyid BETWEEN ? AND ?";
+        PreparedStatement pstmt = this.connection.prepareStatement(SQL_DESERIALIZE_OBJECT);
+        pstmt.setInt(1, i);
+        pstmt.setInt(2, maxLoad);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()) {
+            byte[] buf = rs.getBytes(1);
+            ObjectInputStream objectIn = null;
+            if (buf != null) {
+                objectIn = new ObjectInputStream(new ByteArrayInputStream(buf));
+                Object deSerializedObject = objectIn.readObject();
+                frontStories.add((Story) deSerializedObject);
+            }
+        }
+        rs.close();
+        pstmt.close();
+        return frontStories;
     }
     
     //http://javapapers.com/core-java/serialize-de-serialize-java-object-from-database/
