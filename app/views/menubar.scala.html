@@ -18,7 +18,8 @@
           <a href="#" title="Search" data-toggle="popover" data-trigger="focus" data-content="This field is required! Cannot be whitespace!" data-placement="bottom"><input id="search-text" type="text" onclick="this.select()" class="form-control" placeholder="Search" required></a>
 			    
 			  </div>
-			  <button type="submit" onclick="returnSearch(event)" class="btn btn-default" >Submit</button>
+			  <button type="submit" onclick="returnSearchByTag(event)" class="btn btn-default" >Search Tags</button>
+        <button type="submit" onclick="returnSearchByTitle(event)" class="btn btn-default" >Search Title</button>
       <button id="NewStoryButton" type="button" class="btn btn-primary" onclick="new1Story()" style="margin-left: 20px; display: none;">
         <span class="glyphicon glyphicon-star" aria-hidden="true"></span> New Story
       </button>
@@ -36,44 +37,27 @@
 
 <script>
   //Returns search results when search button is clicked
-  function returnSearch(event){
+  function returnSearchByTag(event){
     search = $('#search-text').val();
     if (!search || search.trim() == ""){
       $('[data-toggle="popover"]').popover('show');   
       event.preventDefault();
       setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
     }
-      console.log("Search query:" + search)
-    document.searchform.action = "/Search/" + search;
+      console.log("Search query by tags:" + search)
+    document.searchform.action = "/SearchTags/" + search;
   }
-  // function returnSearch(){
-    
-  //   search = $('#search-text').val()
-  //   console.log(search)
-  //   $.ajax({
-  //       type: 'POST',
-  //       url:'/Search',
-  //       dataType: 'json',
-  //       data:
-  //       {
-  //         searchWord: search,
-  //       },
-  //       success: function(JSONtagged)
-  //       {
-  //           //       console.log(JSON.stringify(JSONtagged));
-  //           // var length = Object.keys(JSONtagged).length;
-  //           //       console.log(length);
-  //           // for ( i = 0; i < length; i++){
-  //           //       console.log(JSONtagged[i])
-  //           //addSearchResult(JSONtagged[i])
-  //         }
-  //       }
-  //   });
-  // }
 
-  // function addSearchResult(){
-  //   //HTML and javascript to add search results of story
-  // }
+  function returnSearchByTitle(event){
+    search = $('#search-text').val();
+    if (!search || search.trim() == ""){
+      $('[data-toggle="popover"]').popover('show');   
+      event.preventDefault();
+      setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
+    }
+      console.log("Search query by title:" + search)
+    document.searchform.action = "/SearchTitles/" + search;
+  }
 
   function new1Story() {
     console.log("New story");

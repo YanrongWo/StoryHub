@@ -144,11 +144,9 @@ public class Application extends Controller {
             if(myStory != null){
                 System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
-                ArrayList<Integer> segs = new ArrayList<Integer>();
-                segs.add(segmentId);
                 if(added){
                     boolean loggedIn = (session("name") != null);
-                    ArrayList<Integer> segsToParent = myStory.findSegById(segmentId).getParentSegIds();
+                    ArrayList<Integer> segsToParent = myStory.findSegById(seg.getSegmentId()).getParentSegIds();
                     return ok(story.render(storyId, segsToParent, loggedIn));
                 }
             }
@@ -168,16 +166,25 @@ public class Application extends Controller {
     }
 
     //Returns all stories with tags
-    public Result getTaggedStories(String query) throws SQLException, IOException, ClassNotFoundException{
+    public Result getStoriesByTags(String query) throws SQLException, IOException, ClassNotFoundException{
         myAppController.loadAll();
         System.out.println("Function is called!!!");
         System.out.println("Query:"+query);
 
 
-        ArrayList<Segment> tagged = myAppController.find(query.trim());
+        ArrayList<Segment> tagged = myAppController.findByTag(query.trim());
 
         String searchString = "Search results for tag \""+query+"\"";     
         return ok(search.render(searchString,tagged));
+    }
+
+    public Result getStoriesByTitles(String query) throws SQLException,IOException,ClassNotFoundException{
+        myAppController.loadAll();
+
+        ArrayList<Segment> titles = myAppController.findByTitle(query.trim());
+
+        String searchString = "Search results for title \""+query+"\"";
+        return ok(search.render(searchString,titles));
     }
 
     public Result getSegmentInfo(){

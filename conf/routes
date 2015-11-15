@@ -3,29 +3,32 @@
 # ~~~~
 
 # Home page
-GET     /                          controllers.Application.index()
-GET     /$offset<[0-9]+>                   controllers.Application.offset(offset:Integer)
+GET     /                          						controllers.Application.index()
+GET     /$offset<[0-9]+>                   				controllers.Application.offset(offset:Integer)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-POST	/FacebookName				controllers.Application.facebookName()
+GET     /assets/*file               					controllers.Assets.versioned(path="/public", file: Asset)
 
-POST	/NoFacebookName				controllers.Application.noFacebookName()
+POST	/FacebookName									controllers.Application.facebookName()
 
-GET		/NewStory					controllers.Application.newStory()
+POST	/NoFacebookName									controllers.Application.noFacebookName()
 
-POST	/NewStory                   controllers.Application.newStorySubmit()
+GET		/NewStory										controllers.Application.newStory()
 
-GET		/Story/:id/:segid			controllers.Application.story(id: Integer, segid: Integer)
+POST	/NewStory                   					controllers.Application.newStorySubmit()
 
-POST	/AddSegment					controllers.Application.getSegmentInfo()
+GET		/Story/:id/:segid								controllers.Application.story(id: Integer, segid: Integer)
 
-POST	/Search/:query				controllers.Application.getTaggedStories(query: String)
+POST	/AddSegment										controllers.Application.getSegmentInfo()
 
-GET		/Story/:storyId/:segmentId/NewSegment				controllers.Application.newFork(storyId: Integer, segmentId: Integer)
+POST	/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
 
-POST	/Story/:storyId/:segmentId/NewSegment                   controllers.Application.newForkSubmit(storyId: Integer, segmentId: Integer)
+POST	/SearchTitles/:query							controllers.Application.getStoriesByTitles(query: String)
 
-GET	/Search/:query				controllers.Application.getTaggedStories(query: String)
+GET		/Story/:storyId/:segmentId/NewSegment			controllers.Application.newFork(storyId: Integer, segmentId: Integer)
+
+POST	/Story/:storyId/:segmentId/NewSegment			controllers.Application.newForkSubmit(storyId: Integer, segmentId: Integer)
+
+GET		/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
 
