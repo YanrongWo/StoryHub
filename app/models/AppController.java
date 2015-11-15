@@ -30,13 +30,11 @@ public class AppController{
 	}
     
     public Story createStory(Segment seg) throws SQLException{
-        //new Story(Segment )
-        Story newOne = new Story(seg, 0);
         //add null to table and gets last inserted id
         int sId = getNextStoryId();
         //int sId = 0;
-        newOne.setStoryId(sId);
-        System.out.println(sId);
+        //new Story(Segment )
+        Story newOne = new Story(seg, sId);
         stories.add(newOne);
         //save the story to database
         storeStory(newOne);
