@@ -93,7 +93,7 @@ public class Application extends Controller {
                 if (allStories.get(i).getRoot().getContent().equals(content)){
                     int id = allStories.get(i).getStoryId();
                     String message = " <a href=\"/Story/" + id 
-                        + "/0/\"> Error! A story with the same content has already been made! </a>";
+                        + "/0\"> Error! A story with the same content has already been made! </a>";
                     return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
                 }
             }
