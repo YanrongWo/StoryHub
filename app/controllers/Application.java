@@ -219,6 +219,7 @@ public class Application extends Controller {
             }
             queries[i] = "\""+queries[i]+"\"";
         }    
+        String searchString = "Search results for tags "+String.join(",",queries);
         return ok(search.render(searchString,tagged));
     }
 
@@ -237,7 +238,7 @@ public class Application extends Controller {
             titles.retainAll(myAppController.findByTitle(queries[i].trim()));
             queries[i] = "\""+queries[i]+"\"";
         }
-
+        String searchString = "Search results for titles "+String.join(",",queries);
         return ok(search.render(searchString,titles));
     }
 
