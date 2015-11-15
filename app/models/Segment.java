@@ -43,7 +43,7 @@ public class Segment implements Serializable{
    }
 
    private ArrayList<Integer> getParentSegIds(int segid, ArrayList<Integer> parentSegIds){
-       if (this.id == 0){
+       if (segid == 0){
            return parentSegIds;
        }
        parentSegIds.add(parentSeg.getSegmentId());
