@@ -1,4 +1,4 @@
-package models;
+package controllers;
 
 import play.db.*;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.ClassNotFoundException;
 import java.io.ObjectInputStream;
 import java.io.ByteArrayInputStream;
+import models.*;
 
 public class AppController{
 
