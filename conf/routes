@@ -26,3 +26,6 @@ POST	/Search/:query				controllers.Application.getTaggedStories(query: String)
 GET		/Story/:storyId/:segmentId/NewSegment				controllers.Application.newFork(storyId: Integer, segmentId: Integer)
 
 POST	/Story/:storyId/:segmentId/NewSegment                   controllers.Application.newForkSubmit(storyId: Integer, segmentId: Integer)
+
+GET	/Search/:query				controllers.Application.getTaggedStories(query: String)
+
