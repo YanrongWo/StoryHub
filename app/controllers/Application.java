@@ -96,7 +96,11 @@ public class Application extends Controller {
             Segment seg = new Segment(null, title, session("name"),
                 content, tags);
             Story myStory = myAppController.createStory(seg);
-            return ok("Submitted");
+
+            boolean loggedIn = (session("name") != null);
+            int storyId = myStory.getStoryId();
+            ArrayList<Integer> segsToParent = myStory.findSegById(0).getParentSegIds();
+            return ok(story.render(storyId, segsToParent, loggedIn));
         }
     }
 
