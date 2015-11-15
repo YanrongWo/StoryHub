@@ -119,22 +119,17 @@ public class Story implements Serializable{
 
 	public boolean fork(Segment seg, int segId) {
 		Segment segToFork = this.findSegById(segId);
-		System.out.println("fork() segToFork " + segToFork);
-		System.out.println(segToFork.getParentSeg().getSegmentId() == null);
 		return addSegment(seg, segToFork.getParentSeg().getSegmentId());
 	}
 
 	// Adds Segment seg as a child to Segment with segId
 	public boolean addSegment(Segment seg, int segId){
 		Segment segToFork = this.findSegById(segId);
-		System.out.println("addSegment() segToFork " + segToFork);
-		System.out.println("seg " + seg);
 		if(segToFork != null){
 			seg.setStoryId(this.id);
 			seg.setParentSeg(segToFork);
 			seg.setSegmentId(this.nextSegId);
 			this.nextSegId++;
-			System.out.println("here");
 			return segToFork.addChild(seg);
 		}
 		return false;
