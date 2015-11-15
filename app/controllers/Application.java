@@ -15,12 +15,25 @@ public class Application extends Controller {
     AppController myAppController = new AppController();
 
     public Result index() throws SQLException, IOException, ClassNotFoundException{
-
-        myAppController.loadAll();
+        if(myAppController.getStories().size()==0) {
+            myAppController.loadAll();
+        }
 
         //Get all stories
-        ArrayList<Story> storyList = myAppController.getFrontPageStories();   
+        ArrayList<Story> storyList = myAppController.getFrontPageStories(0);   
 
+        return ok(index.render("Homepage", storyList));
+    }
+
+    public Result offset(int i) throws SQLException, IOException, ClassNotFoundException{
+        if(myAppController.getStories().size()==0) {
+            myAppController.loadAll();
+        }
+        if(i>myAppController.getStories().size()) {
+            String message = "Your offset is larger than the size of the stories library";
+            return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
+        }
+        ArrayList<Story> storyList = myAppController.getFrontPageStories(i);   
         return ok(index.render("Homepage", storyList));
     }
 
