@@ -83,7 +83,7 @@ public class Story implements Serializable{
 
 
 	private void recurseSearchSegTitle(ArrayList<Segment> segments, Segment seg, String searchWord){
-		if(seg.getTitle().contains(searchWord)){
+		if(seg.getTitle().toLowerCase().contains(searchWord.toLowerCase())){
 			segments.add(seg);
 		}
 
