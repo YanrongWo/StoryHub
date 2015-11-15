@@ -137,6 +137,8 @@ public class Application extends Controller {
             if(myStory != null){
                 System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
+                ArrayList<Integer> segs = new ArrayList<Integer>();
+                segs.add(segmentId);
                 if(added){
                     boolean loggedIn = (session("name") != null);
                     ArrayList<Integer> segsToParent = myStory.findSegById(segmentId).getParentSegIds();
@@ -182,6 +184,10 @@ public class Application extends Controller {
             try{
                 Story myStory = myAppController.getStory(Integer.valueOf(storyId));
                 Segment mySegment = myStory.findSegById((int) segmentId);
+                int parentSegId = -1;
+                if(mySegment.getParentSeg() != null){
+                    parentSegId = mySegment.getParentSeg().getSegmentId();
+                }
 
                 result += "\"title\": \"" + mySegment.getTitle() + "\",";
                 result += "\"author\": \"" + mySegment.getAuthor() + "\",";
@@ -195,6 +201,7 @@ public class Application extends Controller {
                 }
                 result += "],";
                 result += "\"content\": \"" + mySegment.getContent() + "\",";
+                result += "\"parentSegId\": " + parentSegId + ",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
                 String childrenId = "\"childrenid\":[";
                 String childrenTitle = "\"childrentitle\":[";
