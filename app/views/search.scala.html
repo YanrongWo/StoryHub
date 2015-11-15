@@ -3,10 +3,11 @@
 @main("Searching Storyhub..."){ }{
 
 	<div class="container">
-		<p class="title">
+		<p class="title" id='query'>
 			@searchQuery
 		</p>
 		<div id="all_stories">
+			@if(taggedSegments.length == 0) { <p>No search results.</p>}
 			@for(segment <- taggedSegments){
 			<div class="story">
 				<table>

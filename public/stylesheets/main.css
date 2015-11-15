@@ -105,8 +105,10 @@ a,a:hover {
 .homepage{
   margin-top: 5px;
 }
-
 .error-message{
   font-size: 2vw;
   text-align:center;
+}
+#query{
+  word-wrap: break-word;
 }

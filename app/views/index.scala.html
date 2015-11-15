@@ -41,33 +41,24 @@
 		}
 		</div>
 		<div>
-		<button id="PrevButton" type="button" class="btn btn-primary" onclick="prevPage(@offset, @interval)">
+		@if(offset-interval >=0) {		
+		<button id="PrevButton" style="float: left;" type="button" class="btn btn-primary" onclick="prevPage(@offset, @interval)">
 		    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous Page
 		  </button>
-	      <button id="NextButton" type="button" class="btn btn-primary" onclick="nextPage(@offset, @totalStories, @interval)">
+		}
+		@if(offset+interval < totalStories) {
+	      <button id="NextButton" style="float: right;" type="button" class="btn btn-primary" onclick="nextPage(@offset, @totalStories, @interval)">
 	        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Next Page
 	      </button>
+	     }
 	      <script>
 	      	function prevPage(i, interval) {
 	      		var newIndex = i-interval;
-	      		if(newIndex<0) {
-	      			$("#PrevButton").html("Previous page not possible");
-	      			$('#PrevButton').prop('disabled', true);
-	      		} else {
-	      			window.location = "/"+newIndex.toString();
-	      		}
+	      		window.location = "/"+newIndex.toString();
 	      	}
 	      	function nextPage(i, totalStories, interval) {
 	      		var newIndex = i+interval;
-	      		console.log("i"+i.toString());
-	      		console.log("interval"+interval.toString());
-	      		console.log(newIndex);
-	      		if(newIndex>totalStories) {
-	      			$("#NextButton").html("Next page not possible");
-	      			$('#NextButton').prop('disabled', true);
-	      		} else {
-	      			window.location = "/"+newIndex.toString();
-	      		}
+	      		window.location = "/"+newIndex.toString();
 	      	}
 	      </script>
   		</div>
