@@ -35,7 +35,7 @@ public class Story implements Serializable{
 		return this.recursiveSearchSegId(segId, this.root);
 	}
 
-	public boolean hasTag(String aTag){
+	/*public boolean hasTag(String aTag){
 		return recurseHasTag(aTag, this.root);
 	}
 
@@ -49,7 +49,7 @@ public class Story implements Serializable{
 			}
 		}
 		return false;
-	}
+	}*/
 
 	// Returns list of segment ids of leaf nodes that are matching the tag
 	public ArrayList<Segment> findTags(String searchWord){
