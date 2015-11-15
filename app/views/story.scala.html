@@ -83,7 +83,7 @@
 			if(!$('.segment-1').length){
 				story += '<div class="children">';
 				for (var i = 0; i < storyJSON["childrenid"].length; i++){
-					story += '<button type="button" id="' +  storyJSON["childrenid"][i] + '" class="btn btn-primary" onclick="' + "addSegment(" + storyJSON["childrenid"][i] + ',' + segmentId + ' );">' + storyJSON["childrentitle"][i] + '</button>';
+					story += '<button type="button" id="' +  storyJSON["childrenid"][i] + '" class="childbtn btn btn-primary" onclick="' + "addSegment(" + storyJSON["childrenid"][i] + ',' + segmentId + ' );">' + storyJSON["childrentitle"][i] + '</button>';
 				}
 				story += '</div>';
 			}
