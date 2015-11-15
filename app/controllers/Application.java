@@ -88,6 +88,15 @@ public class Application extends Controller {
             String title = form.get("title").replaceAll("\"", "\'");
             System.out.println(title);
             String content = form.get("content").replaceAll("\"", "\'");
+            ArrayList<Story> allStories = myAppController.getStories();
+            for (int i = 0; i < allStories.size(); i++){
+                if (allStories.get(i).getRoot().getContent().equals(content)){
+                    int id = allStories.get(i).getStoryId();
+                    String message = " <a href=\"/Story/" + id 
+                        + "/0/\"> Error! A story with the same content has already been made! </a>";
+                    return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
+                }
+            }
             System.out.println(content);
             String tagsRaw = form.get("tags").replaceAll("\"", "\'");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
