@@ -27,8 +27,6 @@
 					//And remove same level segment
 					$(segmentLevel).remove();
 				}
-			
-			console.log("addSegment() method");
 			$.ajax({
 	          	type: 'POST',
 	          	url: '/AddSegment',
@@ -40,7 +38,6 @@
 	          	success: function(JSONstory) 
 	          	{       
 	              	var story = JSON.parse(JSONstory);
-	              	console.log(story);
 	              	addJSONcontent(story, segmentId);
 	              	index += 1;
 	              	if (index < segments.length){
@@ -52,8 +49,6 @@
 		function addJSONcontent(storyJSON, segmentId){
 			// NewFork URL: /story/:storyId/:segmentId/NewFork
 			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewSegment";
-			console.log("newForkURL");
-			console.log(newForkURL);
 			var story = '<div class="story segment' + storyJSON["parentSegId"] + '">';
 			story += '<table> \
 				<col style="width:90%"><col style="width:10%"> \
@@ -81,7 +76,6 @@
 					story += '<li><a href="/SearchTags/'+storyJSON["tags"][i]+'" class="tag">' + storyJSON["tags"][i] + '</a></li>';
 				}
 			}
-			console.log(storyJSON["content"].replace(/\~\|\+\#/g, "\""));
 			story += '</ul> \
 					</td> \
 				</tr> \
