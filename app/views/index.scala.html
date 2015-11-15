@@ -45,7 +45,7 @@
 		    	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous Page
 		  	</button>
 		}
-		@if(offset + interval < totalStories) {
+		@if(offset + interval < totalStories+1) {
 	      	<button id="NextButton" style="float: right;" type="button" class="btn btn-primary" onclick="nextPage(@offset, @totalStories, @interval)">
 	        	<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Next Page
 	      	</button>
