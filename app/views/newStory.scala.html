@@ -142,7 +142,7 @@
 
 					<!-- Create the editor container -->
 					<div id="editor">
-					  <div>Your Story Content...</div>
+					  <div></div>
 					</div>
 				</div>
 			</div>
@@ -224,10 +224,15 @@
 
 					posting.done(function(segInfoString){
 						console.log("Received reply!");
-						var segInfo = segInfoString.split(",");
-						var storyId = segInfo[0];
-						var segmentId = segInfo[1];
-						window.location = "/Story/"+storyId.toString()+"/"+segmentId.toString();
+						console.log(segInfoString);
+						if (segInfoString.startsWith("not found")) {
+							window.location = "/Error/NewStoryError"
+						} else {
+							var segInfo = segInfoString.split(",");
+							var storyId = segInfo[0];
+							var segmentId = segInfo[1];
+							window.location = "/Story/"+storyId.toString()+"/"+segmentId.toString();
+						}
 					});
 				}
 			});
