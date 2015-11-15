@@ -1,10 +1,10 @@
 .title{
 	font-size: 4vw;
-
 }
 html {
   position: relative;
   min-height: 100%;
+  height: auto;
 }
 body {
   font: 12px/1.5 'PT Sans', serif;
@@ -121,7 +121,7 @@ a,a:hover {
   color: #777;
 }
 .footer {
-  position: relative;
+  position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
@@ -130,6 +130,13 @@ a,a:hover {
   margin-top: 20px;
   background-color: #f5f5f5;
 }
+#pageButton{
+  overflow: auto;
+}
 #maincontent{
-  margin-bottom: 20px;
+  overflow: auto;
+  margin-bottom: 100px;
+}
+#all_stories{
+  overflow: auto;
 }
