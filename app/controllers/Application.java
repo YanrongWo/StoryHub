@@ -188,7 +188,7 @@ public class Application extends Controller {
                 }
                 result += "],";
                 result += "\"content\": \"" + mySegment.getContent() + "\",";
-                result += "\"parentSegId\": " + parentSegId + ",";
+                result += "\"parentSegId\": \"" + parentSegId + "\",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
                 String childrenId = "\"childrenid\":[";
                 String childrenTitle = "\"childrentitle\":[";
