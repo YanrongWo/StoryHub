@@ -124,13 +124,16 @@ public class AppController{
         PreparedStatement pstmt = this.connection.prepareStatement(SQL_DESERIALIZE_OBJECT);
         pstmt.setInt(1, storyId);
         ResultSet rs = pstmt.executeQuery();
-        rs.next();
-        byte[] buf = rs.getBytes(1);
-        ObjectInputStream objectIn = null;
-        if (buf != null) {
-            objectIn = new ObjectInputStream(new ByteArrayInputStream(buf));
-        }
-        Object deSerializedObject = objectIn.readObject();
+        Object deSerializedObject = null;
+        if (rs.isBeforeFirst()){
+            rs.next();
+            byte[] buf = rs.getBytes(1);
+            ObjectInputStream objectIn = null;
+            if (buf != null) {
+                objectIn = new ObjectInputStream(new ByteArrayInputStream(buf));
+            }
+            deSerializedObject = objectIn.readObject();
+        }      
         rs.close();
         pstmt.close();
         return deSerializedObject;

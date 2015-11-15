@@ -85,18 +85,21 @@
       // Logged into your app and Facebook.
       testAPI();
       $('#NewStoryButton').css("display", "inline");
-    } else if (response.status === 'not_authorized') {
+    } else {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +
         'into this app.';
         $('#NewStoryButton').css("display", "none");
-    } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
-      $('#NewStoryButton').css("display", "none");
-    }
+        $.ajax({
+          method: "POST",
+          url: "/NoFacebookName",
+          success: function(data){
+            if (data == "changed"){
+              window.location.reload(true);
+            }
+          } 
+        });
+    } 
   }
 
   // This function is called when someone finishes with the Login
@@ -153,8 +156,13 @@
       $.ajax({
         method: "POST",
         url: "/FacebookName",
-        data: { name: response.name } 
-      })
+        data: { name: response.name },
+        success: function(data){
+          if (data == "changed"){
+            window.location.reload(true);
+          }
+        }  
+      });
     });
   }
 </script>

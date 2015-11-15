@@ -8,6 +8,7 @@ import views.html.*;
 import java.sql.SQLException;
 import java.util.*;
 import java.io.IOException;
+import play.twirl.api.Html;
 
 public class Application extends Controller {
 
@@ -55,11 +56,23 @@ public class Application extends Controller {
     	DynamicForm form = Form.form().bindFromRequest();
     	if (form.data().size() != 0)
     	{
-            System.out.println(form.get("name"));
-            session("name", form.get("name"));
-    		return ok("Sucess");
+            if (session("name") == null){ 
+                System.out.println(form.get("name"));
+                session("name", form.get("name"));
+                return ok("changed");
+            }
+    		return ok("");
     	}
     	return badRequest();
+    }
+
+    public Result noFacebookName() {
+        if (session("name") != null)
+        {
+            session().clear();
+            return ok("changed");
+        }
+        return ok("");
     }
 
     public Result newStory(){
@@ -113,9 +126,13 @@ public class Application extends Controller {
 
     public Result story(int id, int segid)throws SQLException, IOException, ClassNotFoundException{
         boolean loggedIn = (session("name") != null);
-        Segment mySeg = myAppController.getStory(id).findSegById(segid);
-        ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
-        return ok(story.render(id, segsToParent));
+        Story myStory = myAppController.getStory(id);
+        if (myStory == null){
+            Segment mySeg = myStory.findSegById(segid);
+            ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
+            return ok(story.render(id, segsToParent, loggedIn));
+        }
+        return notFound(main.render("Page Not Found", Html.apply(""), Html.apply("Page Not Found.")));
     }
 
     //Returns all stories with tags

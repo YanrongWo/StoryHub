@@ -1,4 +1,4 @@
-@(myStory: Integer, mySegs: List[Integer])
+@(myStory: Integer, mySegs: List[Integer], loggedin: Boolean)
 
 
 @main(""){
@@ -29,7 +29,7 @@
 		}
 		function addJSONcontent(storyJSON, segmentId){
 			// NewFork URL: /story/:storyId/:segmentId/NewFork
-			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewFork";
+			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewSegment";
 			console.log("newForkURL");
 			console.log(newForkURL);
 			var story = '<div class="segment"> \
@@ -39,10 +39,11 @@
 					<td> \
 						<div class="title">' + storyJSON["title"] + '</div> \
 					</td>';
-			story += '<td> \
+			@if(loggedin){
+				story += '<td> \
 					<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment</button> \
-				</td>';
-		
+					</td>';
+			}
 			story += '</tr> \
 				<tr> \
 					<td> \
