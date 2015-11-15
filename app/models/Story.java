@@ -11,10 +11,11 @@ public class Story implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	public Story(Segment aRoot, int aId){
+		this.id = aId;
+		
 		aRoot.setStoryId(this.id);
 		aRoot.setSegmentId(this.nextSegId);
 		this.root = aRoot;
-		this.id = aId;
 		this.nextSegId++;
 	}
 
