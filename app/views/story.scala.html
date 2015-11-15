@@ -98,7 +98,7 @@
 			</table> \
 		</div>';
 			$('#all_segments').append(story);
-			$(document).scrollTop($(document).height());
+			$("body").animate({ scrollTop: $(document).height() }, "slow");
 		}
 
 		var segments = @mySegs;
