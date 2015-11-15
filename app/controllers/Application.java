@@ -166,7 +166,11 @@ public class Application extends Controller {
             String content = form.get("content");
             String tagsRaw = form.get("tags");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            Segment seg = new Segment(null, title, session("name"), content, tags);
+            Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
+            setTags.remove("");
+            setTags.remove(" ");
+            String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
+            Segment seg = new Segment(null, title, session("name"), content, uniqueTags);
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
             if(myStory != null){
@@ -219,6 +223,7 @@ public class Application extends Controller {
             }
             queries[i] = "\""+queries[i]+"\"";
         }    
+
         String searchString = "Search results for tags "+String.join(",",queries);
         return ok(search.render(searchString,tagged));
     }
