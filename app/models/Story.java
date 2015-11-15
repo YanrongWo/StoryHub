@@ -51,17 +51,6 @@ public class Story implements Serializable{
 		return false;
 	}
 
-	// public ArrayList<Segment> traverse(int segId){
-	// 	ArrayList<Segment> allSegments = new ArrayList<Segment>();
-	// 	int currentId = this.id;
-	// 	Segment currentSeg = this.root;
-	// 	while(currentId != segId){
-	// 		allSegments.add(currentSeg);
-	// 		currentId = this.nextSegId;
-	// 	}
-	// 	return allSegments;
-	// }
-
 	// Returns list of segment ids of leaf nodes that are matching the tag
 	public ArrayList<Segment> findTags(String searchWord){
 		ArrayList<Segment> segments = new ArrayList<Segment>();

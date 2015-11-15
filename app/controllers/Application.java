@@ -19,19 +19,7 @@ public class Application extends Controller {
         myAppController.loadAll();
 
         //Get all stories
-        ArrayList<Story> storyList = myAppController.getFrontPageStories();
-        //ArrayList<Story> storyList = new ArrayList<Story>();
-
-        //For each story, add to storyList 
-        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "This is 250 characters. Story content is great. Read more about this riveting story. You'll never guess what happens because I don't know what will happen. You can determine the ending. Or will there not be an ending? Who knows... Java Play is the worst. Would not recommend", new String[] {"x", "y"});
-        //Story s1 = new Story(test1, 1);
-        //myAppController.createStory(test1);
-        //myAppController.createStory(test2);
-        // storyList.add(s1);
-        // Story s2 = new Story(test2, 2);
-        // storyList.add(s2);   
+        ArrayList<Story> storyList = myAppController.getFrontPageStories();   
 
         return ok(index.render("Homepage", storyList));
     }
@@ -88,15 +76,30 @@ public class Application extends Controller {
             String title = form.get("title").replaceAll("\"", "\'");
             System.out.println(title);
             String content = form.get("content").replaceAll("\"", "\'");
+            ArrayList<Story> allStories = myAppController.getStories();
+            for (int i = 0; i < allStories.size(); i++){
+                if (allStories.get(i).getRoot().getContent().equals(content)){
+                    int id = allStories.get(i).getStoryId();
+                    String message = " <a href=\"/Story/" + id 
+                        + "/0\"> Error! A story with the same content has already been made! </a>";
+                    return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
+                }
+            }
             System.out.println(content);
             String tagsRaw = form.get("tags").replaceAll("\"", "\'");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            System.out.println(tags);
+            Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
+            String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
+            System.out.println(uniqueTags);
             System.out.println(session("name"));
             Segment seg = new Segment(null, title, session("name"),
-                content, tags);
+                content, uniqueTags);
             Story myStory = myAppController.createStory(seg);
-            return ok("Submitted");
+
+            boolean loggedIn = (session("name") != null);
+            int storyId = myStory.getStoryId();
+            ArrayList<Integer> segsToParent = myStory.findSegById(0).getParentSegIds();
+            return ok(story.render(storyId, segsToParent, loggedIn));
         }
     }
 
@@ -125,7 +128,9 @@ public class Application extends Controller {
                 ArrayList<Integer> segs = new ArrayList<Integer>();
                 segs.add(segmentId);
                 if(added){
-                    return ok(story.render(storyId, segs, loggedIn));
+                    boolean loggedIn = (session("name") != null);
+                    ArrayList<Integer> segsToParent = myStory.findSegById(segmentId).getParentSegIds();
+                    return ok(story.render(storyId, segsToParent, loggedIn));
                 }
             }
             return notFound(main.render("Page Not Found", Html.apply(""), Html.apply("Page Not Found.")));
@@ -150,93 +155,16 @@ public class Application extends Controller {
 
 
         ArrayList<Segment> tagged = myAppController.find(query.trim());
-        // ArrayList<Segment> taggedSegments = new ArrayList<Segment>();
-        // for ( int i = 0 ; i < tagged.size(); i ++){
-        //     taggedSegments.addAll(tagged.getSegments());
-        // }
 
         String searchString = "Search results for tag \""+query+"\"";     
         return ok(search.render(searchString,tagged));
     }
-    //  //Returns a JSON string with information about the (story, segment)
-    // public String getSegmentJson(Story myStory, Segment mySegment){
-    //     String result = "{";
-            
-    //     result += "\"title\": \"" + mySegment.getTitle() + "\",";
-    //     result += "\"author\": \"" + mySegment.getAuthor() + "\",";
-    //     result += "\"tags\": [";
-    //     String[] tags = mySegment.getTags();
-    //     for (int i = 0; i < tags.length; i++){
-    //         result += "\"" + tags[i] + "\",";
-    //     }
-    //     result = result.substring(0, result.length() - 1);
-    //     result += "],";
-    //     result += "\"content\": \"" + mySegment.getContent() + "\",";
-    //     ArrayList<Segment> children = mySegment.getChildSegs();
-    //     String childrenId = "\"childrenid\":[";
-    //     String childrenTitle = "\"childrentitle\":[";
-    //     for(int i = 0; i < children.size(); i++){
-    //         Segment child = children.get(i);
-    //         childrenId += "\"" + child.getSegmentId() + "\",";
-    //         childrenTitle += "\"" + child.getTitle() + "\",";
-    //     }
-    //     childrenId = childrenId.substring(0, childrenId.length() - 1);
-    //     childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
-    //     childrenId += "],";
-    //     childrenTitle += "]";
-    //     result += childrenId + childrenTitle + "}";
-
-    //     return(result);
-    // }
-
-
-    // public Result getTaggedStories(){
-    //     System.out.println("Function is called!!!");
-    //     DynamicForm form = Form.form().bindFromRequest();
-    //     if (form.data().size() == 0) {
-    //         System.out.println("Bad Request");
-    //         return badRequest("Form Error");
-    //     } else {
-    //         String searchWord = form.get("searchWord");
-    //         System.out.println(searchWord);
-    //         ArrayList<StorySeg> tagged = myAppController.find(searchWord);
-
-    //         String searchResult = "{"; 
-    //         //Transform each StorySeg into corresponding JSON
-    //         for(int a = 0;a < tagged.size();a++){
-    //             try{
-    //                 Story myStory = myAppController.getStory(Integer.valueOf(tagged.get(a).getStoryInt()));
-    //                 Segment mySegment = myStory.getRoot().getSegment(tagged.get(a).getSegInt());
-    //                 String json = getSegmentJson(myStory,mySegment);
-    //                 searchResult += "\"" + a + ":\"" + json;
-    //             }
-    //             catch (IOException e){
-    //                 return badRequest("IOException");
-    //             }
-    //             catch(SQLException e){
-    //                 return badRequest("SQLException");
-    //             }
-    //             catch(ClassNotFoundException e){
-    //                 return badRequest("ClassNotFoundException");
-    //             }
-    //             catch(Exception e){
-    //                 return badRequest("Exception");
-    //             }
-    //         }
-
-    //         searchResult += "}";
-    //         System.out.println("Search:"+searchResult);
-    //         return ok(searchResult);
-    //     }
-    // }
 
     public Result getSegmentInfo(){
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } else {
-            // String result = "{\"hi\": \"ho\"}";
-            // return ok(result);
 
             String result = "{";
             Integer storyId = Integer.parseInt(form.get("storyId"));
