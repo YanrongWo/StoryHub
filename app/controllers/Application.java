@@ -15,29 +15,31 @@ public class Application extends Controller {
     AppController myAppController = new AppController();
 
     public Result index() throws SQLException, IOException, ClassNotFoundException{
-        if(myAppController.getStories().size()==0) {
-            myAppController.loadAll();
-        }
+        // if(myAppController.getStories().size()==0) {
+        //     myAppController.loadAll();
+        // }
 
         //Get all stories
         ArrayList<Story> storyList = myAppController.getFrontPageStories(0);
         int interval = myAppController.getMax();
         System.out.println("interval");
-        System.out.println(interval);  
+        System.out.println(interval);
+        int storySize = myAppController.getStoryListSize();  
 
-        return ok(index.render("Homepage", storyList, 0, myAppController.getStories().size(), interval));
+        return ok(index.render("Homepage", storyList, 0, storySize, interval));
     }
 
     public Result offset(int i) throws SQLException, IOException, ClassNotFoundException{
-        if(myAppController.getStories().size()==0) {
-            myAppController.loadAll();
-        }
-        if(i>myAppController.getStories().size()) {
-            String message = "Your offset is larger than the size of the stories library";
+        // if(myAppController.getStories().size()==0) {
+        //     myAppController.loadAll();
+        // }
+        int storySize = myAppController.getStoryListSize();
+        if(i>storySize) {
+            String message = "Your offset is larger than the size of the stories library: " + Integer.toString(storySize);
             return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
         }
         ArrayList<Story> storyList = myAppController.getFrontPageStories(i);   
-        return ok(index.render("Homepage", storyList, i, myAppController.getStories().size(), myAppController.getMax()));
+        return ok(index.render("Homepage", storyList, i, storySize, myAppController.getMax()));
     }
 
     // public Result search(){
@@ -105,6 +107,8 @@ public class Application extends Controller {
             String tagsRaw = form.get("tags").replaceAll("\"", "\'");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
+            setTags.remove("");
+            setTags.remove(" ");
             String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
             System.out.println(uniqueTags);
             System.out.println(session("name"));
@@ -164,7 +168,8 @@ public class Application extends Controller {
     }
 
     //Returns all stories with tags
-    public Result getTaggedStories(String query){
+    public Result getTaggedStories(String query) throws SQLException, IOException, ClassNotFoundException{
+        myAppController.loadAll();
         System.out.println("Function is called!!!");
         System.out.println("Query:"+query);
 

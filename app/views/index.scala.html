@@ -25,7 +25,8 @@
 					<td>
 						<ul class="tags">
 				@for(tag <- story.getRoot().getTags()){
-					<li><a href="/Search/@tag" class="tag">@tag</a></li>
+						<li><a href="/Search/@tag" class="tag">@tag</a></li>
+					
 			}
 			</ul>
 					</td>
@@ -53,7 +54,7 @@
 	      			$("#PrevButton").html("Previous page not possible");
 	      			$('#PrevButton').prop('disabled', true);
 	      		} else {
-	      			window.location = "/index/"+newIndex.toString();
+	      			window.location = "/"+newIndex.toString();
 	      		}
 	      	}
 	      	function nextPage(i, totalStories, interval) {
@@ -65,7 +66,7 @@
 	      			$("#NextButton").html("Next page not possible");
 	      			$('#NextButton').prop('disabled', true);
 	      		} else {
-	      			window.location = "/index/"+newIndex.toString();
+	      			window.location = "/"+newIndex.toString();
 	      		}
 	      	}
 	      </script>
