@@ -15,9 +15,10 @@
         <a class="navbar-left homepage" href="/">StoryHub</a>
 	    	<form name = "searchform" class="navbar-form navbar-left" role="search" method="POST" action="">
 			  <div class="form-group">
-			    <input id="search-text" type="text" onclick="this.select()" class="form-control" placeholder="Search" required>
+          <a href="#" title="Search" data-toggle="popover" data-trigger="focus" data-content="This field is required! Cannot be whitespace!" data-placement="bottom"><input id="search-text" type="text" onclick="this.select()" class="form-control" placeholder="Search" required></a>
+			    
 			  </div>
-			  <button type="submit" onclick="returnSearch()" class="btn btn-default" >Submit</button>
+			  <button type="submit" onclick="returnSearch(event)" class="btn btn-default" >Submit</button>
       <button id="NewStoryButton" type="button" class="btn btn-primary" onclick="new1Story()" style="margin-left: 20px; display: none;">
         <span class="glyphicon glyphicon-star" aria-hidden="true"></span> New Story
       </button>
@@ -35,8 +36,13 @@
 
 <script>
   //Returns search results when search button is clicked
-  function returnSearch(){
+  function returnSearch(event){
     search = $('#search-text').val();
+    if (!search || search.trim() == ""){
+      $('[data-toggle="popover"]').popover('show');   
+      event.preventDefault();
+      setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
+    }
       console.log("Search query:" + search)
     document.searchform.action = "/Search/" + search;
   }
