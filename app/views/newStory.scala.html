@@ -224,6 +224,10 @@
 
 					posting.done(function(segInfoString){
 						console.log("Received reply!");
+						console.log(segInfoString);
+						if (segInfoString.startsWith("not found")) {
+							window.location = "/Error/NewStoryError"
+						}
 						var segInfo = segInfoString.split(",");
 						var storyId = segInfo[0];
 						var segmentId = segInfo[1];

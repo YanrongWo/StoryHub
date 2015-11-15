@@ -69,7 +69,7 @@ public class Application extends Controller {
     }
 
     /* create a new story from form data */
-    public Result newStorySubmit() throws SQLException{
+    public Result newStorySubmit() throws SQLException, IOException, ClassNotFoundException{
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
@@ -77,13 +77,15 @@ public class Application extends Controller {
             String title = form.get("title").replaceAll("\"", "\'");
             System.out.println(title);
             String content = form.get("content").replaceAll("\"", "\'");
+            myAppController.loadAll();
             ArrayList<Story> allStories = myAppController.getStories();
             for (int i = 0; i < allStories.size(); i++){
                 if (allStories.get(i).getRoot().getContent().equals(content)){
                     int id = allStories.get(i).getStoryId();
                     String message = " <a href=\"/Story/" + id 
                         + "/0\"> Error! A story with the same content has already been made! </a>";
-                    return notFound(views.html.error.render("Page Not Found"));
+                    //return notFound(views.html.error.render("Page Not Found"));
+                    return ok("not found");
                 }
             }
             System.out.println(content);
@@ -102,6 +104,10 @@ public class Application extends Controller {
             String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(0);
             return ok(result);
         }
+    }
+
+    public Result error(String err) {
+        return notFound(views.html.error.render("Error! A story with the same content has already been made!"));
     }
 
     public Result newFork(int storyId, int segmentId){
