@@ -70,12 +70,12 @@ a,a:hover {
 }
 
 .tag:hover {
-  background-color: crimson;
+  background-color: #337ab7;
   color: white;
 }
 
 .tag:hover::after {
-   border-left-color: crimson; 
+   border-left-color: #337ab7; 
 }
 
 
