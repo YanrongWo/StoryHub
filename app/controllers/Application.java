@@ -36,34 +36,17 @@ public class Application extends Controller {
         int storySize = myAppController.getStoryListSize();
         if(i>storySize) {
             String message = "Your offset is larger than the size of the stories library: " + Integer.toString(storySize);
-            return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
+            return notFound(views.html.error.render("Page Not Found"));
         }
         ArrayList<Story> storyList = myAppController.getFrontPageStories(i);   
         return ok(index.render("Homepage", storyList, i, storySize, myAppController.getMax()));
     }
 
-    // public Result search(){
-    //     //Get all stories
-    //     ArrayList<Story> storyList = new ArrayList<Story>();
-    //     //For each story, add to storyList 
-    //     //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-    //     Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
-    //     Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", new String[] {"x", "y"});
-    //     Story s1 = new Story(test1, 1);
-    //     storyList.add(s1);
-    //     Story s2 = new Story(test2, 2);
-    //     storyList.add(s2);
-        
-    //     return ok(.render("Results", storyList));
-    // }
-
-    /* Make controller object and set form.get("name") */
     public Result facebookName() {
     	DynamicForm form = Form.form().bindFromRequest();
     	if (form.data().size() != 0)
     	{
             if (session("name") == null){ 
-                System.out.println(form.get("name"));
                 session("name", form.get("name"));
                 return ok("changed");
             }
@@ -100,7 +83,7 @@ public class Application extends Controller {
                     int id = allStories.get(i).getStoryId();
                     String message = " <a href=\"/Story/" + id 
                         + "/0\"> Error! A story with the same content has already been made! </a>";
-                    return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
+                    return notFound(views.html.error.render("Page Not Found"));
                 }
             }
             System.out.println(content);
@@ -140,14 +123,13 @@ public class Application extends Controller {
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
             if(myStory != null){
-                System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
                 if(added){
                     String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
                     return(ok(result));
                 }
             }
-            return notFound(main.render("Page Not Found", Html.apply(""), Html.apply("Page Not Found.")));
+            return notFound(views.html.error.render("Page Not Found"));
         }
     }
 
@@ -156,10 +138,13 @@ public class Application extends Controller {
         Story myStory = myAppController.getStory(id);
         if (myStory != null){
             Segment mySeg = myStory.findSegById(segid);
+            if (mySeg == null){
+                return notFound(views.html.error.render("Page Not Found"));
+            }
             ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
             return ok(story.render(id, segsToParent, loggedIn));
         }
-        return notFound(main.render("Page Not Found", Html.apply(""), Html.apply("Page Not Found.")));
+        return notFound(views.html.error.render("Page Not Found"));
     }
 
     //Returns all stories with tags
@@ -234,17 +219,8 @@ public class Application extends Controller {
                 return ok(result);
 
             }
-            catch (IOException e){
-                return badRequest("IOException");
-            }
-            catch(SQLException e){
-                return badRequest("SQLException");
-            }
-            catch(ClassNotFoundException e){
-                return badRequest("ClassNotFoundException");
-            }
             catch(Exception e){
-                return badRequest("Exception");
+                return badRequest(views.html.error.render("Something went wrong! :("));
             }
             
 
