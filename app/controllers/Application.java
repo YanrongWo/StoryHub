@@ -107,6 +107,8 @@ public class Application extends Controller {
             String tagsRaw = form.get("tags").replaceAll("\"", "\'");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
+            setTags.remove("");
+            setTags.remove(" ");
             String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
             System.out.println(uniqueTags);
             System.out.println(session("name"));
