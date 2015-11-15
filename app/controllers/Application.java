@@ -14,40 +14,45 @@ public class Application extends Controller {
 
     AppController myAppController = new AppController();
 
+    /* Handles GET requests from / - home page 
+     * Displays the home page stories with no offset
+     */
     public Result index() throws SQLException, IOException, ClassNotFoundException{
-        // if(myAppController.getStories().size()==0) {
-        //     myAppController.loadAll();
-        // }
-
-        //Get all stories
+        //Get all stories with offset 0
         ArrayList<Story> storyList = myAppController.getFrontPageStories(0);
         int interval = myAppController.getMax();
-        System.out.println("interval");
-        System.out.println(interval);
         int storySize = myAppController.getStoryListSize();  
-
         return ok(index.render("Homepage", storyList, 0, storySize, interval));
     }
 
+    /* Handles GET requests from /offset - home page with offset 
+     * Displays the home page stories with offset
+     * @param i - offset of the home page
+     */
     public Result offset(int i) throws SQLException, IOException, ClassNotFoundException{
-        // if(myAppController.getStories().size()==0) {
-        //     myAppController.loadAll();
-        // }
         int storySize = myAppController.getStoryListSize();
-        if(i>storySize) {
+        // Invalid offset
+        if(i > storySize) {
             String message = "Your offset is larger than the size of the stories library: " + Integer.toString(storySize);
             return notFound(views.html.error.render("Page Not Found"));
         }
+        //Get all stories with offset i
         ArrayList<Story> storyList = myAppController.getFrontPageStories(i);   
         return ok(index.render("Homepage", storyList, i, storySize, myAppController.getMax()));
     }
 
+    /* Handles POST requests from /FacebookName - facebook login 
+     * Tells the front end if the user's name has been changed
+     */
     public Result facebookName() {
+        //Check for input
     	DynamicForm form = Form.form().bindFromRequest();
     	if (form.data().size() != 0)
     	{
+            //If there wasn't a name in session, set one
             if (session("name") == null){ 
                 session("name", form.get("name"));
+                //Return that name was changed
                 return ok("changed");
             }
     		return ok("");
@@ -55,16 +60,25 @@ public class Application extends Controller {
     	return badRequest();
     }
 
+    /* Handles POST requests from /NoFacebookName - facebook logout 
+     * Tells the front end if the user's name has been changed
+     */
     public Result noFacebookName() {
+        //Clear the session name if there is one
         if (session("name") != null)
         {
             session().clear();
+            //Return that it was cleared
             return ok("changed");
         }
         return ok("");
     }
 
+    /* Handles GET requests from /NewStory - new story page
+     * Renders the new story page if there is a log in
+     */
     public Result newStory(){
+        //Check if logged in
         if (session("name") != null)
         {
             return ok(newStory.render("New Story", "newStory"));
@@ -72,16 +86,22 @@ public class Application extends Controller {
         return badRequest(error.render("You must be logged in to add a story"));
     }
 
-    /* create a new story from form data */
+    /* Handles POST requests from /NewStory - new story submission 
+     * Makes sure user is checked in, the new story isn't a repeat,
+     * and cleans up input for storage
+     * Returns the new story id and the root id to the front end
+     */
     public Result newStorySubmit() throws SQLException, IOException, ClassNotFoundException{
+        //Check logged in
         if (session("name") != null){
             DynamicForm form = Form.form().bindFromRequest();
             if (form.data().size() == 0) {
                 return badRequest("Form Error");
             } else {
                 String title = form.get("title").replaceAll("\"", "\'");
-                System.out.println(title);
                 String content = form.get("content").replaceAll("\"", "\'");
+                //Checks that the story doesn't have the same content as 
+                //another root
                 myAppController.loadAll();
                 ArrayList<Story> allStories = myAppController.getStories();
                 for (int i = 0; i < allStories.size(); i++){
@@ -89,24 +109,24 @@ public class Application extends Controller {
                         int id = allStories.get(i).getStoryId();
                         String message = " <a href=\"/Story/" + id 
                             + "/0\"> Error! A story with the same content has already been made! </a>";
-                        //return notFound(views.html.error.render("Page Not Found"));
                         return ok("not found");
                     }
                 }
-                System.out.println(content);
+                //Parse and make sure the tags aren't repeats
                 String tagsRaw = form.get("tags").replaceAll("\"", "\'");
                 String[] tags = tagsRaw.replaceAll("#", "").split(" ");
                 Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
                 setTags.remove("");
                 setTags.remove(" ");
                 String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
-                System.out.println(uniqueTags);
-                System.out.println(session("name"));
+
+                //Create root and then the story
                 Segment seg = new Segment(null, title, session("name"),
                     content, uniqueTags);
                 Story myStory = myAppController.createStory(seg);
 
-                String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(0);
+                //Create result with story id, root id
+                String result = Integer.toString(myStory.getStoryId()) + "," + Integer.toString(0);
                 return ok(result);
             }
         }

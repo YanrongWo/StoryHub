@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+
 GET     /                          						controllers.Application.index()
 GET     /$offset<[0-9]+>                   				controllers.Application.offset(offset:Integer)
 
@@ -10,27 +11,39 @@ GET     /$offset<[0-9]+>                   				controllers.Application.offset(of
 
 GET     /assets/*file               					controllers.Assets.versioned(path="/public", file: Asset)
 
-POST	/FacebookName									controllers.Application.facebookName()
+# Updates user login credentials
 
+POST	/FacebookName									controllers.Application.facebookName()
 POST	/NoFacebookName									controllers.Application.noFacebookName()
 
-GET		/NewStory										controllers.Application.newStory()
+# Add a new story
 
+GET		/NewStory										controllers.Application.newStory()
 POST	/NewStory                   					controllers.Application.newStorySubmit()
+
+# Add a new segment
+
+GET		/Story/:storyId/:segmentId/NewSegment			controllers.Application.newFork(storyId: Integer, segmentId: Integer)
+POST	/Story/:storyId/:segmentId/NewSegment			controllers.Application.newForkSubmit(storyId: Integer, segmentId: Integer)
+
+# Renders story with id and segment segid
 
 GET		/Story/$id<[0-9]+>/$segid<[0-9]+> 				controllers.Application.story(id: Integer, segid: Integer)
 
+# Returns JSON for story segment for view
+
 POST	/AddSegment										controllers.Application.getSegmentInfo()
 
+# Search stories by tag
+
+GET		/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
 POST	/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
+
+# Search stories by title
 
 POST	/SearchTitles/:query							controllers.Application.getStoriesByTitles(query: String)
 
-GET		/Story/:storyId/:segmentId/NewSegment			controllers.Application.newFork(storyId: Integer, segmentId: Integer)
+# Error page
 
-POST	/Story/:storyId/:segmentId/NewSegment			controllers.Application.newForkSubmit(storyId: Integer, segmentId: Integer)
-
-GET		/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
-
-GET 		/Error/:error									controllers.Application.error(error: String)									
+GET 	/Error/:error									controllers.Application.error(error: String)									
 
