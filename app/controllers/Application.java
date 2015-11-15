@@ -99,10 +99,8 @@ public class Application extends Controller {
                 content, uniqueTags);
             Story myStory = myAppController.createStory(seg);
 
-            boolean loggedIn = (session("name") != null);
-            int storyId = myStory.getStoryId();
-            ArrayList<Integer> segsToParent = myStory.findSegById(0).getParentSegIds();
-            return ok(story.render(storyId, segsToParent, loggedIn));
+            String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(0);
+            return ok(result);
         }
     }
 
@@ -127,9 +125,8 @@ public class Application extends Controller {
             if(myStory != null){
                 boolean added = myAppController.fork(myStory, seg, segmentId);
                 if(added){
-                    boolean loggedIn = (session("name") != null);
-                    ArrayList<Integer> segsToParent = myStory.findSegById(seg.getSegmentId()).getParentSegIds();
-                    return ok(story.render(storyId, segsToParent, loggedIn));
+                    String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
+                    return(ok(result));
                 }
             }
             return notFound(views.html.error.render("Page Not Found"));
@@ -200,7 +197,7 @@ public class Application extends Controller {
                     result = result.substring(0, result.length() - 1);
                 }
                 result += "],";
-                result += "\"content\": \"" + mySegment.getContent() + "\",";
+                result += "\"content\": \"" + mySegment.getContent().replace("\"", "~|+#") + "\",";
                 result += "\"parentSegId\": \"" + parentSegId + "\",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
                 String childrenId = "\"childrenid\":[";
