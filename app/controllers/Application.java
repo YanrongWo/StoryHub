@@ -116,10 +116,6 @@ public class Application extends Controller {
                 content, uniqueTags);
             Story myStory = myAppController.createStory(seg);
 
-            boolean loggedIn = (session("name") != null);
-            int storyId = myStory.getStoryId();
-            ArrayList<Integer> segsToParent = myStory.findSegById(0).getParentSegIds();
-
             String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(0);
             return ok(result);
         }
@@ -147,9 +143,6 @@ public class Application extends Controller {
                 System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
                 if(added){
-                    boolean loggedIn = (session("name") != null);
-                    ArrayList<Integer> segsToParent = myStory.findSegById(seg.getSegmentId()).getParentSegIds();
-                    // return ok(story.render(storyId, segsToParent, loggedIn));
                     String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
                     return(ok(result));
                 }
