@@ -154,10 +154,16 @@
 			</div>
 			<div id="errors"></div>
 			<br>
+			<button onclick="goBack()" class="btn btn-default"> Back </button>
 			<button type="submit" onclick="clickReturn()" class="btn btn-default">Submit</button>
 		</form>
 
 		<script>
+
+			function goBack() {
+    			window.history.back();
+			}
+
 			// Initialize editor with custom theme and modules
 			var fullEditor = new Quill('#editor', {
 			  modules: {
