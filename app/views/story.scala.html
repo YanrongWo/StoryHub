@@ -9,7 +9,17 @@
 	</div>
 	<script>
 		var storyId = @{myStory};
-		function addSegment(segmentId){
+		function addSegment(segmentId, parentId){
+			// If not the first segment, then we're looking at a branch. 
+			// Need to disable to see only 1 segment branch at a time
+			if(segmentId !== 0 && parentId > -1){
+				$('button').prop('disabled', false);
+				document.getElementById(segmentId).disabled = true;
+				var segmentLevel = ".segment" + parentId;
+				if($(segmentLevel).length){
+					$(segmentLevel).remove();
+				}
+			}
 			console.log("addSegment() method");
 			$.ajax({
 	          	type: 'POST',
@@ -32,8 +42,8 @@
 			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewSegment";
 			console.log("newForkURL");
 			console.log(newForkURL);
-			var story = '<div class="segment"> \
-			<table> \
+			var story = '<div class="segment' + storyJSON["parentSegId"] + '">';
+			story += '<table> \
 				<col style="width:90%"><col style="width:10%"> \
 				<tr> \
 					<td> \
@@ -65,13 +75,15 @@
 					</td> \
 				</tr> \
 				<tr> \
-					<td> \
-						<div class="children">';
-			for (var i = 0; i < storyJSON["childrenid"].length; i++){
-				story += '<button type="button" id="1" class="btn btn-primary" onclick="' + "addSegment(" + storyJSON["childrenid"][i] + ');">' + storyJSON["childrentitle"][i] + '</button>';
+					<td>';
+			if(!$('.segment-1').length){
+				story += '<div class="children">';
+				for (var i = 0; i < storyJSON["childrenid"].length; i++){
+					story += '<button type="button" id="' +  storyJSON["childrenid"][i] + '" class="btn btn-primary" onclick="' + "addSegment(" + storyJSON["childrenid"][i] + ',' + segmentId + ' );">' + storyJSON["childrentitle"][i] + '</button>';
+				}
+				story += '</div>';
 			}
-			story += '</div> \
-					</td> \
+			story += '</td> \
 				</tr> \
 			</table> \
 		</div>';
@@ -80,7 +92,7 @@
 		$(document).ready(function() {
     		console.log( "ready!" );
     		@for(mySeg <- mySegs){
-    			addSegment(@mySeg);
+    			addSegment(@mySeg, -1);
     		}
 		});
 	</script>
