@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 import javax.persistence.*;
 import java.io.*;
+import java.util.*;
 
 public class Segment implements Serializable{
 
@@ -37,17 +38,19 @@ public class Segment implements Serializable{
     
     public ArrayList<Integer> getParentSegIds(){
        ArrayList<Integer> parentSegIds = new ArrayList<Integer>();
-        getParentSegIds(this.id, parentSegIds).add(id);
+        getParentSegIds(this, parentSegIds);
+        Collections.reverse(parentSegIds);
+        parentSegIds.add(this.id);
         return parentSegIds;
       
    }
 
-   private ArrayList<Integer> getParentSegIds(int segid, ArrayList<Integer> parentSegIds){
-       if (segid == 0){
+   private ArrayList<Integer> getParentSegIds(Segment parent, ArrayList<Integer> parentSegIds){
+       if (parent.getSegmentId() == 0){
            return parentSegIds;
        }
-       parentSegIds.add(parentSeg.getSegmentId());
-       return getParentSegIds(parentSeg.getSegmentId(), parentSegIds);
+       parentSegIds.add(parent.getParentSeg().getSegmentId());
+       return getParentSegIds(parent.getParentSeg(), parentSegIds);
    }
 
     public boolean addChild(Segment child) {
