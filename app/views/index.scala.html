@@ -8,59 +8,63 @@
 		</p>
 		<div id="all_stories">
 			@for(story <- storyList){
-			<div class="story">
-				<table>
-				<col style="width:90%"><col style="width:10%">
-				<tr>
-					<td>
-						<a class="title" href="/Story/@story.getStoryId()/0"> @story.getRoot().getTitle()</a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="author"> @story.getRoot().getAuthor() </dv>
-					</td>
-				</tr>
-				<tr> 
-					<td>
-						<ul class="tags">
-				@for(tag <- story.getRoot().getTags()){
-						<li><a href="/SearchTags/@tag" class="tag">@tag</a></li>
-					
+				<div class="story">
+					<table>
+						<col style="width:90%"><col style="width:10%">
+						<tr>
+							<td>
+								<a class="title" href="/Story/@story.getStoryId()/0"> @story.getRoot().getTitle()</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="author"> @story.getRoot().getAuthor() </dv>
+							</td>
+						</tr>
+						<tr> 
+							<td>
+								<ul class="tags">
+									@for(tag <- story.getRoot().getTags()){
+										<li><a href="/SearchTags/@tag" class="tag">@tag</a></li>		
+									}
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="content"> @Html(story.getRoot().displayContent())</div>
+							</td>
+						</tr>
+					</table>
+				</div>
 			}
-			</ul>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="content"> @Html(story.getRoot().displayContent())</div>
-					</td>
-				</tr>
-			</table>
-			</div>
-		}
 		</div>
 		<div>
-		@if(offset-interval >=0) {		
-		<button id="PrevButton" style="float: left;" type="button" class="btn btn-primary" onclick="prevPage(@offset, @interval)">
-		    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous Page
-		  </button>
+		@if(offset - interval >= 0) {		
+			<button id="PrevButton" style="float: left;" type="button" class="btn btn-primary" onclick="prevPage(@offset, @interval)">
+		    	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous Page
+		  	</button>
 		}
-		@if(offset+interval < totalStories) {
-	      <button id="NextButton" style="float: right;" type="button" class="btn btn-primary" onclick="nextPage(@offset, @totalStories, @interval)">
-	        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Next Page
-	      </button>
-	     }
-	      <script>
-	      	function prevPage(i, interval) {
-	      		var newIndex = i-interval;
-	      		window.location = "/"+newIndex.toString();
-	      	}
-	      	function nextPage(i, totalStories, interval) {
-	      		var newIndex = i+interval;
-	      		window.location = "/"+newIndex.toString();
-	      	}
-	      </script>
+		@if(offset + interval < totalStories) {
+	      	<button id="NextButton" style="float: right;" type="button" class="btn btn-primary" onclick="nextPage(@offset, @totalStories, @interval)">
+	        	<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Next Page
+	      	</button>
+	    }
+		<script>
+			
+			/* Redirects the window for the previous page button */
+			function prevPage(i, interval) {
+				var newIndex = i - interval;
+				window.location = "/" + newIndex.toString();
+			}
+
+			/* Redirects the window for the next page button */
+			function nextPage(i, totalStories, interval) {
+				var newIndex = i + interval;
+				window.location = "/" + newIndex.toString();
+			}
+
+		</script>
   		</div>
 	</div>
 }
