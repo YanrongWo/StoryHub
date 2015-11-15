@@ -1,4 +1,4 @@
-@(myStory: Integer, mySegs: List[Integer])
+@(myStory: Integer, mySegs: List[Integer], loggedin: Boolean)
 
 
 @main(""){
@@ -9,8 +9,24 @@
 	</div>
 	<script>
 		var storyId = @{myStory};
-		function addSegment(segmentId){
-			console.log("addSegment() method");
+		function addSegment(segmentId, parentId){
+				//Enable all buttons to view child segments
+				var buttonLevel = ".btn" + parentId;
+				$(buttonLevel).prop('disabled', false);
+				var buttonForSegId = "#" + segmentId;
+				//Check if button exists for segmentId
+				//There won't be one for the root
+				if ($(buttonForSegId).length > 0) {
+					$(buttonForSegId).prop('disabled', true);
+				}
+				//Check if segment of same level exists.
+				var segmentLevel = ".segment" + parentId;
+				if($(segmentLevel).length){
+					//If so, remove all children below
+					$(segmentLevel).nextAll().remove();
+					//And remove same level segment
+					$(segmentLevel).remove();
+				}
 			$.ajax({
 	          	type: 'POST',
 	          	url: '/AddSegment',
@@ -22,27 +38,29 @@
 	          	success: function(JSONstory) 
 	          	{       
 	              	var story = JSON.parse(JSONstory);
-	              	console.log(story);
 	              	addJSONcontent(story, segmentId);
+	              	index += 1;
+	              	if (index < segments.length){
+	              		addSegment(segments[index], segments[index - 1]);
+	              	}
 	          	}
 	      	});
 		}
 		function addJSONcontent(storyJSON, segmentId){
 			// NewFork URL: /story/:storyId/:segmentId/NewFork
-			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewFork";
-			console.log("newForkURL");
-			console.log(newForkURL);
-			var story = '<div class="segment"> \
-			<table> \
+			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewSegment";
+			var story = '<div class="story segment' + storyJSON["parentSegId"] + '">';
+			story += '<table> \
 				<col style="width:90%"><col style="width:10%"> \
 				<tr> \
 					<td> \
 						<div class="title">' + storyJSON["title"] + '</div> \
 					</td>';
-			story += '<td> \
+			@if(loggedin){
+				story += '<td> \
 					<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment</button> \
-				</td>';
-		
+					</td>';
+			}
 			story += '</tr> \
 				<tr> \
 					<td> \
@@ -53,74 +71,41 @@
 					<td> \
 						<ul class="tags">';
 			for (var i = 0; i < storyJSON["tags"].length; i++){
-				story += '<li><a href="#" class="tag">' + storyJSON["tags"][i] + '</a></li>';
+
+				if(storyJSON["tags"][i].length!=0){
+					story += '<li><a href="/SearchTags/'+storyJSON["tags"][i]+'" class="tag">' + storyJSON["tags"][i] + '</a></li>';
+				}
 			}
 			story += '</ul> \
 					</td> \
 				</tr> \
 				<tr> \
 					<td> \
-						<div class="content">' + storyJSON["content"] + '</div> \
+						<div class="content">' + storyJSON["content"].replace(/\~\|\+\#/g, "\"") + '</div> \
 					</td> \
 				</tr> \
 				<tr> \
-					<td> \
-						<div class="children">';
-			for (var i = 0; i < storyJSON["childrenid"].length; i++){
-				story += '<button type="button" id="1" class="btn btn-primary" onclick="' + "addSegment(" + storyJSON["childrenid"][i] + ');">' + storyJSON["childrentitle"][i] + '</button>';
-			}
-			story += '</div> \
-					</td> \
+					<td>';
+			
+				story += '<div class="children">';
+				for (var i = 0; i < storyJSON["childrenid"].length; i++){
+					story += '<button type="button" id="' +  storyJSON["childrenid"][i] + '" class= "childbtn btn btn-primary btn' + segmentId + '" onclick="addSegment(' + storyJSON["childrenid"][i] + ',' + segmentId + ' );">' + storyJSON["childrentitle"][i] + '</button>';
+				}
+				story += '</div>';
+			
+			story += '</td> \
 				</tr> \
 			</table> \
 		</div>';
 			$('#all_segments').append(story);
+			$("body").animate({ scrollTop: $(document).height() }, "slow");
 		}
-		$( document ).ready(function() {
-    		console.log( "ready!" );
-    		@for(mySeg <- mySegs){
-    			addSegment(mySeg);
-    		}
+
+		var segments = @mySegs;
+		var index  = 0;
+		$(document).ready(function() {
+			index = 0;
+			addSegment(segments[0], -1);
 		});
 	</script>
 }
-
-<!-- <div class="segment">
-			<table>
-				<col style="width:90%"><col style="width:10%">
-				<tr>
-					<td>
-						<div class="title"> Title </div>
-					</td>
-					<td>
-						<button type="button" class="fork btn btn-primary"> Fork </button> 
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="author"> Author </div>
-					</td>
-				</tr>
-				<tr> 
-					<td>
-						<ul class="tags">
-							<li><a href="#" class="tag">Tag1</a></li>
-							<li><a href="#" class="tag">Tag2</a></li>
-						</ul>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="content">	This is my amazing story of amazingness....Oh wait...I can just copy in a story instead. But it's too late now cuz I've already written a bunch of shit</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="children">	
-							<button type="button" id="1" class="btn btn-primary"> Child 1</button> 
-							<button type="button" id="2" class="btn btn-primary"> Child 2</button> 
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div> -->

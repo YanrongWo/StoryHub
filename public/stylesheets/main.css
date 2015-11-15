@@ -70,12 +70,12 @@ a,a:hover {
 }
 
 .tag:hover {
-  background-color: crimson;
+  background-color: #337ab7;
   color: white;
 }
 
 .tag:hover::after {
-   border-left-color: crimson; 
+   border-left-color: #337ab7; 
 }
 
 
@@ -85,10 +85,30 @@ a,a:hover {
 	border-radius: 4px;
 	margin: 0 auto;
 	padding: 2vw;
-	width: 80%
+	width: 80%;
+  margin-bottom: 2vw;
 }
 
 .content{
 	padding-top: 1vw;
 	padding-bottom: 1vw;
+}
+
+#status{
+  margin: 10px;
+}
+
+.fb-login-button{
+  margin-top: 10px;
+}
+
+.homepage{
+  margin-top: 5px;
+}
+.error-message{
+  font-size: 2vw;
+  text-align:center;
+}
+#query{
+  word-wrap: break-word;
 }

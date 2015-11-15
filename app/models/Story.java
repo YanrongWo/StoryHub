@@ -11,10 +11,11 @@ public class Story implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	public Story(Segment aRoot, int aId){
+		this.id = aId;
+		
 		aRoot.setStoryId(this.id);
 		aRoot.setSegmentId(this.nextSegId);
 		this.root = aRoot;
-		this.id = aId;
 		this.nextSegId++;
 	}
 
@@ -50,17 +51,6 @@ public class Story implements Serializable{
 		return false;
 	}
 
-	// public ArrayList<Segment> traverse(int segId){
-	// 	ArrayList<Segment> allSegments = new ArrayList<Segment>();
-	// 	int currentId = this.id;
-	// 	Segment currentSeg = this.root;
-	// 	while(currentId != segId){
-	// 		allSegments.add(currentSeg);
-	// 		currentId = this.nextSegId;
-	// 	}
-	// 	return allSegments;
-	// }
-
 	// Returns list of segment ids of leaf nodes that are matching the tag
 	public ArrayList<Segment> findTags(String searchWord){
 		ArrayList<Segment> segments = new ArrayList<Segment>();
@@ -68,9 +58,15 @@ public class Story implements Serializable{
 		return segments;
 	}
 
+	public ArrayList <Segment> findTitles(String searchWord){
+		ArrayList<Segment> segments = new ArrayList<Segment>();
+		recurseSearchSegTitle(segments,this.root,searchWord);
+		return segments;
+	}
+
 	private void recurseSearchSegTag(ArrayList<Segment> segments, Segment seg, String searchWord) {
 		for (String tag : seg.getTags()){
-			if(tag.equals(searchWord)){
+			if(tag.toLowerCase().equals(searchWord.toLowerCase())){
 				segments.add(seg);
 				break;
 			}
@@ -84,6 +80,23 @@ public class Story implements Serializable{
 			}
 		}
 	}
+
+
+	private void recurseSearchSegTitle(ArrayList<Segment> segments, Segment seg, String searchWord){
+		if(seg.getTitle().toLowerCase().contains(searchWord.toLowerCase())){
+			segments.add(seg);
+		}
+
+		if(seg.isLeafNode()){
+			return;
+		} else {
+			ArrayList<Segment> children = seg.getChildSegs();
+			for ( int i = 0; i < children.size();i++){
+				recurseSearchSegTitle(segments, children.get(i),searchWord);
+			}
+		}
+	}
+
 
 	//returns arraylist of parents of the given segment seg
 	public ArrayList<Segment> getParents(Segment seg) {

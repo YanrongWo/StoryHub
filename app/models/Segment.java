@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 import javax.persistence.*;
 import java.io.*;
+import java.util.*;
 
 public class Segment implements Serializable{
 
@@ -36,34 +37,51 @@ public class Segment implements Serializable{
     }
     
     public ArrayList<Integer> getParentSegIds(){
-        ArrayList<Integer> parentSegIds = new ArrayList<Integer>();
-        return 0;
-    }
+     ArrayList<Integer> parentSegIds = new ArrayList<Integer>();
+     getParentSegIds(this, parentSegIds);
+     Collections.reverse(parentSegIds);
+     parentSegIds.add(this.id);
+     return parentSegIds;
 
-    public boolean addChild(Segment child) {
-        return childSegs.add(child);
-    }
+ }
 
-    public void setParentSeg(Segment seg) {
-        this.parentSeg = seg;
-    }
-    
-    public String getTitle() {
-        return this.title;
-    }
-    
-    public String getAuthor() {
-        return this.author;
-    }
-    
-    public String getContent() {
-        return this.content;
-    }
+ private ArrayList<Integer> getParentSegIds(Segment parent, ArrayList<Integer> parentSegIds){
+     if (parent.getSegmentId() == 0){
+         return parentSegIds;
+     }
+     parentSegIds.add(parent.getParentSeg().getSegmentId());
+     return getParentSegIds(parent.getParentSeg(), parentSegIds);
+ }
 
-    public String displayContent(){
-        if(this.content.length() > 251){
-            return this.content.substring(0, 250) + "...";
+ public boolean addChild(Segment child) {
+    System.out.println("addChild()");
+    return childSegs.add(child);
+}
+
+public void setParentSeg(Segment seg) {
+    this.parentSeg = seg;
+}
+
+public String getTitle() {
+    return this.title;
+}
+
+public String getAuthor() {
+    return this.author;
+}
+
+public String getContent() {
+    return this.content;
+}
+
+public String displayContent(){
+        String htmlString = new String(this.content);
+        String noHTMLString = htmlString.replaceAll("\\<.*?>","");
+        //String noHTMLString = this.content.replace(/\\<.*?>/g,"");
+        if(noHTMLString.length() > 251){
+            return noHTMLString.substring(0, 250) + "...";
         }
+
         return this.content;
     }
     

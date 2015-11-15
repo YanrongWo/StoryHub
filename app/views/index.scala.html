@@ -1,4 +1,4 @@
-@(title: String, storyList: List[Story])
+@(title: String, storyList: List[Story], offset: Integer, totalStories: Integer, interval: Integer)
 
 @main("Welcome to StoryHub"){ }{
 
@@ -13,7 +13,7 @@
 				<col style="width:90%"><col style="width:10%">
 				<tr>
 					<td>
-						<a class="title" href="/Story/@story.getStoryId()"> @story.getRoot().getTitle()</a>
+						<a class="title" href="/Story/@story.getStoryId()/0"> @story.getRoot().getTitle()</a>
 					</td>
 				</tr>
 				<tr>
@@ -25,7 +25,8 @@
 					<td>
 						<ul class="tags">
 				@for(tag <- story.getRoot().getTags()){
-					<li><a href="#" class="tag">@tag</a></li>
+						<li><a href="/SearchTags/@tag" class="tag">@tag</a></li>
+					
 			}
 			</ul>
 					</td>
@@ -39,5 +40,27 @@
 			</div>
 		}
 		</div>
+		<div>
+		@if(offset-interval >=0) {		
+		<button id="PrevButton" style="float: left;" type="button" class="btn btn-primary" onclick="prevPage(@offset, @interval)">
+		    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous Page
+		  </button>
+		}
+		@if(offset+interval < totalStories) {
+	      <button id="NextButton" style="float: right;" type="button" class="btn btn-primary" onclick="nextPage(@offset, @totalStories, @interval)">
+	        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Next Page
+	      </button>
+	     }
+	      <script>
+	      	function prevPage(i, interval) {
+	      		var newIndex = i-interval;
+	      		window.location = "/"+newIndex.toString();
+	      	}
+	      	function nextPage(i, totalStories, interval) {
+	      		var newIndex = i+interval;
+	      		window.location = "/"+newIndex.toString();
+	      	}
+	      </script>
+  		</div>
 	</div>
 }

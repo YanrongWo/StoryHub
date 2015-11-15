@@ -12,12 +12,14 @@
   	<div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
 	    <div class="navbar-header">
-        <a class="navbar-left homepage" href="/index.html">StoryHub</a>
+        <a class="navbar-left homepage" href="/">StoryHub</a>
 	    	<form name = "searchform" class="navbar-form navbar-left" role="search" method="POST" action="">
 			  <div class="form-group">
-			    <input id="search-text" value="Tags" type="text" onclick="this.select()" class="form-control" placeholder="Search">
+          <a href="#" title="Search" data-toggle="popover" data-trigger="focus" data-content="This field is required! Cannot be whitespace!" data-placement="bottom"><input id="search-text" type="text" onclick="this.select()" class="form-control" placeholder="Search" required></a>
+			    
 			  </div>
-			  <button type="submit" onclick="returnSearch()" class="btn btn-default" >Submit</button>
+			  <button type="submit" onclick="returnSearchByTag(event)" class="btn btn-default" >Search Tags</button>
+        <button type="submit" onclick="returnSearchByTitle(event)" class="btn btn-default" >Search Title</button>
       <button id="NewStoryButton" type="button" class="btn btn-primary" onclick="new1Story()" style="margin-left: 20px; display: none;">
         <span class="glyphicon glyphicon-star" aria-hidden="true"></span> New Story
       </button>
@@ -35,48 +37,31 @@
 
 <script>
   //Returns search results when search button is clicked
-  function returnSearch(){
+  function returnSearchByTag(event){
     search = $('#search-text').val();
-      console.log("Search query:" + search)
-    document.searchform.action = "/Search/" + search;
+    if (!search || search.trim() == ""){
+      $('[data-toggle="popover"]').popover('show');   
+      event.preventDefault();
+      setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
+    }
+    document.searchform.action = "/SearchTags/" + search;
   }
-  // function returnSearch(){
-    
-  //   search = $('#search-text').val()
-  //   console.log(search)
-  //   $.ajax({
-  //       type: 'POST',
-  //       url:'/Search',
-  //       dataType: 'json',
-  //       data:
-  //       {
-  //         searchWord: search,
-  //       },
-  //       success: function(JSONtagged)
-  //       {
-  //           //       console.log(JSON.stringify(JSONtagged));
-  //           // var length = Object.keys(JSONtagged).length;
-  //           //       console.log(length);
-  //           // for ( i = 0; i < length; i++){
-  //           //       console.log(JSONtagged[i])
-  //           //addSearchResult(JSONtagged[i])
-  //         }
-  //       }
-  //   });
-  // }
 
-  // function addSearchResult(){
-  //   //HTML and javascript to add search results of story
-  // }
+  function returnSearchByTitle(event){
+    search = $('#search-text').val();
+    if (!search || search.trim() == ""){
+      $('[data-toggle="popover"]').popover('show');   
+      event.preventDefault();
+      setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
+    }
+    document.searchform.action = "/SearchTitles/" + search;
+  }
 
   function new1Story() {
-    console.log("New story");
     window.location = "/NewStory";
 }
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
@@ -85,18 +70,21 @@
       // Logged into your app and Facebook.
       testAPI();
       $('#NewStoryButton').css("display", "inline");
-    } else if (response.status === 'not_authorized') {
+    } else {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
+        'into this app to make contributions.';
         $('#NewStoryButton').css("display", "none");
-    } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
-      $('#NewStoryButton').css("display", "none");
-    }
+        $.ajax({
+          method: "POST",
+          url: "/NoFacebookName",
+          success: function(data){
+            if (data == "changed"){
+              window.location.reload(true);
+            }
+          } 
+        });
+    } 
   }
 
   // This function is called when someone finishes with the Login
@@ -153,8 +141,13 @@
       $.ajax({
         method: "POST",
         url: "/FacebookName",
-        data: { name: response.name } 
-      })
+        data: { name: response.name },
+        success: function(data){
+          if (data == "changed"){
+            window.location.reload(true);
+          }
+        }  
+      });
     });
   }
 </script>

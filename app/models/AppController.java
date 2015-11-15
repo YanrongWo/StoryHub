@@ -30,17 +30,19 @@ public class AppController{
 	}
     
     public Story createStory(Segment seg) throws SQLException{
-        //new Story(Segment )
-        Story newOne = new Story(seg, 0);
         //add null to table and gets last inserted id
         int sId = getNextStoryId();
         //int sId = 0;
-        newOne.setStoryId(sId);
-        System.out.println(sId);
+        //new Story(Segment )
+        Story newOne = new Story(seg, sId);
         stories.add(newOne);
         //save the story to database
         storeStory(newOne);
         return newOne;
+    }
+
+    public int getMax() {
+        return this.max;
     }
     
     public int getNextStoryId() throws SQLException {
@@ -62,7 +64,7 @@ public class AppController{
     
     //not tested
     public boolean fork(Story sto, Segment seg, int segmentId) throws SQLException {
-        if (sto.fork(seg, segmentId)) {
+        if (sto.addSegment(seg, segmentId)) {
             storeStory(sto);
             return true;
         }
@@ -70,20 +72,19 @@ public class AppController{
         
     }
     
-    public ArrayList<Segment> find(String search) {
+    public ArrayList<Segment> findByTag(String search) {
         System.out.println("Finding!!!");
         ArrayList<Segment> results = new ArrayList<Segment>();
         for(int i=0; i<stories.size(); i++) {
             results.addAll(stories.get(i).findTags(search));
-            // for (int j=0; j<hits.size(); j++) {
-            //     results.add(new StorySeg(stories.get(i).getStoryId(), hits.get(j)));
-            // }
         }
+        return results;
+    }
 
-        //Debug
-        System.out.println("The returned segments");
-        for( int i = 0 ;i < results.size(); i++){
-            System.out.println(results.get(i));
+    public ArrayList<Segment> findByTitle(String search){
+        ArrayList<Segment> results = new ArrayList<Segment>();
+        for (int i = 0 ; i < stories.size(); i ++){
+            results.addAll(stories.get(i).findTitles(search));
         }
         return results;
     }
@@ -109,13 +110,53 @@ public class AppController{
         pstmt.executeUpdate();
         pstmt.close();
     }
-    
-    public ArrayList<Story> getFrontPageStories() {
-        if (stories.size() < max) {
-            return stories;
-        } else {
-            return new ArrayList<Story>(stories.subList(0, max));
+
+    public int getStoryListSize() throws SQLException {
+        int storySize = -1;
+        String SIZE_COMMAND = "SELECT count(serialized_object) from stories";
+        PreparedStatement pstmt = this.connection.prepareStatement(SIZE_COMMAND);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            storySize = rs.getInt(1);
         }
+        rs.close();
+        pstmt.close();
+        return storySize;
+    }
+    
+    public ArrayList<Story> getFrontPageStories(int i) throws SQLException, IOException, ClassNotFoundException {
+        // if (stories.size() < max) {
+        //     return stories;
+        // } else {
+        //     int maxLoad = i+max;
+        //     if(maxLoad>stories.size()) {
+        //         maxLoad = stories.size();
+        //     }
+        //     return new ArrayList<Story>(stories.subList(i, maxLoad));
+        // }
+        int storySize = getStoryListSize();
+        int maxLoad = i+this.max;
+        if(maxLoad>storySize) {
+            maxLoad = storySize;
+        }
+        ArrayList<Story> frontStories = new ArrayList<Story>();
+        String SQL_DESERIALIZE_OBJECT = "SELECT serialized_object FROM stories WHERE storyid BETWEEN ? AND ?";
+        PreparedStatement pstmt = this.connection.prepareStatement(SQL_DESERIALIZE_OBJECT);
+        pstmt.setInt(1, i);
+        pstmt.setInt(2, maxLoad);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()) {
+            byte[] buf = rs.getBytes(1);
+            ObjectInputStream objectIn = null;
+            if (buf != null) {
+                objectIn = new ObjectInputStream(new ByteArrayInputStream(buf));
+                Object deSerializedObject = objectIn.readObject();
+                frontStories.add((Story) deSerializedObject);
+            }
+        }
+        rs.close();
+        pstmt.close();
+        return frontStories;
     }
     
     //http://javapapers.com/core-java/serialize-de-serialize-java-object-from-database/
@@ -124,13 +165,16 @@ public class AppController{
         PreparedStatement pstmt = this.connection.prepareStatement(SQL_DESERIALIZE_OBJECT);
         pstmt.setInt(1, storyId);
         ResultSet rs = pstmt.executeQuery();
-        rs.next();
-        byte[] buf = rs.getBytes(1);
-        ObjectInputStream objectIn = null;
-        if (buf != null) {
-            objectIn = new ObjectInputStream(new ByteArrayInputStream(buf));
-        }
-        Object deSerializedObject = objectIn.readObject();
+        Object deSerializedObject = null;
+        if (rs.isBeforeFirst()){
+            rs.next();
+            byte[] buf = rs.getBytes(1);
+            ObjectInputStream objectIn = null;
+            if (buf != null) {
+                objectIn = new ObjectInputStream(new ByteArrayInputStream(buf));
+            }
+            deSerializedObject = objectIn.readObject();
+        }      
         rs.close();
         pstmt.close();
         return deSerializedObject;

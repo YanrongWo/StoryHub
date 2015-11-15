@@ -3,17 +3,18 @@
 @main("Searching Storyhub..."){ }{
 
 	<div class="container">
-		<p class="title">
+		<p class="title" id='query'>
 			@searchQuery
 		</p>
 		<div id="all_stories">
+			@if(taggedSegments.length == 0) { <p>No search results.</p>}
 			@for(segment <- taggedSegments){
 			<div class="story">
 				<table>
 				<col style="width:90%"><col style="width:10%">
 				<tr>
 					<td>
-						<a class="title" href="/Story/@segment.getStoryId()/Segment/@segment.getSegmentId()"> @segment.getTitle()</a>
+						<a class="title" href="/Story/@segment.getStoryId()/@segment.getSegmentId()"> @segment.getTitle()</a>
 					</td>
 				</tr>
 				<tr>
@@ -25,14 +26,14 @@
 					<td>
 						<ul class="tags">
 				@for(tag <- segment.getTags()){
-					<li><a href="#" class="tag">@tag</a></li>
+					<li><a href="/SearchTags/@tag" class="tag">@tag</a></li>
 			}
 			</ul>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<div class="content"> @segment.displayContent()</div>
+						<div class="content"> @Html(segment.displayContent())</div>
 					</td>
 				</tr>
 			</table>

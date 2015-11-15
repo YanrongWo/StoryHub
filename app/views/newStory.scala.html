@@ -11,13 +11,13 @@
 		<p class="title">
 			@title
 		</p>
-		<form method="POST" name="@postForm" role="form">
+		<form method="POST" action="" id="newitemform" name="@postForm" role="form" >
 			<div class="form-group">
 				<input type="hidden" name="content" value="" id="content">
 			</div>
 			<div class="form-group">
 				<label for="title">Title </label><br/>
-				<input type="text" name="title" class="form-control" required/> <br/>
+				<input id ="story-title" onclick=this.select() type="text" name="title" class="form-control"/> <br/>
 			</div>
 			<div class="form-group">
 				<label for="quill"> Story Content </label><br/>
@@ -142,7 +142,7 @@
 
 					<!-- Create the editor container -->
 					<div id="editor">
-					  <div>Your Story Content...</div>
+					  <div></div>
 					</div>
 				</div>
 			</div>
@@ -150,12 +150,20 @@
 			<script src="http://cdn.quilljs.com/latest/quill.js"></script>
 			<div class="form-group">
 				<label for="tags">Tags </label><br/>
-				<input type="text" name="tags" class="form-control"/> <br/>
+				<input type="text" placeholder="e.g. newyork hippo awkwardanimals" onclick=this.select() id="story-tags" name="tags" class="form-control"/> <br/>
 			</div>
-			<button type="submit" onclick="validateForm()" class="btn btn-default">Submit</button>
+			<div id="errors"></div>
+			<br>
+			<button onclick="goBack()" class="btn btn-default"> Back </button>
+			<button type="submit" onclick="clickReturn()" class="btn btn-default">Submit</button>
 		</form>
 
 		<script>
+
+			function goBack() {
+    			window.history.back();
+			}
+
 			// Initialize editor with custom theme and modules
 			var fullEditor = new Quill('#editor', {
 			  modules: {
@@ -167,15 +175,59 @@
 
 			function validateForm()
 			{
+				//Checks that content isn't just blanks/spaces/new lines
 				var content = fullEditor.getHTML();
-				console.log(content);
-				if (content == "" || !content)
+				var checkContent = content.replace(/<div>/g,"").replace(/<\/div>/g,"").replace(/<br>/g,"").replace(/<\/br>/g,"").replace(/&nbsp;/g,"").replace(/^\s+|\s+$/g, "");
+				if (checkContent.length == 0)
 				{
-					alert("Story must have content.");
-					return;
+					document.getElementById("errors").innerHTML = "Please enter in story content.";
+					return false;
 				}
+				//Checks that tile isn't just blanks/spaces/newlines
+				var mytitle = $("#story-title").val();
+				var checkTitle = mytitle.replace(/^\s+|\s+$/g, "");
+				if(checkTitle.length == 0)
+				{
+					document.getElementById("errors").innerHTML = "Please enter in a title.";
+					return false;
+				}
+
 				document.getElementById("content").value = content;
+				return true;
 			}
+
+			function clickReturn(){
+				return;
+			}
+
+			$("#newitemform").submit(function(event){
+				event.preventDefault();
+				var $form = $(this);
+				url = window.location.href;
+
+				var valid = validateForm();
+				if(valid == true){
+					var posting = $.post(url,{
+						title: $("#story-title").val(),
+						content : document.getElementById("content").value , 
+						tags: $("#story-tags").val() 
+					});
+
+					posting.done(function(segInfoString){
+						if (segInfoString.startsWith("not found")) {
+							window.location = "/Error/NewStoryError"
+						} else {
+							var segInfo = segInfoString.split(",");
+							var storyId = segInfo[0];
+							var segmentId = segInfo[1];
+							window.location = "/Story/"+storyId.toString()+"/"+segmentId.toString();
+						}
+					});
+				}
+			});
+
+
+
 		</script>
 	</div>
 }
