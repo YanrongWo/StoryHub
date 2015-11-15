@@ -119,7 +119,9 @@ public class Application extends Controller {
             boolean loggedIn = (session("name") != null);
             int storyId = myStory.getStoryId();
             ArrayList<Integer> segsToParent = myStory.findSegById(0).getParentSegIds();
-            return ok(story.render(storyId, segsToParent, loggedIn));
+
+            String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(0);
+            return ok(result);
         }
     }
 
