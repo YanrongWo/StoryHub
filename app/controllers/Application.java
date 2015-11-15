@@ -208,7 +208,7 @@ public class Application extends Controller {
                     result = result.substring(0, result.length() - 1);
                 }
                 result += "],";
-                result += "\"content\": \"" + mySegment.getContent() + "\",";
+                result += "\"content\": \"" + mySegment.getContent().replace("\"", "~|+#") + "\",";
                 result += "\"parentSegId\": \"" + parentSegId + "\",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
                 String childrenId = "\"childrenid\":[";
