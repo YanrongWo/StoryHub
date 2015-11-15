@@ -1,4 +1,5 @@
-@(myStory: Integer, loggedIn: Boolean)
+@(myStory: Integer, mySegs: List[Integer])
+
 
 @main(""){
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/story.css")">
@@ -38,13 +39,10 @@
 					<td> \
 						<div class="title">' + storyJSON["title"] + '</div> \
 					</td>';
-			console.log("logged in?");
-			console.log(@loggedIn);
-			if(@loggedIn){
-				story += '<td> \
-						<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment</button> \
-					</td>';
-			}
+			story += '<td> \
+					<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment</button> \
+				</td>';
+		
 			story += '</tr> \
 				<tr> \
 					<td> \
@@ -78,9 +76,11 @@
 		</div>';
 			$('#all_segments').append(story);
 		}
-		$( document ).ready(function() {
+		$(document).ready(function() {
     		console.log( "ready!" );
-    		addSegment(0);
+    		@for(mySeg <- mySegs){
+    			addSegment(@mySeg);
+    		}
 		});
 	</script>
 }
