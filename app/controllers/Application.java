@@ -122,7 +122,6 @@ public class Application extends Controller {
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
             if(myStory != null){
-                boolean loggedIn = (session("name") != null);
                 System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
                 ArrayList<Integer> segs = new ArrayList<Integer>();
