@@ -60,7 +60,7 @@ public class AppController{
     
     //not tested
     public boolean fork(Story sto, Segment seg, int segmentId) throws SQLException {
-        if (sto.fork(seg, segmentId)) {
+        if (sto.addSegment(seg, segmentId)) {
             storeStory(sto);
             return true;
         }
