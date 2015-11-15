@@ -238,7 +238,7 @@ public class Application extends Controller {
             titles.retainAll(myAppController.findByTitle(queries[i].trim()));
             queries[i] = "\""+queries[i]+"\"";
         }
-        String searchString = "Search results for titles "+String.join(",",queries);
+        String searchString = "Search results for titles containing "+String.join(",",queries);
         return ok(search.render(searchString,titles));
     }
 
