@@ -66,7 +66,7 @@ public class Story implements Serializable{
 
 	private void recurseSearchSegTag(ArrayList<Segment> segments, Segment seg, String searchWord) {
 		for (String tag : seg.getTags()){
-			if(tag.equals(searchWord)){
+			if(tag.toLowerCase().equals(searchWord.toLowerCase())){
 				segments.add(seg);
 				break;
 			}
