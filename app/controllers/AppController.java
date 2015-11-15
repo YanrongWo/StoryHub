@@ -161,6 +161,8 @@ public class AppController{
         int maxLoad = i+this.max;
         if(maxLoad>storySize) {
             maxLoad = storySize;
+        } else {
+            maxLoad--;
         }
         ArrayList<Story> frontStories = new ArrayList<Story>();
         String SQL_DESERIALIZE_OBJECT = "SELECT serialized_object FROM stories WHERE storyid BETWEEN ? AND ?";
