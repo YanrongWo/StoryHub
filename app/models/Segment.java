@@ -75,8 +75,9 @@ public class Segment implements Serializable{
     }
 
     public String displayContent(){
-        if(this.content.length() > 251){
-            return this.content.substring(0, 250) + "...";
+        String noHTMLString = this.content.replaceAll("\\<.*?>","");
+        if(noHTMLString.length() > 251){
+            return noHTMLString.substring(0, 250) + "...";
         }
         return this.content;
     }
