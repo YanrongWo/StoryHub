@@ -19,19 +19,7 @@ public class Application extends Controller {
         myAppController.loadAll();
 
         //Get all stories
-        ArrayList<Story> storyList = myAppController.getFrontPageStories();
-        //ArrayList<Story> storyList = new ArrayList<Story>();
-
-        //For each story, add to storyList 
-        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "This is 250 characters. Story content is great. Read more about this riveting story. You'll never guess what happens because I don't know what will happen. You can determine the ending. Or will there not be an ending? Who knows... Java Play is the worst. Would not recommend", new String[] {"x", "y"});
-        //Story s1 = new Story(test1, 1);
-        //myAppController.createStory(test1);
-        //myAppController.createStory(test2);
-        // storyList.add(s1);
-        // Story s2 = new Story(test2, 2);
-        // storyList.add(s2);   
+        ArrayList<Story> storyList = myAppController.getFrontPageStories();   
 
         return ok(index.render("Homepage", storyList));
     }
@@ -134,8 +122,11 @@ public class Application extends Controller {
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
             if(myStory != null){
+                boolean loggedIn = (session("name") != null);
                 System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
+                ArrayList<Integer> segs = new ArrayList<Integer>();
+                segs.add(segmentId);
                 if(added){
                     boolean loggedIn = (session("name") != null);
                     ArrayList<Integer> segsToParent = myStory.findSegById(segmentId).getParentSegIds();
@@ -164,93 +155,16 @@ public class Application extends Controller {
 
 
         ArrayList<Segment> tagged = myAppController.find(query.trim());
-        // ArrayList<Segment> taggedSegments = new ArrayList<Segment>();
-        // for ( int i = 0 ; i < tagged.size(); i ++){
-        //     taggedSegments.addAll(tagged.getSegments());
-        // }
 
         String searchString = "Search results for tag \""+query+"\"";     
         return ok(search.render(searchString,tagged));
     }
-    //  //Returns a JSON string with information about the (story, segment)
-    // public String getSegmentJson(Story myStory, Segment mySegment){
-    //     String result = "{";
-            
-    //     result += "\"title\": \"" + mySegment.getTitle() + "\",";
-    //     result += "\"author\": \"" + mySegment.getAuthor() + "\",";
-    //     result += "\"tags\": [";
-    //     String[] tags = mySegment.getTags();
-    //     for (int i = 0; i < tags.length; i++){
-    //         result += "\"" + tags[i] + "\",";
-    //     }
-    //     result = result.substring(0, result.length() - 1);
-    //     result += "],";
-    //     result += "\"content\": \"" + mySegment.getContent() + "\",";
-    //     ArrayList<Segment> children = mySegment.getChildSegs();
-    //     String childrenId = "\"childrenid\":[";
-    //     String childrenTitle = "\"childrentitle\":[";
-    //     for(int i = 0; i < children.size(); i++){
-    //         Segment child = children.get(i);
-    //         childrenId += "\"" + child.getSegmentId() + "\",";
-    //         childrenTitle += "\"" + child.getTitle() + "\",";
-    //     }
-    //     childrenId = childrenId.substring(0, childrenId.length() - 1);
-    //     childrenTitle = childrenTitle.substring(0, childrenTitle.length() - 1);
-    //     childrenId += "],";
-    //     childrenTitle += "]";
-    //     result += childrenId + childrenTitle + "}";
-
-    //     return(result);
-    // }
-
-
-    // public Result getTaggedStories(){
-    //     System.out.println("Function is called!!!");
-    //     DynamicForm form = Form.form().bindFromRequest();
-    //     if (form.data().size() == 0) {
-    //         System.out.println("Bad Request");
-    //         return badRequest("Form Error");
-    //     } else {
-    //         String searchWord = form.get("searchWord");
-    //         System.out.println(searchWord);
-    //         ArrayList<StorySeg> tagged = myAppController.find(searchWord);
-
-    //         String searchResult = "{"; 
-    //         //Transform each StorySeg into corresponding JSON
-    //         for(int a = 0;a < tagged.size();a++){
-    //             try{
-    //                 Story myStory = myAppController.getStory(Integer.valueOf(tagged.get(a).getStoryInt()));
-    //                 Segment mySegment = myStory.getRoot().getSegment(tagged.get(a).getSegInt());
-    //                 String json = getSegmentJson(myStory,mySegment);
-    //                 searchResult += "\"" + a + ":\"" + json;
-    //             }
-    //             catch (IOException e){
-    //                 return badRequest("IOException");
-    //             }
-    //             catch(SQLException e){
-    //                 return badRequest("SQLException");
-    //             }
-    //             catch(ClassNotFoundException e){
-    //                 return badRequest("ClassNotFoundException");
-    //             }
-    //             catch(Exception e){
-    //                 return badRequest("Exception");
-    //             }
-    //         }
-
-    //         searchResult += "}";
-    //         System.out.println("Search:"+searchResult);
-    //         return ok(searchResult);
-    //     }
-    // }
 
     public Result getSegmentInfo(){
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } else {
-            // String result = "{\"hi\": \"ho\"}";
-            // return ok(result);
 
             String result = "{";
             Integer storyId = Integer.parseInt(form.get("storyId"));
@@ -258,6 +172,10 @@ public class Application extends Controller {
             try{
                 Story myStory = myAppController.getStory(Integer.valueOf(storyId));
                 Segment mySegment = myStory.findSegById((int) segmentId);
+                int parentSegId = -1;
+                if(mySegment.getParentSeg() != null){
+                    parentSegId = mySegment.getParentSeg().getSegmentId();
+                }
 
                 result += "\"title\": \"" + mySegment.getTitle() + "\",";
                 result += "\"author\": \"" + mySegment.getAuthor() + "\",";
@@ -271,6 +189,7 @@ public class Application extends Controller {
                 }
                 result += "],";
                 result += "\"content\": \"" + mySegment.getContent() + "\",";
+                result += "\"parentSegId\": " + parentSegId + ",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
                 String childrenId = "\"childrenid\":[";
                 String childrenTitle = "\"childrentitle\":[";
