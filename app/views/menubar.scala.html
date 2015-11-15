@@ -46,7 +46,6 @@
     }
 
     searchQueries = search.split(" ");
-    console.log(searchQueries);
     var searchURL = "/SearchTags/";
     for(var i = 0 ;i <searchQueries.length; i++){
       //Remove white space from searches 
@@ -57,7 +56,6 @@
         searchURL += searchQueries[i];
       } else{ searchURL += searchQueries[i]+"+"; }
     }
-    console.log("Search URL"+searchURL);
     document.searchform.action = searchURL;
   }
 
@@ -69,11 +67,8 @@
       setTimeout(function(){ $('[data-toggle="popover"]').popover('destroy'); }, 2000);
     }
     searchQueries = search.split(" ");
-    console.log(searchQueries);
     var searchURL = "/SearchTitles/";
     for(var i = 0 ;i <searchQueries.length; i++){
-      console.log("i is"+i);
-      console.log("Query is "+ searchQueries[i]);
       //Signal white space in url
       searchQueries[i] = searchQueries[i].replace(/^\s+|\s+$/g, "");
       //Add queries to URL
@@ -81,7 +76,6 @@
         searchURL += searchQueries[i];
       } else{ searchURL += searchQueries[i]+"+"; }
     }
-    console.log("Search URL:"+searchURL);
     document.searchform.action = searchURL;
   }
 
