@@ -177,10 +177,7 @@
 			{
 				//Checks that content isn't just blanks/spaces/new lines
 				var content = fullEditor.getHTML();
-				console.log(content);
 				var checkContent = content.replace(/<div>/g,"").replace(/<\/div>/g,"").replace(/<br>/g,"").replace(/<\/br>/g,"").replace(/&nbsp;/g,"").replace(/^\s+|\s+$/g, "");
-				console.log("Content length is"+checkContent.length);
-				console.log("Check content is "+checkContent);
 				if (checkContent.length == 0)
 				{
 					document.getElementById("errors").innerHTML = "Please enter in story content.";
@@ -189,10 +186,8 @@
 				//Checks that tile isn't just blanks/spaces/newlines
 				var mytitle = $("#story-title").val();
 				var checkTitle = mytitle.replace(/^\s+|\s+$/g, "");
-				console.log("CheckTitle length is "+checkTitle.length);
 				if(checkTitle.length == 0)
 				{
-					console.log("In check title");
 					document.getElementById("errors").innerHTML = "Please enter in a title.";
 					return false;
 				}
@@ -207,15 +202,11 @@
 
 			$("#newitemform").submit(function(event){
 				event.preventDefault();
-				console.log("Entered submit function!!");
 				var $form = $(this);
 				url = window.location.href;
-				console.log("Url is "+url);
 
 				var valid = validateForm();
-				console.log("Valid is "+valid);
 				if(valid == true){
-					console.log("Form was validated");
 					var posting = $.post(url,{
 						title: $("#story-title").val(),
 						content : document.getElementById("content").value , 
@@ -223,8 +214,6 @@
 					});
 
 					posting.done(function(segInfoString){
-						console.log("Received reply!");
-						console.log(segInfoString);
 						if (segInfoString.startsWith("not found")) {
 							window.location = "/Error/NewStoryError"
 						} else {
