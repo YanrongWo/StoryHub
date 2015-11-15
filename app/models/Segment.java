@@ -14,7 +14,7 @@ public class Segment implements Serializable{
     //Segment and story ids
     private int id = 0; //default = 0 for root of story
     private int storyId = 0;
-    
+
     //Segment information
     private String title;
     private String author;
@@ -122,7 +122,7 @@ public class Segment implements Serializable{
      */
     public String displayContent() {
         String htmlString = new String(this.content);
-        String noHTMLString = htmlString.replaceAll("\\<.*?>","");
+        String noHTMLString = htmlString.replaceAll("\\<.*?>", "");
         if(noHTMLString.length() > 251) {
             return noHTMLString.substring(0, 250) + "...";
         }
