@@ -32,3 +32,5 @@ POST	/Story/:storyId/:segmentId/NewSegment			controllers.Application.newForkSubm
 
 GET		/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
 
+GET 		/Error/:error									controllers.Application.error(error: String)									
+
