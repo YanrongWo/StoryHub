@@ -73,15 +73,6 @@ public class AppController{
         ArrayList<Segment> results = new ArrayList<Segment>();
         for(int i=0; i<stories.size(); i++) {
             results.addAll(stories.get(i).findTags(search));
-            // for (int j=0; j<hits.size(); j++) {
-            //     results.add(new StorySeg(stories.get(i).getStoryId(), hits.get(j)));
-            // }
-        }
-
-        //Debug
-        System.out.println("The returned segments");
-        for( int i = 0 ;i < results.size(); i++){
-            System.out.println(results.get(i));
         }
         return results;
     }
