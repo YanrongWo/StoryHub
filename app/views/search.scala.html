@@ -1,44 +1,45 @@
 @(searchQuery: String, taggedSegments: List[Segment])
 
 @main("Searching Storyhub..."){ }{
-
 	<div class="container">
 		<p class="title" id='query'>
 			@searchQuery
 		</p>
 		<div id="all_stories">
-			@if(taggedSegments.length == 0) { <p>No search results.</p>}
-			@for(segment <- taggedSegments){
-			<div class="story">
-				<table>
-				<col style="width:90%"><col style="width:10%">
-				<tr>
-					<td>
-						<a class="title" href="/Story/@segment.getStoryId()/@segment.getSegmentId()"> @segment.getTitle()</a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="author"> @segment.getAuthor() </dv>
-					</td>
-				</tr>
-				<tr> 
-					<td>
-						<ul class="tags">
-				@for(tag <- segment.getTags()){
-					<li><a href="/SearchTags/@tag" class="tag">@tag</a></li>
+			@if(taggedSegments.length == 0) { 
+				<p>No search results.</p>
 			}
-			</ul>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="content"> @Html(segment.displayContent())</div>
-					</td>
-				</tr>
-			</table>
-			</div>
-		}
+			@for(segment <- taggedSegments){
+				<div class="story">
+					<table>
+						<col style="width:90%"><col style="width:10%">
+						<tr>
+							<td>
+								<a class="title" href="/Story/@segment.getStoryId()/@segment.getSegmentId()"> @segment.getTitle()</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="author"> @segment.getAuthor() </dv>
+							</td>
+						</tr>
+						<tr> 
+							<td>
+								<ul class="tags">
+								@for(tag <- segment.getTags()){
+									<li><a href="/SearchTags/@tag" class="tag">@tag</a></li>
+								}
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="content"> @Html(segment.displayContent())</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			}
 		</div>
 	</div>
 }
