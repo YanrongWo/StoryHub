@@ -93,3 +93,15 @@ a,a:hover {
 	padding-top: 1vw;
 	padding-bottom: 1vw;
 }
+
+#status{
+  margin: 10px;
+}
+
+.fb-login-button{
+  margin-top: 10px;
+}
+
+.homepage{
+  margin-top: 5px;
+}
