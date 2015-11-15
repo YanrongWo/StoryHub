@@ -118,12 +118,14 @@ public class Application extends Controller {
             Segment seg = new Segment(null, title, session("name"), content, tags);
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
-
-            boolean added = myAppController.fork(myStory, seg, segmentId);
-            if(added){
-                return ok("Submitted");
+            if(myStory != null){
+                System.out.println("myStory" + myStory);
+                boolean added = myAppController.fork(myStory, seg, segmentId);
+                if(added){
+                    return ok("Submitted");
+                }
             }
-            return ok("Failed");
+            return notFound(main.render("Page Not Found", Html.apply(""), Html.apply("Page Not Found.")));
         }
     }
 
