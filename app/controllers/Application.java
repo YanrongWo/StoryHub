@@ -147,7 +147,9 @@ public class Application extends Controller {
                 if(added){
                     boolean loggedIn = (session("name") != null);
                     ArrayList<Integer> segsToParent = myStory.findSegById(seg.getSegmentId()).getParentSegIds();
-                    return ok(story.render(storyId, segsToParent, loggedIn));
+                    // return ok(story.render(storyId, segsToParent, loggedIn));
+                    String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
+                    return(ok(result));
                 }
             }
             return notFound(main.render("Page Not Found", Html.apply(""), Html.apply("Page Not Found.")));
