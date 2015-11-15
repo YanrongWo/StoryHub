@@ -99,11 +99,11 @@ public class AppController{
         pstmt.close();
     }
     
-    public ArrayList<Story> getFrontPageStories() {
+    public ArrayList<Story> getFrontPageStories(int i) {
         if (stories.size() < max) {
             return stories;
         } else {
-            return new ArrayList<Story>(stories.subList(0, max));
+            return new ArrayList<Story>(stories.subList(i, i+max));
         }
     }
     

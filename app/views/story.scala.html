@@ -42,6 +42,10 @@
 	              	var story = JSON.parse(JSONstory);
 	              	console.log(story);
 	              	addJSONcontent(story, segmentId);
+	              	index += 1;
+	              	if (index < segments.length){
+	              		addSegment(segments[index], segments[index - 1]);
+	              	}
 	          	}
 	      	});
 		}
@@ -97,11 +101,12 @@
 		</div>';
 			$('#all_segments').append(story);
 		}
+
+		var segments = @mySegs;
+		var index  = 0;
 		$(document).ready(function() {
-    		console.log( "ready!" );
-    		@for(mySeg <- mySegs){
-    			addSegment(@mySeg, -1);
-    		}
+			index = 0;
+			addSegment(segments[0], -1);
 		});
 	</script>
 }
