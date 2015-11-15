@@ -137,7 +137,9 @@ public class Application extends Controller {
                 System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
                 if(added){
-                    return ok("Submitted");
+                    boolean loggedIn = (session("name") != null);
+                    ArrayList<Integer> segsToParent = myStory.findSegById(segmentId).getParentSegIds();
+                    return ok(story.render(storyId, segsToParent, loggedIn));
                 }
             }
             return notFound(main.render("Page Not Found", Html.apply(""), Html.apply("Page Not Found.")));
