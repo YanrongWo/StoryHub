@@ -127,7 +127,7 @@ public class Application extends Controller {
     public Result story(int id, int segid)throws SQLException, IOException, ClassNotFoundException{
         boolean loggedIn = (session("name") != null);
         Story myStory = myAppController.getStory(id);
-        if (myStory == null){
+        if (myStory != null){
             Segment mySeg = myStory.findSegById(segid);
             ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
             return ok(story.render(id, segsToParent, loggedIn));
