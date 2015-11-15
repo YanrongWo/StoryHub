@@ -92,6 +92,7 @@ public class Application extends Controller {
     }
 
     /* create a new fork from form data */
+    // Adds segment to story with storyId, parent will be segment with segmentId
     public Result newForkSubmit(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
@@ -104,10 +105,12 @@ public class Application extends Controller {
             Segment seg = new Segment(null, title, session("name"), content, tags);
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
-            Segment parentSegment = myStory.getRoot().getSegment(segmentId);
 
-            parentSegment.addChild(seg);
-            return ok("Submitted");
+            boolean added = myAppController.fork(myStory, seg, segmentId);
+            if(added){
+                return ok("Submitted");
+            }
+            return ok("Failed");
         }
     }
 
