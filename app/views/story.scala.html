@@ -81,12 +81,13 @@
 					story += '<li><a href="/SearchTags/'+storyJSON["tags"][i]+'" class="tag">' + storyJSON["tags"][i] + '</a></li>';
 				}
 			}
+			console.log(storyJSON["content"].replace(/\~\|\+\#/g, "\""));
 			story += '</ul> \
 					</td> \
 				</tr> \
 				<tr> \
 					<td> \
-						<div class="content">' + storyJSON["content"] + '</div> \
+						<div class="content">' + storyJSON["content"].replace(/\~\|\+\#/g, "\"") + '</div> \
 					</td> \
 				</tr> \
 				<tr> \
