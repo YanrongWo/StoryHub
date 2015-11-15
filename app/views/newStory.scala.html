@@ -227,11 +227,12 @@
 						console.log(segInfoString);
 						if (segInfoString.startsWith("not found")) {
 							window.location = "/Error/NewStoryError"
+						} else {
+							var segInfo = segInfoString.split(",");
+							var storyId = segInfo[0];
+							var segmentId = segInfo[1];
+							window.location = "/Story/"+storyId.toString()+"/"+segmentId.toString();
 						}
-						var segInfo = segInfoString.split(",");
-						var storyId = segInfo[0];
-						var segmentId = segInfo[1];
-						window.location = "/Story/"+storyId.toString()+"/"+segmentId.toString();
 					});
 				}
 			});
