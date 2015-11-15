@@ -85,11 +85,11 @@ public class Application extends Controller {
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } else {
-            String title = form.get("title");
+            String title = form.get("title").replaceAll("\"", "\'");
             System.out.println(title);
-            String content = form.get("content");
+            String content = form.get("content").replaceAll("\"", "\'");
             System.out.println(content);
-            String tagsRaw = form.get("tags");
+            String tagsRaw = form.get("tags").replaceAll("\"", "\'");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
             System.out.println(tags);
             System.out.println(session("name"));
