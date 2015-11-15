@@ -167,25 +167,48 @@ public class Application extends Controller {
         return notFound(views.html.error.render("Page Not Found"));
     }
 
-    //Returns all stories with tags
+    //Returns all segments with specified tags
     public Result getStoriesByTags(String query) throws SQLException, IOException, ClassNotFoundException{
         myAppController.loadAll();
         System.out.println("Function is called!!!");
         System.out.println("Query:"+query);
 
+        String[] queries = query.split("\\+");
 
-        ArrayList<Segment> tagged = myAppController.findByTag(query.trim());
+        ArrayList <Segment> tagged = myAppController.findByTag(queries[0].trim());
+        for(int i = 0; i < queries.length;i++){
+            if(queries[i].substring(0,1)=="#"){
+                queries[i]=queries[i].substring(1,queries[i].length());
+            }
+            System.out.println("Query is "+queries[i]);
+            // Get interesection of all searches
+            tagged.retainAll(myAppController.findByTag(queries[i].trim()));
+            for(int p = 0 ; p< tagged.size();p ++){
+                System.out.println("Segment is "+tagged.get(p).getStoryId()+","+tagged.get(p).getSegmentId());
+            }
+            System.out.println("Tagged Segments Length:"+tagged.size());
+            queries[i] = "\""+queries[i]+"\"";
+            System.out.println("New Query");
+        }
 
-        String searchString = "Search results for tag \""+query+"\"";     
+        String searchString = "Search results for tag(s) "+ String.join(",",queries);     
         return ok(search.render(searchString,tagged));
     }
 
     public Result getStoriesByTitles(String query) throws SQLException,IOException,ClassNotFoundException{
         myAppController.loadAll();
 
-        ArrayList<Segment> titles = myAppController.findByTitle(query.trim());
+        String[] queries = query.split("\\+");
 
-        String searchString = "Search results for title \""+query+"\"";
+        ArrayList <Segment> titles = myAppController.findByTitle(queries[0].trim());
+        
+        for(int i = 0; i < queries.length; i++){
+            // Get intersection of all searches
+            titles.retainAll(myAppController.findByTitle(queries[i].trim()));
+            queries[i] = "\""+queries[i]+"\"";
+        }
+
+        String searchString = "Search results for title(s) "+String.join(",",queries);
         return ok(search.render(searchString,titles));
     }
 
