@@ -51,6 +51,7 @@ public class Segment implements Serializable{
    }
 
     public boolean addChild(Segment child) {
+        System.out.println("addChild()");
         return childSegs.add(child);
     }
 
