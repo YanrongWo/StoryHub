@@ -10,16 +10,24 @@
 	<script>
 		var storyId = @{myStory};
 		function addSegment(segmentId, parentId){
-			// If not the first segment, then we're looking at a branch. 
-			// Need to disable to see only 1 segment branch at a time
-			if(segmentId !== 0 && parentId > -1){
-				$('button').prop('disabled', false);
-				document.getElementById(segmentId).disabled = true;
+				//Enable all buttons to view child segments
+				var buttonLevel = ".btn" + parentId;
+				$(buttonLevel).prop('disabled', false);
+				var buttonForSegId = "#" + segmentId;
+				//Check if button exists for segmentId
+				//There won't be one for the root
+				if ($(buttonForSegId).length > 0) {
+					$(buttonForSegId).prop('disabled', true);
+				}
+				//Check if segment of same level exists.
 				var segmentLevel = ".segment" + parentId;
 				if($(segmentLevel).length){
+					//If so, remove all children below
+					$(segmentLevel).nextAll().remove();
+					//And remove same level segment
 					$(segmentLevel).remove();
 				}
-			}
+			
 			console.log("addSegment() method");
 			$.ajax({
 	          	type: 'POST',
@@ -34,6 +42,10 @@
 	              	var story = JSON.parse(JSONstory);
 	              	console.log(story);
 	              	addJSONcontent(story, segmentId);
+	              	index += 1;
+	              	if (index < segments.length){
+	              		addSegment(segments[index], segments[index - 1]);
+	              	}
 	          	}
 	      	});
 		}
@@ -42,7 +54,7 @@
 			var newForkURL = "/Story/" + @myStory + "/" + segmentId + "/NewSegment";
 			console.log("newForkURL");
 			console.log(newForkURL);
-			var story = '<div class="segment' + storyJSON["parentSegId"] + '">';
+			var story = '<div class="story segment' + storyJSON["parentSegId"] + '">';
 			story += '<table> \
 				<col style="width:90%"><col style="width:10%"> \
 				<tr> \
@@ -79,24 +91,25 @@
 				</tr> \
 				<tr> \
 					<td>';
-			if(!$('.segment-1').length){
+			
 				story += '<div class="children">';
 				for (var i = 0; i < storyJSON["childrenid"].length; i++){
-					story += '<button type="button" id="' +  storyJSON["childrenid"][i] + '" class="btn btn-primary" onclick="' + "addSegment(" + storyJSON["childrenid"][i] + ',' + segmentId + ' );">' + storyJSON["childrentitle"][i] + '</button>';
+					story += '<button type="button" id="' +  storyJSON["childrenid"][i] + '" class= "btn btn-primary btn' + segmentId + '" onclick="addSegment(' + storyJSON["childrenid"][i] + ',' + segmentId + ' );">' + storyJSON["childrentitle"][i] + '</button>';
 				}
 				story += '</div>';
-			}
+			
 			story += '</td> \
 				</tr> \
 			</table> \
 		</div>';
 			$('#all_segments').append(story);
 		}
+
+		var segments = @mySegs;
+		var index  = 0;
 		$(document).ready(function() {
-    		console.log( "ready!" );
-    		@for(mySeg <- mySegs){
-    			addSegment(@mySeg, -1);
-    		}
+			index = 0;
+			addSegment(segments[0], -1);
 		});
 	</script>
 }

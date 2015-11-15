@@ -15,29 +15,45 @@ public class Application extends Controller {
     AppController myAppController = new AppController();
 
     public Result index() throws SQLException, IOException, ClassNotFoundException{
-
-        myAppController.loadAll();
+        if(myAppController.getStories().size()==0) {
+            myAppController.loadAll();
+        }
 
         //Get all stories
-        ArrayList<Story> storyList = myAppController.getFrontPageStories();   
+        ArrayList<Story> storyList = myAppController.getFrontPageStories(0);
+        int interval = myAppController.getMax();
+        System.out.println("interval");
+        System.out.println(interval);  
 
-        return ok(index.render("Homepage", storyList));
+        return ok(index.render("Homepage", storyList, 0, myAppController.getStories().size(), interval));
     }
 
-    public Result search(){
-        //Get all stories
-        ArrayList<Story> storyList = new ArrayList<Story>();
-        //For each story, add to storyList 
-        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", new String[] {"x", "y"});
-        Story s1 = new Story(test1, 1);
-        storyList.add(s1);
-        Story s2 = new Story(test2, 2);
-        storyList.add(s2);
+    public Result offset(int i) throws SQLException, IOException, ClassNotFoundException{
+        if(myAppController.getStories().size()==0) {
+            myAppController.loadAll();
+        }
+        if(i>myAppController.getStories().size()) {
+            String message = "Your offset is larger than the size of the stories library";
+            return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
+        }
+        ArrayList<Story> storyList = myAppController.getFrontPageStories(i);   
+        return ok(index.render("Homepage", storyList, i, myAppController.getStories().size(), myAppController.getMax()));
+    }
+
+    // public Result search(){
+    //     //Get all stories
+    //     ArrayList<Story> storyList = new ArrayList<Story>();
+    //     //For each story, add to storyList 
+    //     //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
+    //     Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
+    //     Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", new String[] {"x", "y"});
+    //     Story s1 = new Story(test1, 1);
+    //     storyList.add(s1);
+    //     Story s2 = new Story(test2, 2);
+    //     storyList.add(s2);
         
-        return ok(index.render("Results", storyList));
-    }
+    //     return ok(.render("Results", storyList));
+    // }
 
     /* Make controller object and set form.get("name") */
     public Result facebookName() {
@@ -122,7 +138,6 @@ public class Application extends Controller {
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
             if(myStory != null){
-                boolean loggedIn = (session("name") != null);
                 System.out.println("myStory" + myStory);
                 boolean added = myAppController.fork(myStory, seg, segmentId);
                 ArrayList<Integer> segs = new ArrayList<Integer>();
@@ -188,7 +203,7 @@ public class Application extends Controller {
                 }
                 result += "],";
                 result += "\"content\": \"" + mySegment.getContent() + "\",";
-                result += "\"parentSegId\": " + parentSegId + ",";
+                result += "\"parentSegId\": \"" + parentSegId + "\",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
                 String childrenId = "\"childrenid\":[";
                 String childrenTitle = "\"childrentitle\":[";

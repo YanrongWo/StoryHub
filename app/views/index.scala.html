@@ -1,4 +1,4 @@
-@(title: String, storyList: List[Story])
+@(title: String, storyList: List[Story], offset: Integer, totalStories: Integer, interval: Integer)
 
 @main("Welcome to StoryHub"){ }{
 
@@ -39,5 +39,36 @@
 			</div>
 		}
 		</div>
+		<div>
+		<button id="PrevButton" type="button" class="btn btn-primary" onclick="prevPage(@offset, @interval)">
+		    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous Page
+		  </button>
+	      <button id="NextButton" type="button" class="btn btn-primary" onclick="nextPage(@offset, @totalStories, @interval)">
+	        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Next Page
+	      </button>
+	      <script>
+	      	function prevPage(i, interval) {
+	      		var newIndex = i-interval;
+	      		if(newIndex<0) {
+	      			$("#PrevButton").html("Previous page not possible");
+	      			$('#PrevButton').prop('disabled', true);
+	      		} else {
+	      			window.location = "/index/"+newIndex.toString();
+	      		}
+	      	}
+	      	function nextPage(i, totalStories, interval) {
+	      		var newIndex = i+interval;
+	      		console.log("i"+i.toString());
+	      		console.log("interval"+interval.toString());
+	      		console.log(newIndex);
+	      		if(newIndex>totalStories) {
+	      			$("#NextButton").html("Next page not possible");
+	      			$('#NextButton').prop('disabled', true);
+	      		} else {
+	      			window.location = "/index/"+newIndex.toString();
+	      		}
+	      	}
+	      </script>
+  		</div>
 	</div>
 }
