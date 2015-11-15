@@ -91,10 +91,12 @@ public class Application extends Controller {
             System.out.println(content);
             String tagsRaw = form.get("tags").replaceAll("\"", "\'");
             String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            System.out.println(tags);
+            Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
+            String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
+            System.out.println(uniqueTags);
             System.out.println(session("name"));
             Segment seg = new Segment(null, title, session("name"),
-                content, tags);
+                content, uniqueTags);
             Story myStory = myAppController.createStory(seg);
 
             boolean loggedIn = (session("name") != null);
