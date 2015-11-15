@@ -78,7 +78,7 @@
 			for (var i = 0; i < storyJSON["tags"].length; i++){
 
 				if(storyJSON["tags"][i].length!=0){
-					story += '<li><a href="/Search/'+storyJSON["tags"][i]+'" class="tag">' + storyJSON["tags"][i] + '</a></li>';
+					story += '<li><a href="/SearchTags/'+storyJSON["tags"][i]+'" class="tag">' + storyJSON["tags"][i] + '</a></li>';
 				}
 			}
 			console.log(storyJSON["content"].replace(/\~\|\+\#/g, "\""));

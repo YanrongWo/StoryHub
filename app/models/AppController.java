@@ -72,11 +72,19 @@ public class AppController{
         
     }
     
-    public ArrayList<Segment> find(String search) {
+    public ArrayList<Segment> findByTag(String search) {
         System.out.println("Finding!!!");
         ArrayList<Segment> results = new ArrayList<Segment>();
         for(int i=0; i<stories.size(); i++) {
             results.addAll(stories.get(i).findTags(search));
+        }
+        return results;
+    }
+
+    public ArrayList<Segment> findByTitle(String search){
+        ArrayList<Segment> results = new ArrayList<Segment>();
+        for (int i = 0 ; i < stories.size(); i ++){
+            results.addAll(stories.get(i).findTitles(search));
         }
         return results;
     }

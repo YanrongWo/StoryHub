@@ -58,9 +58,15 @@ public class Story implements Serializable{
 		return segments;
 	}
 
+	public ArrayList <Segment> findTitles(String searchWord){
+		ArrayList<Segment> segments = new ArrayList<Segment>();
+		recurseSearchSegTitle(segments,this.root,searchWord);
+		return segments;
+	}
+
 	private void recurseSearchSegTag(ArrayList<Segment> segments, Segment seg, String searchWord) {
 		for (String tag : seg.getTags()){
-			if(tag.equals(searchWord)){
+			if(tag.toLowerCase().equals(searchWord.toLowerCase())){
 				segments.add(seg);
 				break;
 			}
@@ -74,6 +80,23 @@ public class Story implements Serializable{
 			}
 		}
 	}
+
+
+	private void recurseSearchSegTitle(ArrayList<Segment> segments, Segment seg, String searchWord){
+		if(seg.getTitle().contains(searchWord)){
+			segments.add(seg);
+		}
+
+		if(seg.isLeafNode()){
+			return;
+		} else {
+			ArrayList<Segment> children = seg.getChildSegs();
+			for ( int i = 0; i < children.size();i++){
+				recurseSearchSegTitle(segments, children.get(i),searchWord);
+			}
+		}
+	}
+
 
 	//returns arraylist of parents of the given segment seg
 	public ArrayList<Segment> getParents(Segment seg) {
