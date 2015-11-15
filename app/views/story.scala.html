@@ -64,7 +64,10 @@
 					<td> \
 						<ul class="tags">';
 			for (var i = 0; i < storyJSON["tags"].length; i++){
-				story += '<li><a href="/Search/'+storyJSON["tags"][i]+'" class="tag">' + storyJSON["tags"][i] + '</a></li>';
+
+				if(storyJSON["tags"][i].length!=0){
+					story += '<li><a href="/Search/'+storyJSON["tags"][i]+'" class="tag">' + storyJSON["tags"][i] + '</a></li>';
+				}
 			}
 			story += '</ul> \
 					</td> \

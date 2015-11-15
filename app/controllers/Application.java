@@ -128,7 +128,6 @@ public class Application extends Controller {
                 ArrayList<Integer> segs = new ArrayList<Integer>();
                 segs.add(segmentId);
                 if(added){
-                    boolean loggedIn = (session("name") != null);
                     ArrayList<Integer> segsToParent = myStory.findSegById(segmentId).getParentSegIds();
                     return ok(story.render(storyId, segsToParent, loggedIn));
                 }
