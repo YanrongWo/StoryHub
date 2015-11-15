@@ -20,9 +20,12 @@ public class Application extends Controller {
         }
 
         //Get all stories
-        ArrayList<Story> storyList = myAppController.getFrontPageStories(0);   
+        ArrayList<Story> storyList = myAppController.getFrontPageStories(0);
+        int interval = myAppController.getMax();
+        System.out.println("interval");
+        System.out.println(interval);  
 
-        return ok(index.render("Homepage", storyList));
+        return ok(index.render("Homepage", storyList, 0, myAppController.getStories().size(), interval));
     }
 
     public Result offset(int i) throws SQLException, IOException, ClassNotFoundException{
@@ -34,23 +37,23 @@ public class Application extends Controller {
             return badRequest(main.render("Page Not Found", Html.apply(""), Html.apply(message)));
         }
         ArrayList<Story> storyList = myAppController.getFrontPageStories(i);   
-        return ok(index.render("Homepage", storyList));
+        return ok(index.render("Homepage", storyList, i, myAppController.getStories().size(), myAppController.getMax()));
     }
 
-    public Result search(){
-        //Get all stories
-        ArrayList<Story> storyList = new ArrayList<Story>();
-        //For each story, add to storyList 
-        //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
-        Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
-        Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", new String[] {"x", "y"});
-        Story s1 = new Story(test1, 1);
-        storyList.add(s1);
-        Story s2 = new Story(test2, 2);
-        storyList.add(s2);
+    // public Result search(){
+    //     //Get all stories
+    //     ArrayList<Story> storyList = new ArrayList<Story>();
+    //     //For each story, add to storyList 
+    //     //public Segment(Segment parentSeg, String title, String author, String content, int id, String[] tags)
+    //     Segment test1 = new Segment(null, "Title 1", "Author 1", "Content 1", new String[] {"a", "b"});
+    //     Segment test2 = new Segment(null, "Title 2", "Author 2", "Content 2", new String[] {"x", "y"});
+    //     Story s1 = new Story(test1, 1);
+    //     storyList.add(s1);
+    //     Story s2 = new Story(test2, 2);
+    //     storyList.add(s2);
         
-        return ok(index.render("Results", storyList));
-    }
+    //     return ok(.render("Results", storyList));
+    // }
 
     /* Make controller object and set form.get("name") */
     public Result facebookName() {

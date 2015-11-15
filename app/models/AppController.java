@@ -40,6 +40,10 @@ public class AppController{
         storeStory(newOne);
         return newOne;
     }
+
+    public int getMax() {
+        return this.max;
+    }
     
     public int getNextStoryId() throws SQLException {
         int storyId = -1;
@@ -103,7 +107,11 @@ public class AppController{
         if (stories.size() < max) {
             return stories;
         } else {
-            return new ArrayList<Story>(stories.subList(i, i+max));
+            int maxLoad = i+max;
+            if(maxLoad>stories.size()) {
+                maxLoad = stories.size();
+            }
+            return new ArrayList<Story>(stories.subList(i, maxLoad));
         }
     }
     
