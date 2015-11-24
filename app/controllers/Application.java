@@ -178,44 +178,44 @@ public class Application extends Controller {
         @param storyId - story ID that you want to add a new segment too
         @param segmentId - the segment that you are branching off to add a new segment to
         Returns the page of the new segment created */
-        public Result newForkSubmit(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
-            if (session("name") != null) {
-                DynamicForm form = Form.form().bindFromRequest();
-                if (form.data().size() == 0) {
-                    return badRequest("Form Error");
-                } else {
-                    Story myStory = null;
-                    try {
-                        String title = form.get("title");
-                        String content = form.get("content");
-                        String tagsRaw = form.get("tags");
-                        String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-                        Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
-                        setTags.remove("");
-                        setTags.remove(" ");
-                        String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
-                        Segment seg = new Segment(null, title, session("name"), content, uniqueTags);
-                        //add segment to story
-                        myStory = myAppController.getStory(storyId);
-                        if(myStory != null){
-                            boolean added = myAppController.fork(myStory, seg, segmentId);
-                            if(added){
-                                String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
-                                return(ok(result));
-                            }
+    public Result newForkSubmit(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
+        if (session("name") != null) {
+            DynamicForm form = Form.form().bindFromRequest();
+            if (form.data().size() == 0) {
+                return badRequest("Form Error");
+            } else {
+                Story myStory = null;
+                try {
+                    String title = form.get("title");
+                    String content = form.get("content");
+                    String tagsRaw = form.get("tags");
+                    String[] tags = tagsRaw.replaceAll("#", "").split(" ");
+                    Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
+                    setTags.remove("");
+                    setTags.remove(" ");
+                    String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
+                    Segment seg = new Segment(title, session("name"), content, uniqueTags);
+                    //add segment to story
+                    myStory = myAppController.getStory(storyId);
+                    if(myStory != null){
+                        boolean added = myAppController.fork(myStory, seg, segmentId);
+                        if(added){
+                            String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
+                            return(ok(result));
                         }
-                        return notFound(views.html.error.render("Page Not Found"));
                     }
-                    catch (SQLException e){
-                        if(myStory != null){
-                            myStory.setClosed();
-                        }
-                        return badRequest(views.html.error.render("This story has been closed! :("));
-                    }
-                    catch(Exception e){
-                        return badRequest(views.html.error.render("Something went wrong! :("));
-                    }
+                    return notFound(views.html.error.render("Page Not Found"));
                 }
+                catch (SQLException e){
+                    if(myStory != null){
+                        myStory.setClosed();
+                    }
+                    return badRequest(views.html.error.render("This story has been closed! :("));
+                }
+                catch(Exception e){
+                    return badRequest(views.html.error.render("Something went wrong! :("));
+                }
+            }
             }
             return badRequest(error.render("You must be logged in to add a segment"));
         }

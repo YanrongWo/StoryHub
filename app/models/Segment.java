@@ -20,7 +20,7 @@ public class Segment implements Serializable{
     private String author;
     private String content;  
     private String[] tags;
-    private Segment parentSeg;
+    private Segment parentSeg = null;
     private ArrayList<Segment> childSegs;
     private static final long serialVersionUID = 1L;
     
@@ -31,8 +31,7 @@ public class Segment implements Serializable{
      * @param content - content of this segment
      * @param tags - tags of this segment
      */
-    public Segment(Segment parentSeg, String title, String author, String content, String[] tags) {
-        this.parentSeg = parentSeg;
+    public Segment(String title, String author, String content, String[] tags) {
         this.title = title;
         this.author = author;
         this.content = content;
@@ -121,6 +120,9 @@ public class Segment implements Serializable{
      * @return cleaned and shortened version of the content
      */
     public String displayContent() {
+        if (this.content == null){
+            this.content = "";
+        }
         String htmlString = new String(this.content);
         String noHTMLString = htmlString.replaceAll("\\<.*?>", "");
         if(noHTMLString.length() > 251) {
