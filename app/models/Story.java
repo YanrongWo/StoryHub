@@ -15,6 +15,7 @@ public class Story implements Serializable{
 
 	private Segment root;
 	private int nextSegId = 0;
+	private boolean closed = false;
 
 	//serialVersionUID used for serialization
 	private static final long serialVersionUID = 1L;
@@ -136,6 +137,15 @@ public class Story implements Serializable{
 
 	public Segment getRoot(){
 		return this.root;
+	}
+
+	public boolean isClosed(){
+		return this.closed;
+	}
+
+	public boolean setClosed(){
+		this.closed = true;
+		return this.closed;
 	}
 
    /**

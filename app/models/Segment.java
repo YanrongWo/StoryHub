@@ -20,7 +20,7 @@ public class Segment implements Serializable{
     private String author;
     private String content;  
     private String[] tags;
-    private Segment parentSeg;
+    private Segment parentSeg = null;
     private ArrayList<Segment> childSegs;
     private static final long serialVersionUID = 1L;
     

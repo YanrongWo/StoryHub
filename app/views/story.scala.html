@@ -1,4 +1,4 @@
-@(myStory: Integer, mySegs: List[Integer], loggedin: Boolean)
+@(myStory: Integer, mySegs: List[Integer], loggedin: Boolean, isClosed: Boolean)
 
 
 @main(""){
@@ -69,7 +69,7 @@
 							<td> \
 								<div class="title">' + storyJSON["title"] + '</div> \
 							</td>';
-			@if(loggedin){
+			@if(loggedin && !isClosed){
 				story += '<td> \
 							<button type="button" class="fork btn btn-primary" onclick="location.href=\'' + newForkURL + '\';">+ Segment\
 							</button> \
