@@ -55,9 +55,9 @@ public class Application extends Controller {
                 //Return that name was changed
                 return ok("changed");
             }
-    		return ok("");
-    	}
-    	return badRequest();
+            return ok("");
+        }
+        return badRequest();
     }
 
     /* Handles POST requests from /NoFacebookName - facebook logout 
@@ -108,7 +108,7 @@ public class Application extends Controller {
                     if (allStories.get(i).getRoot().getContent().equals(content)){
                         int id = allStories.get(i).getStoryId();
                         String message = " <a href=\"/Story/" + id 
-                            + "/0\"> Error! A story with the same content has already been made! </a>";
+                        + "/0\"> Error! A story with the same content has already been made! </a>";
                         return ok("not found");
                     }
                 }
@@ -136,18 +136,24 @@ public class Application extends Controller {
     /* Handles GET request from: /Error/ERROR 
         @param error - error message
         Displays an error page if user tries to submit a duplicate story with the same title and contents */
-    public Result error(String err) {
-        return notFound(views.html.error.render("Error! A story with the same content has already been made!"));
-    }
+        public Result error(String err) {
+            return notFound(views.html.error.render("Error! A story with the same content has already been made!"));
+        }
 
     /* Handles GET request from: /Story/STORYID/SEGMENTID/NewSegment
         @param storyId - story ID that you want to add a new segment too
         @param segmentId - the segment that you are branching off to add a new segment to
         Displays a page to add a new segment */
-    public Result newFork(int storyId, int segmentId){
+        public Result newFork(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
+            Story myStory = myAppController.getStory(storyId);
             if (session("name") != null)
             {
-                return  ok(newStory.render("New Segment", "newFork"));
+                if(!myStory.isClosed()){
+                    return  ok(newStory.render("New Segment", "newFork"));
+                } else{
+                    return badRequest(error.render("This story has been closed"));
+                }
+                
             }
             return badRequest(error.render("You must be logged in to add a segment"));
         }
@@ -159,97 +165,109 @@ public class Application extends Controller {
     public Result newForkSubmit(int storyId, int segmentId) throws SQLException, IOException, ClassNotFoundException{
         if (session("name") != null) {
             DynamicForm form = Form.form().bindFromRequest();
-        if (form.data().size() == 0) {
-            return badRequest("Form Error");
-        } else {
-            String title = form.get("title");
-            String content = form.get("content");
-            String tagsRaw = form.get("tags");
-            String[] tags = tagsRaw.replaceAll("#", "").split(" ");
-            Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
-            setTags.remove("");
-            setTags.remove(" ");
-            String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
-            Segment seg = new Segment(title, session("name"), content, uniqueTags);
-            //add segment to story
-            Story myStory = myAppController.getStory(storyId);
-            if(myStory != null){
-                boolean added = myAppController.fork(myStory, seg, segmentId);
-                if(added){
-                    String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
-                    return(ok(result));
+            if (form.data().size() == 0) {
+                return badRequest("Form Error");
+            } else {
+                Story myStory = null;
+                try {
+                    String title = form.get("title");
+                    String content = form.get("content");
+                    String tagsRaw = form.get("tags");
+                    String[] tags = tagsRaw.replaceAll("#", "").split(" ");
+                    Set<String> setTags = new HashSet<String>(Arrays.asList(tags));
+                    setTags.remove("");
+                    setTags.remove(" ");
+                    String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
+                    Segment seg = new Segment(title, session("name"), content, uniqueTags);
+                    //add segment to story
+                    myStory = myAppController.getStory(storyId);
+                    if(myStory != null){
+                        boolean added = myAppController.fork(myStory, seg, segmentId);
+                        if(added){
+                            String result = Integer.toString(myStory.getStoryId())+","+Integer.toString(seg.getSegmentId());
+                            return(ok(result));
+                        }
+                    }
+                    return notFound(views.html.error.render("Page Not Found"));
+                }
+                catch (SQLException e){
+                    if(myStory != null){
+                        myStory.setClosed();
+                    }
+                    return badRequest(views.html.error.render("This story has been closed! :("));
+                }
+                catch(Exception e){
+                    return badRequest(views.html.error.render("Something went wrong! :("));
                 }
             }
-            return notFound(views.html.error.render("Page Not Found"));
+            }
+            return badRequest(error.render("You must be logged in to add a segment"));
         }
-        }
-        return badRequest(error.render("You must be logged in to add a segment"));
-    }
 
     /*  Handles GET request from: /Story/STORYID/SEGMENTID
         @ param id - story ID of the story the segment is in
         @ param segid - segment ID of the segment of interest
         Returns a page listing the story at the specified segment id  */
-    public Result story(int id, int segid)throws SQLException, IOException, ClassNotFoundException{
-        boolean loggedIn = (session("name") != null);
-        Story myStory = myAppController.getStory(id);
-        if (myStory != null){
-            Segment mySeg = myStory.findSegById(segid);
-            if (mySeg == null){
-                return notFound(views.html.error.render("Page Not Found"));
+        public Result story(int id, int segid)throws SQLException, IOException, ClassNotFoundException{
+            boolean loggedIn = (session("name") != null);
+            Story myStory = myAppController.getStory(id);
+            if (myStory != null){
+                Segment mySeg = myStory.findSegById(segid);
+                if (mySeg == null){
+                    return notFound(views.html.error.render("Page Not Found"));
+                }
+                ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
+                return ok(story.render(id, segsToParent, loggedIn, myStory.isClosed()));
             }
-            ArrayList<Integer> segsToParent = mySeg.getParentSegIds();
-            return ok(story.render(id, segsToParent, loggedIn));
+            return notFound(views.html.error.render("Page Not Found"));
         }
-        return notFound(views.html.error.render("Page Not Found"));
-    }
 
     /*  Handles POST/GET request from: /SearchTags/*
         @param query - String of all queries in format "query1+query2+query3+query4...." 
         Returns a search page listing all segments whose tags that include all the query tags  */
-    public Result getStoriesByTags(String query) throws SQLException, IOException, ClassNotFoundException{
-        myAppController.loadAll();
+        public Result getStoriesByTags(String query) throws SQLException, IOException, ClassNotFoundException{
+            myAppController.loadAll();
 
-        String[] queries = query.split("\\+");
+            String[] queries = query.split("\\+");
 
-        ArrayList <Segment> tagged = myAppController.findByTag(queries[0].trim());
-        for(int i = 0; i < queries.length;i++){
-            if(queries[i].substring(0,1)=="#"){
-                queries[i]=queries[i].substring(1,queries[i].length());
-            }
+            ArrayList <Segment> tagged = myAppController.findByTag(queries[0].trim());
+            for(int i = 0; i < queries.length;i++){
+                if(queries[i].substring(0,1)=="#"){
+                    queries[i]=queries[i].substring(1,queries[i].length());
+                }
             // Get interesection of all searches
-            tagged.retainAll(myAppController.findByTag(queries[i].trim()));
-            for(int p = 0 ; p< tagged.size();p ++){
-            }
-            queries[i] = "\""+queries[i]+"\"";
-        }    
+                tagged.retainAll(myAppController.findByTag(queries[i].trim()));
+                for(int p = 0 ; p< tagged.size();p ++){
+                }
+                queries[i] = "\""+queries[i]+"\"";
+            }    
 
-        String searchString = "Search results for tags "+String.join(",",queries);
-        return ok(search.render(searchString,tagged));
-    }
+            String searchString = "Search results for tags "+String.join(",",queries);
+            return ok(search.render(searchString,tagged));
+        }
 
     /*  Handles POST request from: /SearchTitles/*
         @param query - String of all queries in format "query1+query2+query3+query4...." 
         Returns a search page listing all segments whose title contains all the query titles*/
-    public Result getStoriesByTitles(String query) throws SQLException,IOException,ClassNotFoundException{
-        myAppController.loadAll();
+        public Result getStoriesByTitles(String query) throws SQLException,IOException,ClassNotFoundException{
+            myAppController.loadAll();
 
-        String[] queries = query.split("\\+");
+            String[] queries = query.split("\\+");
 
-        ArrayList <Segment> titles = myAppController.findByTitle(queries[0].trim());
-        
-        for(int i = 0; i < queries.length; i++){
+            ArrayList <Segment> titles = myAppController.findByTitle(queries[0].trim());
+
+            for(int i = 0; i < queries.length; i++){
             // Get intersection of all searches
-            titles.retainAll(myAppController.findByTitle(queries[i].trim()));
-            queries[i] = "\""+queries[i]+"\"";
+                titles.retainAll(myAppController.findByTitle(queries[i].trim()));
+                queries[i] = "\""+queries[i]+"\"";
+            }
+            String searchString = "Search results for titles containing "+String.join(",",queries);
+            return ok(search.render(searchString,titles));
         }
-        String searchString = "Search results for titles containing "+String.join(",",queries);
-        return ok(search.render(searchString,titles));
-    }
 
 
     /*  Handles POST request from /AddSegment 
-        Returns a JSON formatted Segment to HTML page(that page then parses) */
+    Returns a JSON formatted Segment to HTML page(that page then parses) */
     public Result getSegmentInfo(){
         DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
