@@ -121,7 +121,7 @@ public class Application extends Controller {
                 String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
 
                 //Create root and then the story
-                Segment seg = new Segment(null, title, session("name"),
+                Segment seg = new Segment(title, session("name"),
                     content, uniqueTags);
                 Story myStory = myAppController.createStory(seg);
 
@@ -170,7 +170,7 @@ public class Application extends Controller {
             setTags.remove("");
             setTags.remove(" ");
             String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
-            Segment seg = new Segment(null, title, session("name"), content, uniqueTags);
+            Segment seg = new Segment(title, session("name"), content, uniqueTags);
             //add segment to story
             Story myStory = myAppController.getStory(storyId);
             if(myStory != null){
