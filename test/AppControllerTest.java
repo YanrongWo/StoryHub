@@ -19,6 +19,6 @@ import play.twirl.api.Content;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 
-public class AppController{
+public class AppControllerTest{
 	
 }

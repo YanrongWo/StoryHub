@@ -63,7 +63,8 @@ public class Story implements Serializable{
 	*/
 	public ArrayList<Segment> findTags(String searchWord){
 		ArrayList<Segment> segments = new ArrayList<Segment>();
-		recurseSearchSegTag(segments, this.root, searchWord);
+		if (searchWord!=null || searchWord.length()>0)
+			recurseSearchSegTag(segments, this.root, searchWord);
 		return segments;
 	}
 
@@ -98,7 +99,8 @@ public class Story implements Serializable{
 	*/
 	public ArrayList <Segment> findTitles(String searchWord){
 		ArrayList<Segment> segments = new ArrayList<Segment>();
-		recurseSearchSegTitle(segments,this.root,searchWord);
+		if(searchWord.length()>0)
+			recurseSearchSegTitle(segments,this.root,searchWord);
 		return segments;
 	}
 
