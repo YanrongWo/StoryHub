@@ -9,10 +9,26 @@ import java.sql.SQLException;
 import java.util.*;
 import java.io.IOException;
 import play.twirl.api.Html;
+import java.sql.Connection;
 
 public class Application extends Controller {
+    private AppController myAppController;
 
-    AppController myAppController = new AppController(play.db.DB.getConnection());
+    public Application() {
+        this.myAppController = new AppController(play.db.DB.getConnection());
+    }
+
+    public AppController getMyAppController() {
+        return myAppController;
+    }
+
+    public Application(Connection conn) {
+        this.myAppController = new AppController(conn);
+    }
+
+    // public void setConnection(Connection conn) {
+    //     this.myAppController()
+    // }
 
     /* Handles GET requests from / - home page 
      * Displays the home page stories with no offset

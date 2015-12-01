@@ -26,6 +26,10 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
+import java.sql.SQLException;
+
+import models.*;
+import controllers.*;
 
 /**
 *
@@ -43,9 +47,9 @@ public class ApplicationTest {
         database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
-            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306",
+            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306/test",
             ImmutableMap.of(
-                "user", "javathehutt",
+                "username", "javathehutt",
                 "password", "starwars"
             )
         );
@@ -63,12 +67,17 @@ public class ApplicationTest {
         assertEquals(2, a);
     }
 
-    // @Test
-    // public void renderTemplate() {
-    //     Content html = views.html.index.render("Your new application is ready.");
-    //     assertEquals("text/html", contentType(html));
-    //     assertTrue(contentAsString(html).contains("Your new application is ready."));
-    // }
+    @Test
+    public void renderTemplate() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        System.out.println(ma);
+        ma.createStory(seg1);
+        Result rs = a.index();
+        System.out.println(contentAsString(rs));
+    }
 
 
 }
