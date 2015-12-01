@@ -40,10 +40,6 @@ import com.google.common.collect.*;
 import controllers.*;
 import models.*;
 import java.util.*;
-import java.sql.SQLException;
-
-import models.*;
-import controllers.*;
 import java.lang.*;
 import java.io.*;
 
@@ -255,25 +251,6 @@ public class AppControllerTest{
     @Test
     public void getFrontPageStories() throws SQLException, IOException,ClassNotFoundException{
     	AppController a = new AppController(this.connection);
-
-
-    	// int max = a.getMax();
-    	// Set<Story> expected = new HashSet<Story>();
-    	// System.out.println("Before For Loop");
-    	// for ( int i = 0; i < max+2;i++){
-    	// 	Segment seg = new Segment("Segment Holiday "+Integer.toString(i), "Test Author "+Integer.toString(i), "Some Testing Content "+Integer.toString(i), new String[]{"tag"+Integer.toString(i)});
-    	// 	Story newStory = a.createStory(seg);
-
-    	// 	if(i < max-1){
-    	// 		expected.add(newStory);
-    	// 	}
-    	// }
-    	// System.out.println("After For Loop");
-    	// System.out.println(expected.size());
-
-    	// Set<Story> results = new HashSet<Story>(a.getFrontPageStories(0));
-    	// System.out.println(results.size());
-
     	
     	int max = a.getMax();
     	ArrayList<Story> expected = new ArrayList<Story>();
