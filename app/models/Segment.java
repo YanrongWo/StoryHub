@@ -138,4 +138,22 @@ public class Segment implements Serializable{
         return this.childSegs.isEmpty();
     }
 
+    @Override
+    public boolean equals(Object other){
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof Segment))return false;
+        Segment otherSegment = (Segment) other;
+        if (this.id != otherSegment.id) return false;
+        if (this.storyId != otherSegment.storyId) return false;
+        if (!this.title.equals(otherSegment.title)) return false;
+        if (!this.author.equals(otherSegment.author)) return false;
+        if (!this.content.equals(otherSegment.content)) return false;
+        if (!Arrays.equals(this.tags, otherSegment.tags)) return false;
+        if (!(this.parentSeg == null && otherSegment.parentSeg == null) && !this.parentSeg.equals(otherSegment.parentSeg)) {
+            return false;
+        }
+        if (!this.childSegs.equals(otherSegment.childSegs)) return false;
+        return true;
+    }
 }
