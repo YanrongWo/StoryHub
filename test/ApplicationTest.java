@@ -16,20 +16,34 @@ import play.libs.F;
 import play.libs.F.*;
 import play.twirl.api.Content;
 
+import java.sql.SQLException;
+import java.io.IOException;
+import java.lang.ClassNotFoundException;
+
 import play.db.Database;
 import play.db.Databases;
 import play.db.evolutions.*;
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import models.*;
+import controllers.*;
 
 import org.junit.*;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
-import java.sql.SQLException;
 
-import models.*;
 import controllers.*;
+import models.*;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,6 +90,13 @@ public class ApplicationTest {
         String DROP_COMMAND = "drop table stories";
         PreparedStatement pstmt = connection.prepareStatement(DROP_COMMAND);
         pstmt.executeUpdate();
+    }
+
+    @Test
+    public void error(){    
+        Application a = new Application(connection);
+        Result rs= a.error("error");
+        assertTrue(contentAsString(rs).contains("Error! A story with the same content has already been made!"));
     }
 
     @Test

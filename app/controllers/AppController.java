@@ -28,7 +28,7 @@ public class AppController{
     
 	
     public AppController(Connection conn) {
-        this.max = 10;
+        this.max = 11;
         this.storyIndex = 0;
         this.connection = conn;
         //this.connection = play.db.DB.getConnection();
