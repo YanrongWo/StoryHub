@@ -12,7 +12,7 @@ import play.twirl.api.Html;
 
 public class Application extends Controller {
 
-    AppController myAppController = new AppController();
+    AppController myAppController = new AppController(play.db.DB.getConnection());
 
     /* Handles GET requests from / - home page 
      * Displays the home page stories with no offset
