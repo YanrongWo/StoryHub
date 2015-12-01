@@ -26,10 +26,6 @@ public class Application extends Controller {
         this.myAppController = new AppController(conn);
     }
 
-    // public void setConnection(Connection conn) {
-    //     this.myAppController()
-    // }
-
     /* Handles GET requests from / - home page 
      * Displays the home page stories with no offset
      */

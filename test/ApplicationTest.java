@@ -61,6 +61,20 @@ public class ApplicationTest {
         database.shutdown();
     }
 
+    @Before
+    public void createTable() throws SQLException{
+        String CREATE_COMMAND = "CREATE TABLE stories (storyid int(11) NOT NULL auto_increment, serialized_object blob, PRIMARY KEY (storyid))";
+        PreparedStatement pstmt = connection.prepareStatement(CREATE_COMMAND);
+        pstmt.executeUpdate();
+    }
+
+    @After
+    public void dropTable() throws SQLException{
+        String DROP_COMMAND = "drop table stories";
+        PreparedStatement pstmt = connection.prepareStatement(DROP_COMMAND);
+        pstmt.executeUpdate();
+    }
+
     @Test
     public void simpleCheck() {
         int a = 1 + 1;
@@ -73,7 +87,6 @@ public class ApplicationTest {
         AppController ma = a.getMyAppController();
         String[] tags1 = {"hi", "ho"};
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
-        System.out.println(ma);
         ma.createStory(seg1);
         Result rs = a.index();
         System.out.println(contentAsString(rs));
