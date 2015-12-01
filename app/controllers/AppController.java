@@ -12,6 +12,7 @@ import java.lang.ClassNotFoundException;
 import java.io.ObjectInputStream;
 import java.io.ByteArrayInputStream;
 import models.*;
+import java.lang.*;
 
 /**
  * AppController controls the storylist and connecting to the database
@@ -27,7 +28,7 @@ public class AppController{
     
 	
     public AppController(Connection conn) {
-        this.max = 10;
+        this.max = 11;
         this.storyIndex = 0;
         this.connection = conn;
         //this.connection = play.db.DB.getConnection();
@@ -45,6 +46,9 @@ public class AppController{
     * @return Story created
     */
     public Story createStory(Segment seg) throws SQLException{
+        if (seg == null){
+            throw new NullPointerException("Segment for createStory should not be null.");
+        }
         //add null to table and gets last inserted id
         int sId = getNextStoryId();
         Story newOne = new Story(seg, sId);

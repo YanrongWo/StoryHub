@@ -45,6 +45,7 @@ import java.sql.SQLException;
 import models.*;
 import controllers.*;
 import java.lang.*;
+import java.io.*;
 
 public class AppControllerTest{
 	static Database database;
@@ -256,25 +257,50 @@ public class AppControllerTest{
     	AppController a = new AppController(this.connection);
 
 
+    	// int max = a.getMax();
+    	// Set<Story> expected = new HashSet<Story>();
+    	// System.out.println("Before For Loop");
+    	// for ( int i = 0; i < max+2;i++){
+    	// 	Segment seg = new Segment("Segment Holiday "+Integer.toString(i), "Test Author "+Integer.toString(i), "Some Testing Content "+Integer.toString(i), new String[]{"tag"+Integer.toString(i)});
+    	// 	Story newStory = a.createStory(seg);
+
+    	// 	if(i < max-1){
+    	// 		expected.add(newStory);
+    	// 	}
+    	// }
+    	// System.out.println("After For Loop");
+    	// System.out.println(expected.size());
+
+    	// Set<Story> results = new HashSet<Story>(a.getFrontPageStories(0));
+    	// System.out.println(results.size());
+
+    	
     	int max = a.getMax();
-    	Set<Story> expected = new HashSet<Story>();
-    	System.out.println("Before For Loop");
+    	ArrayList<Story> expected = new ArrayList<Story>();
     	for ( int i = 0; i < max+2;i++){
     		Segment seg = new Segment("Segment Holiday "+Integer.toString(i), "Test Author "+Integer.toString(i), "Some Testing Content "+Integer.toString(i), new String[]{"tag"+Integer.toString(i)});
     		Story newStory = a.createStory(seg);
 
-    		if(i < max){
+    		if(i < max-1){
     			expected.add(newStory);
     		}
     	}
-    	System.out.println("After For Loop");
-    	System.out.println(expected.size());
 
-    	Set<Story> results = new HashSet<Story>(a.getFrontPageStories(0));
-    	System.out.println(results.size());
+    	ArrayList<Story> results = a.getFrontPageStories(0);
+    	for(int i = 0 ; i < expected.size();i++){
+    		assertEquals(expected.get(i),results.get(i));
+    	}
+    }
 
-    	assertEquals(results,expected);
-
+    public void storeThenGetStory() throws SQLException, IOException, ClassNotFoundException {
+    	AppController a = new AppController(connection);
+    	Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        s1.setSegmentId(0);
+        int storyid = a.getNextStoryId();
+        Story sto = new Story(s1, storyid);
+        a.storeStory(sto);
+        Story sto2 = a.getStory(storyid);
+        assertEquals(sto , sto2);
     }
 
 
