@@ -16,9 +16,16 @@ import play.libs.F;
 import play.libs.F.*;
 import play.twirl.api.Content;
 
+import play.db.Database;
+import play.db.Databases;
+import play.db.evolutions.*;
+import java.sql.Connection;
+
+import org.junit.*;
+import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
-
+import com.google.common.collect.*;
 
 /**
 *
@@ -26,7 +33,26 @@ import static org.junit.Assert.*;
 * If you are interested in mocking a whole application, see the wiki for more details.
 *
 */
+
 public class ApplicationTest {
+    Database database;
+    @Before
+    public void createDatabase() {
+        database = Databases.createFrom(
+            "test",
+            "com.mysql.jdbc.Driver",
+            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306",
+            ImmutableMap.of(
+                "user", "javathehutt",
+                "password", "starwars"
+            )
+        );
+    }
+
+    @After
+    public void shutdownDatabase() {
+        database.shutdown();
+    }
 
     @Test
     public void simpleCheck() {
