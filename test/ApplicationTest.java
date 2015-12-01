@@ -36,6 +36,8 @@ import com.google.common.collect.*;
 
 public class ApplicationTest {
     Database database;
+    Connection connection;
+
     @Before
     public void createDatabase() {
         database = Databases.createFrom(
@@ -47,6 +49,7 @@ public class ApplicationTest {
                 "password", "starwars"
             )
         );
+        connection = database.getConnection();
     }
 
     @After
