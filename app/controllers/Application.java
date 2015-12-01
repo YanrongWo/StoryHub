@@ -25,7 +25,7 @@ public class Application extends Controller {
             int storySize = myAppController.getStoryListSize();  
             return ok(index.render("Homepage", storyList, 0, storySize, interval));
         } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
     }
 
