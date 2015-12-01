@@ -143,7 +143,12 @@ public class AppController{
     * @param story object
     */
     public void storeStory(Story sto) throws SQLException {
-        serializeJavaObjectToDB(sto, sto.getStoryId());
+        String SQL_SERIALIZE_OBJECT = "UPDATE stories SET serialized_object=? WHERE storyid=?";
+        PreparedStatement pstmt = this.connection.prepareStatement(SQL_SERIALIZE_OBJECT);
+        pstmt.setInt(2, sto.getStoryId());
+        pstmt.setObject(1, sto);
+        pstmt.executeUpdate();
+        pstmt.close();
     }
     
    /**

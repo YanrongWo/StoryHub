@@ -17,6 +17,8 @@ import play.libs.F.*;
 import play.twirl.api.Content;
 
 import java.sql.SQLException;
+import java.io.IOException;
+import java.lang.ClassNotFoundException;
 
 import play.db.Database;
 import play.db.Databases;
@@ -93,13 +95,63 @@ public class AppControllerTest{
     }	
 
     @Test
-    public void getNextStoryId() throws SQLException{
+    public void getNextStoryId_Story() throws SQLException{
         AppController a = new AppController(connection);
         String[] tags1 = {"hi", "ho"};
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
         a.createStory(seg1);
         int nextId = a.getNextStoryId();
         assertEquals(nextId, 2);
+    }
+
+    @Test
+    public void getNextStoryId_NoStory() throws SQLException{
+        AppController a = new AppController(connection);
+        int nextId = a.getNextStoryId();
+        assertEquals(nextId, 1);
+    }
+
+    @Test
+    public void getStoryListSize_Stories() throws SQLException{
+        AppController a = new AppController(connection);
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        a.createStory(seg1);
+        a.createStory(seg1);
+        int storyList = a.getStoryListSize();
+        assertEquals(storyList, 2);
+    }
+
+    @Test
+    public void getStoryListSize_None() throws SQLException{
+        AppController a = new AppController(connection);
+        int storyList = a.getStoryListSize();
+        assertEquals(storyList, 0);
+    }
+
+    @Test
+    public void loadAll() throws SQLException, IOException, ClassNotFoundException {
+        AppController a = new AppController(connection);
+        ArrayList<Story> stories = new ArrayList<Story>();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        stories.add(a.createStory(seg1));
+        String[] tags2 = {"hi", "hum"};
+        Segment seg2 = new Segment("Seg 2", "Auth", "Content", tags2);
+        stories.add(a.createStory(seg2));
+        String[] tags3 = {"hi", "hum", "ha"};
+        Segment seg3 = new Segment("Seg 3", "Auth", "Content", tags2);
+        stories.add(a.createStory(seg3));
+        ArrayList<Story> comparison = a.getStories();
+        assertEquals(stories, comparison);
+    }
+
+    @Test
+    public void loadAll_zero() throws SQLException, IOException, ClassNotFoundException {
+        AppController a = new AppController(connection);
+        ArrayList<Story> stories = new ArrayList<Story>();
+        ArrayList<Story> comparison = a.getStories();
+        assertEquals(stories, comparison);
     }
 
     @Before
@@ -137,7 +189,6 @@ public class AppControllerTest{
     	boolean expected = false; 
     	assertEquals(expected, result);
     }
-
 
     @Test
     public void findByTag() throws SQLException{
