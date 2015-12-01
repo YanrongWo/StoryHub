@@ -39,9 +39,9 @@ public class ApplicationTest {
     @Before
     public void createDatabase() {
         database = Databases.createFrom(
-            "storyhub",
+            "test",
             "com.mysql.jdbc.Driver",
-            "jdbc:mysql://storyhub.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306",
+            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306",
             ImmutableMap.of(
                 "user", "javathehutt",
                 "password", "starwars"
