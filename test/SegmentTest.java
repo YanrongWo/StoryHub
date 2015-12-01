@@ -167,4 +167,11 @@ public class SegmentTest{
 		Integer i = new Integer(1);
 		assertNotEquals(s1, i);
 	}
+
+	@Test
+	public void equals_null(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Segment s2 = null;
+		assertNotEquals(s1, s2);
+	}
 }
