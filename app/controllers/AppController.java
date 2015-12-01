@@ -33,6 +33,10 @@ public class AppController{
         this.stories = new ArrayList<Story>();
         
 	}
+
+    public void setConnection(Connection conn) {
+        this.connection = conn;
+    }
     
    /**
     * Creates story and saves it into the stories list and stores it in the database
