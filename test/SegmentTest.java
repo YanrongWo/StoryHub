@@ -98,4 +98,80 @@ public class SegmentTest{
 		s1.addChild(s2);
 		assertEquals(s1.isLeafNode(), false);
 	}
+
+	@Test
+	public void equals_valid(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Segment s2 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		assertEquals(s1, s2);
+	}
+
+	@Test
+	public void equals_diffTitles(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Segment s2 = new Segment("Segment 2", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		assertNotEquals(s1, s2);
+	}
+
+	@Test
+	public void equals_diffAuth(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Segment s2 = new Segment("Segment 1", "Test Author1", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		assertNotEquals(s1, s2);
+	}	
+
+	@Test
+	public void equals_diffContent(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content1</tag>", new String[]{"tag1", "tag2"});
+		Segment s2 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		assertNotEquals(s1, s2);
+	}	
+
+	@Test
+	public void equals_diffTags(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Segment s2 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag3", "tag2"});
+		assertNotEquals(s1, s2);
+	}	
+
+	@Test
+	public void equals_diffSegId(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		s1.setSegmentId(1);
+		Segment s2 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		s2.setSegmentId(2);
+		assertNotEquals(s1, s2);
+	}	
+
+	@Test
+	public void equals_diffStoryId(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		s1.setStoryId(1);
+		Segment s2 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		s2.setStoryId(2);
+		assertNotEquals(s1, s2);
+	}	
+
+	@Test
+	public void equals_diffChild(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Segment child = new Segment("Segment 2", "Author", "some content", new String[]{"tag"});
+		s1.addChild(child);
+		Segment s2 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag3", "tag2"});
+		assertNotEquals(s1, s2);
+	}	
+
+	@Test 
+	public void equals_diffTypes(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Integer i = new Integer(1);
+		assertNotEquals(s1, i);
+	}
+
+	@Test
+	public void equals_null(){
+		Segment s1 = new Segment("Segment 1", "Test Author", "<tag>Some Test Content</tag>", new String[]{"tag1", "tag2"});
+		Segment s2 = null;
+		assertNotEquals(s1, s2);
+	}
 }
