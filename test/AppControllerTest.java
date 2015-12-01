@@ -187,7 +187,7 @@ public class AppControllerTest{
     }
 
     @Test
-    public void findByTag() throws SQLException{
+    public void findByTag_null() throws SQLException{
     	AppController a = new AppController(this.connection);
 
     	// Create a small set of stories and insert them into the database
@@ -201,23 +201,60 @@ public class AppControllerTest{
     	ArrayList<Segment> results = a.findByTag("");
     	ArrayList<Segment> expected = new ArrayList<Segment>();
     	assertEquals(results,expected);
+    }
 
+    @Test
+    public void findByTag_incorrect() throws SQLException{
+        AppController a = new AppController(this.connection);
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        a.createStory(s1);
+
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        a.createStory(s2);
+        //Test that searching for a nonexistent string returns no results
+        ArrayList<Segment> results = a.findByTag("asdfasdf");
+        ArrayList<Segment> expected = new ArrayList<Segment>();
+        assertEquals(results,expected);
+    }
+
+    @Test
+    public void findByTag_common() throws SQLException{
+        AppController a = new AppController(this.connection);
     	//Test that searching by "tag2" returns correcy query (both segments)
-    	results = a.findByTag("tag2");
+    	// Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        a.createStory(s1);
+
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        a.createStory(s2);
+        ArrayList<Segment> results = a.findByTag("tag2");
     	Set<Segment> s = new HashSet<Segment>(results);
     	Set<Segment> expected_segs = new HashSet<Segment>();
     	expected_segs.add(s1);
     	expected_segs.add(s2);
     	assertEquals(s,expected_segs);
+    }
+
+    @Test
+    public void findByTag_unique() throws SQLException{
+        AppController a = new AppController(this.connection);
+
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        a.createStory(s1);
+
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        a.createStory(s2);
     	//Test that searching by "tag1" returns correct query
-    	results = a.findByTag("tag1");
+    	 ArrayList<Segment> results = a.findByTag("tag1");
     	assertEquals(s1,results.get(0));
     	
     }
 
 
     @Test
-    public void findByTitle() throws SQLException{
+    public void findByTitle_null() throws SQLException{
     	AppController a = new AppController(this.connection);
 
     	//Create a smallset of stories and insert them into the database
@@ -232,18 +269,58 @@ public class AppControllerTest{
     	ArrayList<Segment> results = a.findByTitle("");
     	ArrayList<Segment> expected = new ArrayList<Segment>();
     	assertEquals(results,expected);
+    }
 
+    @Test
+    public void findByTitle_incorrect() throws SQLException{
+        AppController a = new AppController(this.connection);
+
+        //Create a smallset of stories and insert them into the database
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment Holiday 1", "Test Author", "Some Testing Content", new String[]{"tag1", "tag2"});
+        a.createStory(s1);
+
+        Segment s2 = new Segment("Segment Yeti 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        a.createStory(s2);    
+        //Test that searching for a nonexistent string returns no results
+        ArrayList<Segment> results = a.findByTag("asdfasdf");
+        ArrayList<Segment> expected = new ArrayList<Segment>();
+        assertEquals(results,expected);
+    }
+
+    @Test
+    public void findByTitle_common() throws SQLException{
+        AppController a = new AppController(this.connection);
+
+        //Create a smallset of stories and insert them into the database
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment Holiday 1", "Test Author", "Some Testing Content", new String[]{"tag1", "tag2"});
+        a.createStory(s1);
+
+        Segment s2 = new Segment("Segment Yeti 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        a.createStory(s2);
     	//Test that searching by "Segment" returns both segments
-    	results = a.findByTitle("segment");
-    	assertEquals(2,results.size());
+    	ArrayList<Segment> results = a.findByTitle("segment");
     	Set<Segment> s = new HashSet<Segment>(results);
     	Set<Segment> expected_segs = new HashSet<Segment>();
     	expected_segs.add(s1);
     	expected_segs.add(s2);
-    	//Print out results
     	assertEquals(s,expected_segs);
+    }
+
+    @Test
+    public void findByTitle_unique() throws SQLException{
+        AppController a = new AppController(this.connection);
+
+        //Create a smallset of stories and insert them into the database
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment Holiday 1", "Test Author", "Some Testing Content", new String[]{"tag1", "tag2"});
+        a.createStory(s1);
+
+        Segment s2 = new Segment("Segment Yeti 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        a.createStory(s2);
     	//Test that searching  Yeti returns the target segment
-    	results = a.findByTitle("yeti");
+    	ArrayList<Segment> results = a.findByTitle("yeti");
     	assertEquals(results.get(0),s2);
 
     }
