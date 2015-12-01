@@ -22,6 +22,7 @@ import play.db.Database;
 import play.db.Databases;
 import play.db.evolutions.*;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,13 +40,16 @@ import models.*;
 import java.util.*;
 import java.sql.SQLException;
 
+import models.*;
+import controllers.*;
+
 public class AppControllerTest{
 	Database database;
     Connection connection;
 
     @Before
     public void createDatabase() {
-        this.database = Databases.createFrom(
+        database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
             "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306/test",
@@ -54,7 +58,7 @@ public class AppControllerTest{
                 "password", "starwars"
             )
         );
-        this.connection = database.getConnection();
+        connection = database.getConnection();
     }
 
     @Test
@@ -74,9 +78,25 @@ public class AppControllerTest{
     }
 
     @Test
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertEquals(2, a);
+    public void fork_true() throws SQLException {
+    	AppController a = new AppController(connection);
+    	String[] t1 = {"tag1", "tag2"};
+        Segment seg = new Segment("Seg 1", "Auth", "Content", t1);
+    	Story sto = a.createStory(seg);
+    	boolean result = a.fork(sto, seg, 0);
+    	boolean expected = true;
+    	assertEquals(expected, result);
+    }
+
+    @Test
+    public void fork_false() throws SQLException{
+    	AppController a = new AppController(connection);
+    	String[] t1 = {"tag1", "tag2"};
+        Segment seg = new Segment("Seg 1", "Auth", "Content", t1);
+    	Story sto = a.createStory(seg);
+    	boolean result = a.fork(sto, seg, 2);
+    	boolean expected = false; 
+    	assertEquals(expected, result);
     }
 
 
