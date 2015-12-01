@@ -47,6 +47,7 @@ import java.io.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 /**
 *
@@ -92,6 +93,18 @@ public class ApplicationTest {
         pstmt.executeUpdate();
     }
 
+    // @Test
+    // public void newStorySubmit(){
+    //     Application a = new Application(connection);
+    //     running(testServer(3333),HtmlUnitDriver.class, new Callback<TestBrowser>(){
+    //         public void test(TestBrowser browser){
+    //             browser.goTo("http://localhost:3333");
+    //         }
+    //     });
+        
+
+    // }
+
     @Test
     public void error(){    
         Application a = new Application(connection);
@@ -107,7 +120,7 @@ public class ApplicationTest {
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
         ma.createStory(seg1);
         Result rs = a.index();
-        System.out.println(contentAsString(rs));
+        // System.out.println(contentAsString(rs));
     }
 
 
