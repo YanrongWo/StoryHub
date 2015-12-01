@@ -25,7 +25,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
-
+import com.google.common.collect.*;
 
 /**
 *
@@ -60,12 +60,12 @@ public class ApplicationTest {
         assertEquals(2, a);
     }
 
-    @Test
-    public void renderTemplate() {
-        Content html = views.html.index.render("Your new application is ready.");
-        assertEquals("text/html", contentType(html));
-        assertTrue(contentAsString(html).contains("Your new application is ready."));
-    }
+    // @Test
+    // public void renderTemplate() {
+    //     Content html = views.html.index.render("Your new application is ready.");
+    //     assertEquals("text/html", contentType(html));
+    //     assertTrue(contentAsString(html).contains("Your new application is ready."));
+    // }
 
 
 }
