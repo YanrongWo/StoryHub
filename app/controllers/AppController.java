@@ -26,10 +26,11 @@ public class AppController{
     private Connection connection;
     
 	
-    public AppController() {
+    public AppController(Connection conn) {
         this.max = 10;
         this.storyIndex = 0;
-        this.connection = play.db.DB.getConnection();
+        this.connection = conn;
+        //this.connection = play.db.DB.getConnection();
         this.stories = new ArrayList<Story>();
         
 	}
