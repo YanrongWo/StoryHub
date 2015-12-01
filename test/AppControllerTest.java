@@ -44,6 +44,7 @@ import java.sql.SQLException;
 
 import models.*;
 import controllers.*;
+import java.lang.*;
 
 public class AppControllerTest{
 	static Database database;
@@ -67,6 +68,30 @@ public class AppControllerTest{
     public static void shutdownDatabase() {
         database.shutdown();
     }
+
+    @Test 
+    public void createStory_valid() throws SQLException{
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        s1.setSegmentId(0);
+        AppController a = new AppController(connection);
+        a.createStory(s1);
+        assertTrue(connection.prepareStatement("Select * from stories").executeQuery().next());
+    }	
+
+    @Test(expected=NullPointerException.class)
+    public void createStory_null() throws SQLException{
+    	AppController a = new AppController(connection);
+        a.createStory(null);
+    }
+
+    @Test 
+    public void createStory_size() throws SQLException{
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        s1.setSegmentId(0);
+        AppController a = new AppController(connection);
+        a.createStory(s1);
+        assertEquals(a.getStories().size(), 1);
+    }	
 
     @Test
     public void getNextStoryId_Story() throws SQLException{
@@ -219,7 +244,6 @@ public class AppControllerTest{
     	expected_segs.add(s1);
     	expected_segs.add(s2);
     	//Print out results
-    	System.out.println(results.get(0).getTitle());
     	assertEquals(s,expected_segs);
     	//Test that searching  Yeti returns the target segment
     	results = a.findByTitle("yeti");
