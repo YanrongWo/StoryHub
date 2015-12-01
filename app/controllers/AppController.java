@@ -148,20 +148,6 @@ public class AppController{
     }
     
    /**
-    * Executes a query in the database to save an object with story id by serializing it
-    * @param Object to serialize
-    * @param story id of object
-    */
-    public void serializeJavaObjectToDB(Object objectToSerialize, int storyId) throws SQLException {
-        String SQL_SERIALIZE_OBJECT = "UPDATE stories SET serialized_object=? WHERE storyid=?";
-        PreparedStatement pstmt = this.connection.prepareStatement(SQL_SERIALIZE_OBJECT);
-        pstmt.setInt(2, storyId);
-        pstmt.setObject(1, objectToSerialize);
-        pstmt.executeUpdate();
-        pstmt.close();
-    }
-    
-   /**
     * Executes a query to the number of stories within the offset
     * @param offset
     * @return arraylist of stories with story ids within the offset
@@ -200,16 +186,6 @@ public class AppController{
     * @return story object
     */
     public Story getStory(int storyId) throws SQLException, IOException, ClassNotFoundException {
-        //do table query
-        return (Story) deserializeObjectFromDB(storyId);
-    }
-    
-   /**
-    * Executes a query in the database to get an object with story id by deserializing it
-    * @param story id
-    * @return Object that was deserialized
-    */
-    public Object deserializeObjectFromDB(int storyId) throws SQLException, IOException, ClassNotFoundException {
         String SQL_DESERIALIZE_OBJECT = "SELECT serialized_object FROM stories WHERE storyId = ?";
         PreparedStatement pstmt = this.connection.prepareStatement(SQL_DESERIALIZE_OBJECT);
         pstmt.setInt(1, storyId);
@@ -226,7 +202,7 @@ public class AppController{
         }      
         rs.close();
         pstmt.close();
-        return deSerializedObject;
+        return (Story) deSerializedObject;
     }
     
    /**
