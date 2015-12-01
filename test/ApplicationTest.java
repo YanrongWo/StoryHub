@@ -120,8 +120,33 @@ public class ApplicationTest {
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
         ma.createStory(seg1);
         Result rs = a.index();
+
         // System.out.println(contentAsString(rs));
+
     }
 
-
+    @Test
+    public void offset_renderNotFound() {
+        Application app = new Application(connection);
+        Result result = app.offset(2);
+        System.out.println(status(result));
+        System.out.println(contentType(result));
+        System.out.println(charset(result));
+        assertEquals(404, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Page Not Found"));
+    }
+    @Test
+    public void offset_renderIndex() {
+        Application app = new Application(connection);
+        Result result = app.offset(0);
+        System.out.println(status(result));
+        System.out.println(contentType(result));
+        System.out.println(charset(result));
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Homepage"));
+    }
 }
