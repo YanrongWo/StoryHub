@@ -37,18 +37,16 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
-<<<<<<< HEAD
+
 import controllers.*;
 import models.*;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
-=======
-import java.sql.SQLException;
 
-import models.*;
-import controllers.*;
->>>>>>> 8f19c04a3be143739f38e6b39ae994f9a2808dd2
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
 *
@@ -95,24 +93,13 @@ public class ApplicationTest {
     }
 
     @Test
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertEquals(2, a);
+    public void error(){    
+        Application a = new Application(connection);
+        Result rs= a.error("error");
+        assertTrue(contentAsString(rs).contains("Error! A story with the same content has already been made!"));
     }
 
     @Test
-    public void error(){    
-        Application a = new Application();
-        Result html= a.error("error");
-        assertEquals("text/html", contentType(html));
-        assertTrue(contentAsString(html).contains("Error! A story with the same content has already been made!"));
-    }
-    // @Test
-    // public void renderTemplate() {
-    //     Content html = views.html.index.render("Your new application is ready.");
-    //     assertEquals("text/html", contentType(html));
-    //     assertTrue(contentAsString(html).contains("Your new application is ready."));
-    // }
     public void renderTemplate() throws SQLException {
         Application a = new Application(connection);
         AppController ma = a.getMyAppController();
