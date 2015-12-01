@@ -35,11 +35,11 @@ import com.google.common.collect.*;
 */
 
 public class ApplicationTest {
-    Database database;
-    Connection connection;
+    static Database database;
+    static Connection connection;
 
-    @Before
-    public void createDatabase() {
+    @BeforeClass
+    public static void createDatabase() {
         database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
@@ -52,8 +52,8 @@ public class ApplicationTest {
         connection = database.getConnection();
     }
 
-    @After
-    public void shutdownDatabase() {
+    @AfterClass
+    public static void shutdownDatabase() {
         database.shutdown();
     }
 

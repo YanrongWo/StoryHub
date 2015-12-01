@@ -36,12 +36,12 @@ import static org.junit.Assert.*;
 import com.google.common.collect.*;
 
 public class AppControllerTest{
-	Database database;
-    Connection connection;
+	static Database database;
+    static Connection connection;
 
-    @Before
-    public void createDatabase() {
-        this.database = Databases.createFrom(
+    @BeforeClass
+    public static void createDatabase() {
+        database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
             "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com/test",
@@ -50,25 +50,39 @@ public class AppControllerTest{
                 "password", "starwars"
             )
         );
-        this.connection = database.getConnection();
+        connection = database.getConnection();
+    }
+
+    @AfterClass
+    public static void shutdownDatabase() {
+        database.shutdown();
     }
 
     @Test
     public void getNextStoryId() throws SQLException{
-        AppController a = new AppController(this.connection);
+        AppController a = new AppController(connection);
         String[] tags1 = {"hi", "ho"};
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
         a.createStory(seg1);
         int nextId = a.getNextStoryId();
         assertEquals(nextId, 2);
         String DELETE_COMMAND = "DELETE FROM stories";
-        PreparedStatement pstmt = this.connection.prepareStatement(DELETE_COMMAND);
-        pstmt.executeQuery();
+        PreparedStatement pstmt = connection.prepareStatement(DELETE_COMMAND);
+        pstmt.executeUpdate();
+    }
+
+    @Before
+    public void createTable() throws SQLException{
+        String CREATE_COMMAND = "CREATE TABLE stories (storyid int(11) NOT NULL auto_increment, serialized_object blob, PRIMARY KEY (storyid))";
+        PreparedStatement pstmt = connection.prepareStatement(CREATE_COMMAND);
+        pstmt.executeUpdate();
     }
 
     @After
-    public void shutdownDatabase() {
-        database.shutdown();
+    public void dropTable() throws SQLException{
+        String DROP_COMMAND = "drop table stories";
+        PreparedStatement pstmt = connection.prepareStatement(DROP_COMMAND);
+        pstmt.executeUpdate();
     }
 
     @Test
@@ -76,4 +90,5 @@ public class AppControllerTest{
         int a = 1 + 1;
         assertEquals(2, a);
     }
+
 }
