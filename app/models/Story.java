@@ -167,4 +167,25 @@ public class Story implements Serializable{
 		}
 		return false;
 	}
+
+	@Override
+	public boolean equals(Object other){
+		if (other == null) return false;
+    	if (other == this) return true;
+    	if (!(other instanceof Story))return false;
+    	Story otherStory = (Story) other;
+    	if(this.id != otherStory.id){
+     		return false;
+    	}
+    	if (this.nextSegId != otherStory.nextSegId){
+    		return false;
+    	}
+    	if (!this.root.equals(otherStory.root)){
+    		return false;
+    	}
+    	if (this.closed != otherStory.closed){
+    		return false;
+    	}
+    	return true;
+	} 
 }

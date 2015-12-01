@@ -45,6 +45,7 @@ import java.sql.SQLException;
 import models.*;
 import controllers.*;
 import java.lang.*;
+import java.io.*;
 
 public class AppControllerTest{
 	static Database database;
@@ -249,6 +250,18 @@ public class AppControllerTest{
     	results = a.findByTitle("yeti");
     	assertEquals(results.get(0),s2);
 
+    }
+
+    @Test
+    public void storeThenGetStory() throws SQLException, IOException, ClassNotFoundException {
+    	AppController a = new AppController(connection);
+    	Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        s1.setSegmentId(0);
+        int storyid = a.getNextStoryId();
+        Story sto = new Story(s1, storyid);
+        a.storeStory(sto);
+        Story sto2 = a.getStory(storyid);
+        assertEquals(sto , sto2);
     }
 
 }
