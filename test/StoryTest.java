@@ -269,4 +269,83 @@ public class StoryTest{
         assertEquals(size, 0);
     }
 
+
+    @Test
+    public void equals_valid() {
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        String[] tags2 = {"hi", "hum"};
+        Segment seg2 = new Segment("Seg 2", "Auth", "Content", tags2);
+        String[] tags3 = {"hi", "hum", "ha"};
+        Segment seg3 = new Segment("Seg 3", "Auth", "Content", tags2);
+        Story sto = new Story(seg1, 1);
+        int rootSegId = sto.getRoot().getSegmentId();
+        sto.addSegment(seg2, rootSegId);
+        sto.addSegment(seg3, rootSegId+1);
+        Story sto2 = new Story(seg1, 1);
+        rootSegId = sto2.getRoot().getSegmentId();
+        sto2.addSegment(seg2, rootSegId);
+        sto2.addSegment(seg3, rootSegId+1);
+        assertEquals(sto, sto2);
+    }
+
+    @Test
+    public void equals_null() {
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        Story sto = new Story(seg1, 1);
+        Story sto2 = null;
+        assertNotEquals(sto, sto2);
+    }
+
+    @Test
+    public void equals_diffClasses(){
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        Story sto = new Story(seg1, 1);
+        Integer i = new Integer(1);
+        assertNotEquals(sto, i);
+    }
+
+    @Test
+    public void equals_diffRoots(){
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);  
+        Story sto = new Story(seg1, 1); 
+        Segment seg2 = new Segment("Seg 2", "Auth", "Content", tags1);  
+        Story sto2 = new Story(seg2, 1);
+        assertNotEquals(sto, sto2);
+    }
+
+    @Test
+    public void equals_diffIds(){
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);  
+        Story sto = new Story(seg1, 1); 
+        Story sto2 = new Story(seg1, 2);
+        assertNotEquals(sto, sto2);
+    }
+
+    @Test
+    public void equals_diffClosed(){
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);  
+        Story sto = new Story(seg1, 1); 
+        sto.setClosed();
+        Story sto2 = new Story(seg1, 1);
+        assertNotEquals(sto, sto2);
+    }
+
+    @Test
+    public void equals_diffSegment(){
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        String[] tags2 = {"hi", "hum"};
+        Segment seg2 = new Segment("Seg 2", "Auth", "Content", tags2);
+        Story sto = new Story(seg1, 1);
+        int rootSegId = sto.getRoot().getSegmentId();
+        sto.addSegment(seg2, rootSegId);
+        Story sto2 = new Story(seg1, 1);
+        assertNotEquals(sto, sto2);
+    }
 }

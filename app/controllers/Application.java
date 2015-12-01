@@ -41,7 +41,7 @@ public class Application extends Controller {
             int storySize = myAppController.getStoryListSize();  
             return ok(index.render("Homepage", storyList, 0, storySize, interval));
         } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
     }
 
@@ -61,7 +61,7 @@ public class Application extends Controller {
             ArrayList<Story> storyList = myAppController.getFrontPageStories(i);   
             return ok(index.render("Homepage", storyList, i, storySize, myAppController.getMax()));
         } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
     }
 
@@ -157,7 +157,7 @@ public class Application extends Controller {
             }
             return badRequest(error.render("You must be logged in to add a story"));
         } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
     }
 
@@ -186,7 +186,7 @@ public class Application extends Controller {
                 }
                 return badRequest(error.render("You must be logged in to add a segment"));
             } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
         }
 
@@ -254,7 +254,7 @@ public class Application extends Controller {
                 }
                 return notFound(views.html.error.render("Page Not Found"));
             } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
         }
 
@@ -282,7 +282,7 @@ public class Application extends Controller {
                 String searchString = "Search results for tags "+String.join(",",queries);
                 return ok(search.render(searchString,tagged));
             } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
         }
 
@@ -305,7 +305,7 @@ public class Application extends Controller {
                 String searchString = "Search results for titles containing "+String.join(",",queries);
                 return ok(search.render(searchString,titles));
             } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contant the website administrator."));
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
         }
 

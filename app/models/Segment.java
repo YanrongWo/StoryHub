@@ -35,7 +35,11 @@ public class Segment implements Serializable{
         this.title = title;
         this.author = author;
         this.content = content;
-        this.tags = tags;
+        if (tags == null){
+          tags = new String[]{};  
+        } else{
+            this.tags = tags;
+        }
         this.childSegs = new ArrayList<Segment>();  
     }
 
