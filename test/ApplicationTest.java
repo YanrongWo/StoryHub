@@ -37,11 +37,18 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
+<<<<<<< HEAD
 import controllers.*;
 import models.*;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
+=======
+import java.sql.SQLException;
+
+import models.*;
+import controllers.*;
+>>>>>>> 8f19c04a3be143739f38e6b39ae994f9a2808dd2
 
 /**
 *
@@ -59,9 +66,9 @@ public class ApplicationTest {
         database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
-            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306",
+            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306/test",
             ImmutableMap.of(
-                "user", "javathehutt",
+                "username", "javathehutt",
                 "password", "starwars"
             )
         );
@@ -92,6 +99,16 @@ public class ApplicationTest {
     //     assertEquals("text/html", contentType(html));
     //     assertTrue(contentAsString(html).contains("Your new application is ready."));
     // }
+    public void renderTemplate() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        System.out.println(ma);
+        ma.createStory(seg1);
+        Result rs = a.index();
+        System.out.println(contentAsString(rs));
+    }
 
 
 }
