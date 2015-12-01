@@ -31,6 +31,9 @@ import java.sql.SQLException;
 import models.*;
 import controllers.*;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 /**
 *
 * Simple (JUnit) tests that can call all parts of a play app.
@@ -73,12 +76,6 @@ public class ApplicationTest {
         String DROP_COMMAND = "drop table stories";
         PreparedStatement pstmt = connection.prepareStatement(DROP_COMMAND);
         pstmt.executeUpdate();
-    }
-
-    @Test
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertEquals(2, a);
     }
 
     @Test
