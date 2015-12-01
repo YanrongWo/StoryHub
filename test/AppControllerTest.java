@@ -20,12 +20,16 @@ import play.db.Database;
 import play.db.Databases;
 import play.db.evolutions.*;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.junit.*;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
+
+import models.*;
+import controllers.*;
 
 public class AppControllerTest{
 	Database database;
@@ -36,7 +40,7 @@ public class AppControllerTest{
         database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
-            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306",
+            "jdbc:mysql://test.ctsufn7qqcwv.us-west-2.rds.amazonaws.com:3306/test",
             ImmutableMap.of(
                 "user", "javathehutt",
                 "password", "starwars"
@@ -51,8 +55,24 @@ public class AppControllerTest{
     }
 
     @Test
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertEquals(2, a);
+    public void fork_true() throws SQLException {
+    	AppController a = new AppController(connection);
+    	String[] t1 = {"tag1", "tag2"};
+        Segment seg = new Segment("Seg 1", "Auth", "Content", t1);
+    	Story sto = a.createStory(seg);
+    	boolean result = a.fork(sto, seg, 0);
+    	boolean expected = true;
+    	assertEquals(expected, result);
+    }
+
+    @Test
+    public void fork_false() throws SQLException{
+    	AppController a = new AppController(connection);
+    	String[] t1 = {"tag1", "tag2"};
+        Segment seg = new Segment("Seg 1", "Auth", "Content", t1);
+    	Story sto = a.createStory(seg);
+    	boolean result = a.fork(sto, seg, 2);
+    	boolean expected = false; 
+    	assertEquals(expected, result);
     }
 }
