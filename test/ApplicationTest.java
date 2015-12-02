@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.*;
@@ -20,6 +21,7 @@ import play.db.Database;
 import play.db.Databases;
 import play.db.evolutions.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -30,6 +32,9 @@ import java.sql.SQLException;
 
 import models.*;
 import controllers.*;
+import play.mvc.Http.RequestBuilder;
+import play.test.Helpers;
+import play.test.*;
 
 /**
 *
@@ -89,8 +94,18 @@ public class ApplicationTest {
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
         ma.createStory(seg1);
         Result rs = a.index();
-        System.out.println(contentAsString(rs));
+        //System.out.println(contentAsString(rs));
     }
 
+    @Test 
+    public void facebookName(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/FacebookName").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertEquals(result.session().get("name"), "Test Name");            
+            }});
+    }
 
 }
