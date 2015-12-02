@@ -183,16 +183,6 @@ public class ApplicationTest{
         assertTrue(contentAsString(rs).contains("Error! This story has been closed. Please contibute to another story"));
     }
 
-    @Test
-    public void renderTemplate() throws SQLException {
-        Application a = new Application(connection);
-        AppController ma = a.getMyAppController();
-        String[] tags1 = {"hi", "ho"};
-        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
-        ma.createStory(seg1);
-        Result rs = a.index();
-    }
-
     @Test 
     public void facebookName_withName(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
