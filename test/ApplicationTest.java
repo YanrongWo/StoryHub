@@ -51,9 +51,21 @@ import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
 
+
+import play.test.*;
+import static play.test.Helpers.*;
+import play.libs.ws.*;
+import play.libs.*;
+import play.libs.F.Function;
+import play.libs.F.Promise;
+import play.test.FakeRequest;
+
+
+
 import play.Configuration;
 import com.typesafe.config.Config;
 import com.typesafe.config.*;
+
 /**
 *
 * Simple (JUnit) tests that can call all parts of a play app.
@@ -61,7 +73,7 @@ import com.typesafe.config.*;
 *
 */
 
-public class ApplicationTest {
+public class ApplicationTest{
     static Database database;
     static Connection connection;
     private Configuration additionalConfigurations;
@@ -100,6 +112,63 @@ public class ApplicationTest {
         PreparedStatement pstmt = connection.prepareStatement(DROP_COMMAND);
         pstmt.executeUpdate();
     }
+
+
+    @Test 
+    public void newStorySubmit_successful(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitleSuccess","content","Test Content Success1323","tags","testing test tested");
+                
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+                String segmentInfoString = Helpers.contentAsString(result);
+                assertEquals(status(result),200);
+                assertTrue(segmentInfoString.contains("0") && segmentInfoString.contains(","));
+                           
+            }
+        });
+    }
+
+
+    @Test
+    public void newStorySubmit_duplicateStory(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+
+                //Log in
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+
+                //Create a new story
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Test Content","tags","testing test tested");
+                RequestBuilder rb1 = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result1 = Helpers.route(rb1);
+
+                //Create story with same data: should return error message
+                RequestBuilder rb2 = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result2 = Helpers.route(rb2);
+                String html = Helpers.contentAsString(result2);
+                System.out.println(html);
+                assertEquals(status(result2),200);
+                assertTrue(html.contains("not found"));            
+            }
+        });
+    }
+
+    @Test
+    public void newStorySubmit_notLoggedIn(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Test Content","tags","testing test tested");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertEquals(status(result),400);
+                assertTrue(Helpers.contentAsString(Helpers.route(rb)).contains("You must be logged in to add a story"));            
+            }
+        });
+    }
+
 
     @Test
     public void error_NewStoryError(){    
