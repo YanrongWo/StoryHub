@@ -51,7 +51,9 @@ import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
 
-
+import play.Configuration;
+import com.typesafe.config.Config;
+import com.typesafe.config.*;
 /**
 *
 * Simple (JUnit) tests that can call all parts of a play app.
@@ -62,9 +64,10 @@ import com.google.common.collect.*;
 public class ApplicationTest {
     static Database database;
     static Connection connection;
+    private Configuration additionalConfigurations;
 
     @BeforeClass
-    public static void createDatabase() {
+    public static void createDatabase() throws SQLException{
         database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
@@ -87,6 +90,8 @@ public class ApplicationTest {
         String CREATE_COMMAND = "CREATE TABLE stories (storyid int(11) NOT NULL auto_increment, serialized_object blob, PRIMARY KEY (storyid))";
         PreparedStatement pstmt = connection.prepareStatement(CREATE_COMMAND);
         pstmt.executeUpdate();
+        Config additionalConfig = ConfigFactory.parseFile(new File("conf/application.test.conf"));
+        additionalConfigurations = new Configuration(additionalConfig);
     }
 
     @After
@@ -127,7 +132,7 @@ public class ApplicationTest {
 
     @Test 
     public void facebookName_withName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 Map<String, String> formData = ImmutableMap.of("name", "Test Name");
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/FacebookName").bodyForm(formData);
@@ -141,7 +146,7 @@ public class ApplicationTest {
 
     @Test 
     public void facebookName_noName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/FacebookName");
                 Result result = Helpers.route(rb);
@@ -153,7 +158,7 @@ public class ApplicationTest {
 
     @Test
     public void noFacebookName_withName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/NoFacebookName").session(cookies);
@@ -166,7 +171,7 @@ public class ApplicationTest {
 
     @Test
     public void noFacebookName_noName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/NoFacebookName");
                 Result result = Helpers.route(rb);
@@ -193,5 +198,17 @@ public class ApplicationTest {
         assertEquals("text/html", contentType(result));
         assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("Homepage"));
+    }
+
+    @Test 
+    public void newFork_valid(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Test Content4538","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+            };  
+        });
     }
 }
