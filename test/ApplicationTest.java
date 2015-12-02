@@ -312,7 +312,7 @@ public class ApplicationTest {
 
     }
 
-        @Test
+    @Test
     public void getStoriesByTags_empty() throws SQLException {
         Application a = new Application(connection);
         AppController ma = a.getMyAppController();
@@ -430,5 +430,43 @@ public class ApplicationTest {
         ma.fork(sto, s2, 0);
         Result result = a.getStoriesByTitles("tag3");
         assertTrue(contentAsString(result).contains("No search results"));
+    }
+
+    @Test
+    public void getSegmentInfo_noFormData(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/AddSegment");
+                Result result = Helpers.route(rb);
+                assertEquals(400, status(result));
+            }
+        });
+    }
+
+    @Test 
+    public void getSegmentInfo_valid() throws SQLException{
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("storyId", "1", "segmentId", "0");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/AddSegment").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertEquals(200, status(result));
+                assertTrue(contentAsString(result).contains("Segment 1"));
+                assertTrue(contentAsString(result).contains("Test Author"));
+                assertTrue(contentAsString(result).contains("Some Test Content"));
+                assertTrue(contentAsString(result).contains("tag1"));
+                assertTrue(contentAsString(result).contains("tag2"));
+                assertTrue(contentAsString(result).contains("-1"));
+                assertTrue(contentAsString(result).contains("Segment 1"));
+                assertTrue(contentAsString(result).contains("childrenid\":[]"));
+                assertTrue(contentAsString(result).contains("childrentitle\":[]"));
+            }
+        });
     }
 }
