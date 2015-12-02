@@ -75,6 +75,11 @@
 							</button> \
 						</td>';
 			}
+			@if(isClosed){
+				story += '<td> \
+							<span style="border: red 2px solid; padding: 5px; border-radius: 5px; color: red;font-weight: bold;"> Closed Story </span> \
+						</td>';
+			}
 			story += '</tr> \
 					<tr> \
 						<td> \
