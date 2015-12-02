@@ -51,7 +51,9 @@ import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 import com.google.common.collect.*;
 
-
+import play.Configuration;
+import com.typesafe.config.Config;
+import com.typesafe.config.*;
 /**
 *
 * Simple (JUnit) tests that can call all parts of a play app.
@@ -62,9 +64,10 @@ import com.google.common.collect.*;
 public class ApplicationTest {
     static Database database;
     static Connection connection;
+    private Configuration additionalConfigurations;
 
     @BeforeClass
-    public static void createDatabase() {
+    public static void createDatabase() throws SQLException{
         database = Databases.createFrom(
             "test",
             "com.mysql.jdbc.Driver",
@@ -87,6 +90,8 @@ public class ApplicationTest {
         String CREATE_COMMAND = "CREATE TABLE stories (storyid int(11) NOT NULL auto_increment, serialized_object blob, PRIMARY KEY (storyid))";
         PreparedStatement pstmt = connection.prepareStatement(CREATE_COMMAND);
         pstmt.executeUpdate();
+        Config additionalConfig = ConfigFactory.parseFile(new File("conf/application.test.conf"));
+        additionalConfigurations = new Configuration(additionalConfig);
     }
 
     @After
@@ -134,7 +139,7 @@ public class ApplicationTest {
 
     @Test 
     public void facebookName_withName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 Map<String, String> formData = ImmutableMap.of("name", "Test Name");
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/FacebookName").bodyForm(formData);
@@ -148,7 +153,7 @@ public class ApplicationTest {
 
     @Test 
     public void facebookName_noName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/FacebookName");
                 Result result = Helpers.route(rb);
@@ -160,7 +165,7 @@ public class ApplicationTest {
 
     @Test
     public void noFacebookName_withName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/NoFacebookName").session(cookies);
@@ -173,7 +178,7 @@ public class ApplicationTest {
 
     @Test
     public void noFacebookName_noName(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/NoFacebookName");
                 Result result = Helpers.route(rb);
@@ -203,8 +208,92 @@ public class ApplicationTest {
     }
 
     @Test
+    public void newFork_valid(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+
+                RequestBuilder rb2 = Helpers.fakeRequest("GET", "/Story/1/0/NewSegment").session(cookies);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(200, status(result2));
+                assertTrue(contentAsString(result2).contains("New Segment"));
+                assertTrue(contentAsString(result2).contains("Story Content"));
+            }
+        });
+    }
+
+    @Test
+    public void newFork_notLoggedIn(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+
+                RequestBuilder rb2 = Helpers.fakeRequest("GET", "/Story/1/0/NewSegment");
+                Result result2 = Helpers.route(rb2);
+                assertEquals(400, status(result2));
+                assertTrue(contentAsString(result2).contains("You must be logged in"));
+            }
+        });
+    }
+
+    @Test 
+    public void newForkSubmit_valid(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+                
+                formData = ImmutableMap.of("title", "TestTitle","content","Some More Test Content","tags","testing test tested");
+                RequestBuilder rb2 = Helpers.fakeRequest("POST", "/Story/1/0/NewSegment").session(cookies).bodyForm(formData);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(200, status(result2));
+                assertTrue(contentAsString(result2).contains("1,1"));
+            };  
+        });
+    }
+
+    @Test 
+    public void newForkSubmit_notLoggedIn(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+                formData = ImmutableMap.of("title", "TestTitle","content","Some More Test Content","tags","testing test tested");
+                RequestBuilder rb2 = Helpers.fakeRequest("POST", "/Story/1/0/NewSegment").bodyForm(formData);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(400, status(result2));
+                assertTrue(contentAsString(result2).contains("You must be logged in"));
+            };  
+        });
+    }
+
+    @Test
+    public void newForkSubmit_invalidStory(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb2 = Helpers.fakeRequest("POST", "/Story/2/0/NewSegment").session(cookies).bodyForm(formData);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(404, status(result2));
+                assertTrue(contentAsString(result2).contains("Page Not Found"));
+            }
+        });
+    }
+
+    @Test
     public void newStory_notLoggedIn(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 RequestBuilder rb = Helpers.fakeRequest("GET", "/NewStory");
                 Result result = Helpers.route(rb);
@@ -217,7 +306,7 @@ public class ApplicationTest {
 
     @Test
     public void newStory_loggedIn(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
                 RequestBuilder rb = Helpers.fakeRequest("GET", "/NewStory").session(cookies);
@@ -227,5 +316,126 @@ public class ApplicationTest {
                 assertEquals("utf-8", charset(result));
                 assertTrue(contentAsString(result).contains("New Story"));
             }});
+
+    }
+
+        @Test
+    public void getStoriesByTags_empty() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTags("");
+        assertTrue(contentAsString(result).contains("Your query cannot be empty"));
+    }
+
+    @Test
+    public void getStoriesByTags_storyRoot() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTags("tag1");
+        assertFalse(contentAsString(result).contains("Tag2"));
+        assertTrue(contentAsString(result).contains("tag1"));
+    }
+
+    @Test
+    public void getStoriesByTags_storyLeaf() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Segment s3 = new Segment("Segment 3", "Test Author", "Some Test Content 3", new String[]{"Tag3"});
+        ma.fork(sto, s3, 0);
+        Result result = a.getStoriesByTags("Tag3");
+        assertFalse(contentAsString(result).contains("Tag2"));
+        assertTrue(contentAsString(result).contains("Tag3"));
+    }
+
+    @Test
+    public void getStoriesByTags_incorrect() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag3"});
+        ma.fork(sto, s2, 0);
+        Result result = a.getStoriesByTags("awefewa");
+        assertTrue(contentAsString(result).contains("No search results"));
+    }
+
+    @Test
+    public void getStoriesByTitles_empty() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTitles("");
+        assertTrue(contentAsString(result).contains("Your query cannot be empty"));
+    }
+
+    @Test
+    public void getStoriesByTitles_storyRoot() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTitles("Segment 1");
+        assertFalse(contentAsString(result).contains("Segment 2"));
+        assertTrue(contentAsString(result).contains("Segment 1"));
+    }
+
+    @Test
+    public void getStoriesByTitles_storyLeaf() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Segment s3 = new Segment("Segment 3", "Test Author", "Some Test Content 3", new String[]{"Tag3"});
+        ma.fork(sto, s3, 0);
+        Result result = a.getStoriesByTitles("Segment 3");
+        assertFalse(contentAsString(result).contains("Segment 1"));
+        assertTrue(contentAsString(result).contains("Segment 3"));
+    }
+
+    @Test
+    public void getStoriesByTitles_incorrect() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag3"});
+        ma.fork(sto, s2, 0);
+        Result result = a.getStoriesByTitles("tag3");
+        assertTrue(contentAsString(result).contains("No search results"));
     }
 }
