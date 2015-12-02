@@ -158,7 +158,6 @@
 		</form>
 
 		<script>
-
 			/* Back button onclick to go back to the last page */
 			function goBack() {
     			window.history.back();
@@ -215,8 +214,10 @@
 					// Make sure nothing when run making the new segment
 					posting.done(function(segInfoString){
 						if (segInfoString.startsWith("not found")) {
-							window.location = "/Error/NewStoryError"
-						} else {
+							window.location = "/Error/NewStoryError";
+						} else if(segInfoString.startsWith("story closed")){
+							window.location = "/Error/StoryClosed";
+						}else {
 							var segInfo = segInfoString.split(",");
 							var storyId = segInfo[0];
 							var segmentId = segInfo[1];

@@ -161,7 +161,13 @@ public class Application extends Controller {
         @param error - error message
         Displays an error page if user tries to submit a duplicate story with the same title and contents */
         public Result error(String err) {
-            return notFound(views.html.error.render("Error! A story with the same content has already been made!"));
+            if(err.equals("NewStoryError")){
+                return notFound(views.html.error.render("Error! A story with the same content has already been made!"));
+            }
+            if(err.equals("StoryClosed")){
+                return notFound(views.html.error.render("Error! This story has been closed. Please contibute to another story"));
+            }
+            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
         }
 
     /* Handles GET request from: /Story/STORYID/SEGMENTID/NewSegment
@@ -176,7 +182,7 @@ public class Application extends Controller {
                     if(!myStory.isClosed()){
                         return  ok(newStory.render("New Segment", "newFork"));
                     } else{
-                        return badRequest(error.render("This story has been closed"));
+                        return error("StoryClosed");
                     }
                     
                 }
@@ -197,6 +203,7 @@ public class Application extends Controller {
                 return badRequest("Form Error");
             } else {
                 Story myStory = null;
+                Story origStory = null;
                 try {
                     String title = form.get("title");
                     String content = form.get("content");
@@ -209,6 +216,7 @@ public class Application extends Controller {
                     Segment seg = new Segment(title, session("name"), content, uniqueTags);
                     //add segment to story
                     myStory = myAppController.getStory(storyId);
+                    origStory = myAppController.getStory(storyId);
                     if(myStory != null){
                         boolean added = myAppController.fork(myStory, seg, segmentId);
                         if(added){
@@ -219,10 +227,16 @@ public class Application extends Controller {
                     return notFound(views.html.error.render("Page Not Found"));
                 }
                 catch (SQLException e){
-                    if(myStory != null){
-                        myStory.setClosed();
+                    if(origStory != null){
+                        boolean test = origStory.setClosed();
+                        try {
+                            myAppController.storeStory(origStory);
+                        }
+                        catch(Exception x){
+                            return badRequest(views.html.error.render("Something went wrong! :("));
+                        }
                     }
-                    return badRequest(views.html.error.render("This story has been closed! :("));
+                    return ok("story closed");
                 }
                 catch(Exception e){
                     return badRequest(views.html.error.render("Something went wrong! :("));
