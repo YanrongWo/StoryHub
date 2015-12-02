@@ -113,40 +113,200 @@ public class ApplicationTest {
     }
 
     @Test
-    public void renderTemplate() throws SQLException {
+    public void index_title() throws SQLException {
         Application a = new Application(connection);
         AppController ma = a.getMyAppController();
         String[] tags1 = {"hi", "ho"};
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
         ma.createStory(seg1);
-        Result rs = a.index();
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Seg 1"));
+    }
 
-        // System.out.println(contentAsString(rs));
+    @Test
+    public void index_author() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Auth"));
+    }
 
+    @Test
+    public void index_content() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Content"));
+    }
+
+    @Test
+    public void index_tag() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("hi"));
     }
 
     @Test
     public void offset_renderNotFound() {
         Application app = new Application(connection);
         Result result = app.offset(2);
-        System.out.println(status(result));
-        System.out.println(contentType(result));
-        System.out.println(charset(result));
         assertEquals(404, status(result));
         assertEquals("text/html", contentType(result));
         assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("Page Not Found"));
     }
+
     @Test
     public void offset_renderIndex() {
         Application app = new Application(connection);
         Result result = app.offset(0);
-        System.out.println(status(result));
-        System.out.println(contentType(result));
-        System.out.println(charset(result));
         assertEquals(200, status(result));
         assertEquals("text/html", contentType(result));
         assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("Homepage"));
     }
+
+    @Test
+    public void getStoriesByTags_empty() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTags("");
+        assertTrue(contentAsString(result).contains("Your query cannot be empty"));
+    }
+
+    @Test
+    public void getStoriesByTags_storyRoot() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTags("tag1");
+        assertFalse(contentAsString(result).contains("Tag2"));
+        assertTrue(contentAsString(result).contains("tag1"));
+    }
+
+    @Test
+    public void getStoriesByTags_storyLeaf() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Segment s3 = new Segment("Segment 3", "Test Author", "Some Test Content 3", new String[]{"Tag3"});
+        ma.fork(sto, s3, 0);
+        Result result = a.getStoriesByTags("Tag3");
+        assertFalse(contentAsString(result).contains("Tag2"));
+        assertTrue(contentAsString(result).contains("Tag3"));
+    }
+
+    @Test
+    public void getStoriesByTags_incorrect() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag3"});
+        ma.fork(sto, s2, 0);
+        Result result = a.getStoriesByTags("awefewa");
+        assertTrue(contentAsString(result).contains("No search results"));
+    }
+
+    @Test
+    public void getStoriesByTitles_empty() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTitles("");
+        assertTrue(contentAsString(result).contains("Your query cannot be empty"));
+    }
+
+        @Test
+    public void getStoriesByTitles_storyRoot() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Result result = a.getStoriesByTitles("Segment 1");
+        assertFalse(contentAsString(result).contains("Segment 2"));
+        assertTrue(contentAsString(result).contains("Segment 1"));
+    }
+
+    @Test
+    public void getStoriesByTitles_storyLeaf() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag2"});
+        ma.createStory(s2);
+        Segment s3 = new Segment("Segment 3", "Test Author", "Some Test Content 3", new String[]{"Tag3"});
+        ma.fork(sto, s3, 0);
+        Result result = a.getStoriesByTitles("Segment 3");
+        assertFalse(contentAsString(result).contains("Segment 1"));
+        assertTrue(contentAsString(result).contains("Segment 3"));
+    }
+
+    @Test
+    public void getStoriesByTitles_incorrect() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        // Create a small set of stories and insert them into the database
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+        Segment s2 = new Segment("Segment 2", "Test Author", "Some Test Content 2", new String[]{"Tag3"});
+        ma.fork(sto, s2, 0);
+        Result result = a.getStoriesByTitles("tag3");
+        assertTrue(contentAsString(result).contains("No search results"));
+    }
+
+
 }

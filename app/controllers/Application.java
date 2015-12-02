@@ -258,51 +258,59 @@ public class Application extends Controller {
         @param query - String of all queries in format "query1+query2+query3+query4...." 
         Returns a search page listing all segments whose tags that include all the query tags  */
         public Result getStoriesByTags(String query){
-            try{
-                myAppController.loadAll();
+            if(query.length()>0) {
+                try{
+                    myAppController.loadAll();
 
-                String[] queries = query.split("\\+");
+                    String[] queries = query.split("\\+");
 
-                ArrayList <Segment> tagged = myAppController.findByTag(queries[0].trim());
-                for(int i = 0; i < queries.length;i++){
-                    if(queries[i].substring(0,1)=="#"){
-                        queries[i]=queries[i].substring(1,queries[i].length());
-                    }
-                // Get interesection of all searches
-                    tagged.retainAll(myAppController.findByTag(queries[i].trim()));
-                    for(int p = 0 ; p< tagged.size();p ++){
-                    }
-                    queries[i] = "\""+queries[i]+"\"";
-                }    
+                    ArrayList <Segment> tagged = myAppController.findByTag(queries[0].trim());
+                    for(int i = 0; i < queries.length;i++){
+                        if(queries[i].substring(0,1)=="#"){
+                            queries[i]=queries[i].substring(1,queries[i].length());
+                        }
+                    // Get interesection of all searches
+                        tagged.retainAll(myAppController.findByTag(queries[i].trim()));
+                        for(int p = 0 ; p< tagged.size();p ++){
+                        }
+                        queries[i] = "\""+queries[i]+"\"";
+                    }    
 
-                String searchString = "Search results for tags "+String.join(",",queries);
-                return ok(search.render(searchString,tagged));
-            } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
-        }
+                    String searchString = "Search results for tags "+String.join(",",queries);
+                    return ok(search.render(searchString,tagged));
+                } catch ( SQLException|IOException|ClassNotFoundException e){
+                    return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
+                }
+            } else {
+                return badRequest(error.render("Your query cannot be empty"));
+            }
         }
 
     /*  Handles POST request from: /SearchTitles/*
         @param query - String of all queries in format "query1+query2+query3+query4...." 
         Returns a search page listing all segments whose title contains all the query titles*/
         public Result getStoriesByTitles(String query){
-            try{
-                myAppController.loadAll();
+            if(query.length()>0) {
+                try{
+                    myAppController.loadAll();
 
-                String[] queries = query.split("\\+");
+                    String[] queries = query.split("\\+");
 
-                ArrayList <Segment> titles = myAppController.findByTitle(queries[0].trim());
+                    ArrayList <Segment> titles = myAppController.findByTitle(queries[0].trim());
 
-                for(int i = 0; i < queries.length; i++){
-                // Get intersection of all searches
-                    titles.retainAll(myAppController.findByTitle(queries[i].trim()));
-                    queries[i] = "\""+queries[i]+"\"";
+                    for(int i = 0; i < queries.length; i++){
+                    // Get intersection of all searches
+                        titles.retainAll(myAppController.findByTitle(queries[i].trim()));
+                        queries[i] = "\""+queries[i]+"\"";
+                    }
+                    String searchString = "Search results for titles containing "+String.join(",",queries);
+                    return ok(search.render(searchString,titles));
+                } catch ( SQLException|IOException|ClassNotFoundException e){
+                    return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
                 }
-                String searchString = "Search results for titles containing "+String.join(",",queries);
-                return ok(search.render(searchString,titles));
-            } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
-        }
+            } else {
+                return badRequest(error.render("Your query cannot be empty"));
+            }
         }
 
 
