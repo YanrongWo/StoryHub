@@ -109,10 +109,17 @@ public class ApplicationTest {
     // }
 
     @Test
-    public void error(){    
+    public void error_NewStoryError(){    
         Application a = new Application(connection);
-        Result rs= a.error("error");
+        Result rs= a.error("NewStoryError");
         assertTrue(contentAsString(rs).contains("Error! A story with the same content has already been made!"));
+    }
+
+    @Test
+    public void error_StoryClosed(){    
+        Application a = new Application(connection);
+        Result rs= a.error("StoryClosed");
+        assertTrue(contentAsString(rs).contains("Error! This story has been closed. Please contibute to another story"));
     }
 
     @Test
@@ -213,7 +220,7 @@ public class ApplicationTest {
         running(fakeApplication(), new Runnable() {
             public void run() {
                 Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
-                RequestBuilder rb = Helpers.fakeRequest("GET", "/NewStory").session(cookies);;
+                RequestBuilder rb = Helpers.fakeRequest("GET", "/NewStory").session(cookies);
                 Result result = Helpers.route(rb);
                 assertEquals(200, status(result));
                 assertEquals("text/html", contentType(result));
