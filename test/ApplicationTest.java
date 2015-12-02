@@ -254,7 +254,7 @@ public class ApplicationTest{
     }
 
     @Test
-    public void index_title() throws SQLException {
+    public void index() throws SQLException {
         Application a = new Application(connection);
         AppController ma = a.getMyAppController();
         String[] tags1 = {"hi", "ho"};
