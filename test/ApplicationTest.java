@@ -126,19 +126,56 @@ public class ApplicationTest {
     }
 
     @Test 
-    public void facebookName(){
+    public void facebookName_withName(){
         running(fakeApplication(), new Runnable() {
             public void run() {
                 Map<String, String> formData = ImmutableMap.of("name", "Test Name");
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/FacebookName").bodyForm(formData);
                 Result result = Helpers.route(rb);
-                assertEquals(result.session().get("name"), "Test Name");            
-            }});
+                assertEquals(result.session().get("name"), "Test Name");
+                assertEquals(200, status(result));
+            }
+        });
     }
 
 
-    
+    @Test 
+    public void facebookName_noName(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/FacebookName");
+                Result result = Helpers.route(rb);
+                assertEquals(400, status(result));
+                assertEquals(result.session().get("name"), null);
+            }
+        });
+    }
 
+    @Test
+    public void noFacebookName_withName(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NoFacebookName").session(cookies);
+                Result result = Helpers.route(rb);
+                assertEquals(result.session().get("name"), null);
+                assertEquals(200, status(result));
+            }
+        });
+    }
+
+    @Test
+    public void noFacebookName_noName(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NoFacebookName");
+                Result result = Helpers.route(rb);
+                assertEquals(result.session().get("name"), null);
+                assertEquals(200, status(result));
+            }
+        });
+    }
+    
     @Test
     public void offset_renderNotFound() {
         Application app = new Application(connection);
