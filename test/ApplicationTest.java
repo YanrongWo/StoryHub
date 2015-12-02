@@ -207,49 +207,9 @@ public class ApplicationTest {
         assertEquals("text/html", contentType(result));
         assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("Seg 1"));
-    }
-
-    @Test
-    public void index_author() throws SQLException {
-        Application a = new Application(connection);
-        AppController ma = a.getMyAppController();
-        String[] tags1 = {"hi", "ho"};
-        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
-        ma.createStory(seg1);
-        Result result = a.index();
-        assertEquals(200, status(result));
-        assertEquals("text/html", contentType(result));
-        assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("Auth"));
-    }
-
-    @Test
-    public void index_content() throws SQLException {
-        Application a = new Application(connection);
-        AppController ma = a.getMyAppController();
-        String[] tags1 = {"hi", "ho"};
-        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
-        ma.createStory(seg1);
-        Result result = a.index();
-        assertEquals(200, status(result));
-        assertEquals("text/html", contentType(result));
-        assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("Content"));
-    }
-
-    @Test
-    public void index_tag() throws SQLException {
-        Application a = new Application(connection);
-        AppController ma = a.getMyAppController();
-        String[] tags1 = {"hi", "ho"};
-        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
-        ma.createStory(seg1);
-        Result result = a.index();
-        assertEquals(200, status(result));
-        assertEquals("text/html", contentType(result));
-        assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("hi"));
-        Result rs = a.index();
     }
 
     public void newFork_valid(){
