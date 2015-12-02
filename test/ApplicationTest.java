@@ -113,6 +113,7 @@ public class ApplicationTest{
         pstmt.executeUpdate();
     }
 
+
     @Test 
     public void newStorySubmit_successful(){
         running(fakeApplication(), new Runnable() {
@@ -264,6 +265,62 @@ public class ApplicationTest{
     }
 
     @Test
+    public void index_title() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Seg 1"));
+    }
+
+    @Test
+    public void index_author() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Auth"));
+    }
+
+    @Test
+    public void index_content() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("Content"));
+    }
+
+    @Test
+    public void index_tag() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result result = a.index();
+        assertEquals(200, status(result));
+        assertEquals("text/html", contentType(result));
+        assertEquals("utf-8", charset(result));
+        assertTrue(contentAsString(result).contains("hi"));
+        Result rs = a.index();
+    }
+
     public void newFork_valid(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
@@ -494,4 +551,52 @@ public class ApplicationTest{
         Result result = a.getStoriesByTitles("tag3");
         assertTrue(contentAsString(result).contains("No search results"));
     }
+
+    @Test 
+    public void story_notFound(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("GET", "/Story/1/0").session(cookies);
+                Result result = Helpers.route(rb);
+                assertTrue(contentAsString(result).contains("Page Not Found"));
+                assertEquals(404, status(result));
+            };  
+        });
+    }
+
+    @Test 
+    public void story_segNotFound(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Test Content4538","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+                RequestBuilder rb2 = Helpers.fakeRequest("GET", "/Story/1/1").session(cookies);
+                Result result2 = Helpers.route(rb2);
+                assertTrue(contentAsString(result2).contains("Page Not Found"));
+                assertEquals(404, status(result2));
+            };  
+        });
+    }
+
+    @Test 
+    public void story_valid(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Test Content4538","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+                RequestBuilder rb2 = Helpers.fakeRequest("GET", "/Story/1/0").session(cookies);
+                Result result2 = Helpers.route(rb2);
+                assertFalse(contentAsString(result2).contains("Page Not Found"));
+                assertEquals(200, status(result2));
+            };  
+        });
+    }
+
+
+
 }
