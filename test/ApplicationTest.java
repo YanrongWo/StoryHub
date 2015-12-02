@@ -235,15 +235,86 @@ public class ApplicationTest {
         Result rs = a.index();
     }
 
-    @Test 
     public void newFork_valid(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
-                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Test Content4538","tags","testing test tested");
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
                 Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
                 Result result = Helpers.route(rb);
+
+                RequestBuilder rb2 = Helpers.fakeRequest("GET", "/Story/1/0/NewSegment").session(cookies);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(200, status(result2));
+                assertTrue(contentAsString(result2).contains("New Segment"));
+                assertTrue(contentAsString(result2).contains("Story Content"));
+            }
+        });
+    }
+
+    @Test
+    public void newFork_notLoggedIn(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+
+                RequestBuilder rb2 = Helpers.fakeRequest("GET", "/Story/1/0/NewSegment");
+                Result result2 = Helpers.route(rb2);
+                assertEquals(400, status(result2));
+                assertTrue(contentAsString(result2).contains("You must be logged in"));
+            }
+        });
+    }
+
+    @Test 
+    public void newForkSubmit_valid(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+                
+                formData = ImmutableMap.of("title", "TestTitle","content","Some More Test Content","tags","testing test tested");
+                RequestBuilder rb2 = Helpers.fakeRequest("POST", "/Story/1/0/NewSegment").session(cookies).bodyForm(formData);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(200, status(result2));
+                assertTrue(contentAsString(result2).contains("1,1"));
             };  
+        });
+    }
+
+    @Test 
+    public void newForkSubmit_notLoggedIn(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
+                Result result = Helpers.route(rb);
+                formData = ImmutableMap.of("title", "TestTitle","content","Some More Test Content","tags","testing test tested");
+                RequestBuilder rb2 = Helpers.fakeRequest("POST", "/Story/1/0/NewSegment").bodyForm(formData);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(400, status(result2));
+                assertTrue(contentAsString(result2).contains("You must be logged in"));
+            };  
+        });
+    }
+
+    @Test
+    public void newForkSubmit_invalidStory(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Some Test Content","tags","testing test tested");
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb2 = Helpers.fakeRequest("POST", "/Story/2/0/NewSegment").session(cookies).bodyForm(formData);
+                Result result2 = Helpers.route(rb2);
+                assertEquals(404, status(result2));
+                assertTrue(contentAsString(result2).contains("Page Not Found"));
+            }
         });
     }
 
