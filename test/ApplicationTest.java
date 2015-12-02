@@ -194,4 +194,31 @@ public class ApplicationTest {
         assertEquals("utf-8", charset(result));
         assertTrue(contentAsString(result).contains("Homepage"));
     }
+
+    @Test
+    public void newStory_notLoggedIn(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                RequestBuilder rb = Helpers.fakeRequest("GET", "/NewStory");
+                Result result = Helpers.route(rb);
+                assertEquals(400, status(result));
+                assertEquals("text/html", contentType(result));
+                assertEquals("utf-8", charset(result));
+                assertTrue(contentAsString(result).contains("You must be logged in to add a story"));
+            }});
+    }
+
+    @Test
+    public void newStory_loggedIn(){
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
+                RequestBuilder rb = Helpers.fakeRequest("GET", "/NewStory").session(cookies);;
+                Result result = Helpers.route(rb);
+                assertEquals(200, status(result));
+                assertEquals("text/html", contentType(result));
+                assertEquals("utf-8", charset(result));
+                assertTrue(contentAsString(result).contains("New Story"));
+            }});
+    }
 }
