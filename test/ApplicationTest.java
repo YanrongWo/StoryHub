@@ -49,6 +49,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import play.test.*;
+import static play.test.Helpers.*;
+import play.libs.ws.*;
+import play.libs.*;
+import play.libs.F.Function;
+import play.libs.F.Promise;
+
+
 /**
 *
 * Simple (JUnit) tests that can call all parts of a play app.
@@ -56,7 +64,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 *
 */
 
-public class ApplicationTest {
+public class ApplicationTest{
     static Database database;
     static Connection connection;
 
@@ -93,17 +101,48 @@ public class ApplicationTest {
         pstmt.executeUpdate();
     }
 
-    // @Test
-    // public void newStorySubmit(){
-    //     Application a = new Application(connection);
-    //     running(testServer(3333),HtmlUnitDriver.class, new Callback<TestBrowser>(){
-    //         public void test(TestBrowser browser){
-    //             browser.goTo("http://localhost:3333");
-    //         }
-    //     });
-        
+    @Test
+    public void newStorySubmit_allSuccesful(){
+        running(testServer(3333),() -> {
+            System.out.println(WS.url("http://localhost:3333").get();
+            System.out.println(WS.url("http://localhost:3333/NewStory"));
 
-    // }
+
+                
+        });
+        
+    }
+
+    @Test
+    public void newStorySubmit_noTitle(){
+
+    }
+
+    @Test
+    public void newStorySubmit_noStoryContent(){
+
+    }
+
+    @Test
+    public void newStorySubmit_simultaneousSubmission(){
+
+    }
+
+    @Test
+    public void newStorySubmit_error(){
+
+    }
+
+    @Test
+    public void newStorySubmit_duplicateStory(){
+
+    }
+
+    @Test
+    public void newStorySubmit_loggedInCheck(){
+
+    }
+
 
     @Test
     public void error(){    
