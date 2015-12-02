@@ -25,9 +25,7 @@ import play.db.Database;
 import play.db.Databases;
 import play.db.evolutions.*;
 import java.sql.Connection;
-<<<<<<< HEAD
-import java.sql.PreparedStatement;
-=======
+
 import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
@@ -35,21 +33,6 @@ import java.sql.ResultSet;
 
 import models.*;
 import controllers.*;
->>>>>>> 1b59fb5df348eeb7f3ac8f71ad1415f095993d82
-
-import org.junit.*;
-import static org.junit.Assert.*;
-import static play.test.Helpers.*;
-import static org.junit.Assert.*;
-import com.google.common.collect.*;
-
-import controllers.*;
-<<<<<<< HEAD
-import play.mvc.Http.RequestBuilder;
-import play.test.Helpers;
-import play.test.*;
-=======
-import models.*;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -58,7 +41,16 @@ import java.io.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
->>>>>>> 1b59fb5df348eeb7f3ac8f71ad1415f095993d82
+import play.mvc.Http.RequestBuilder;
+import play.test.Helpers;
+import play.test.*;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+import static play.test.Helpers.*;
+import static org.junit.Assert.*;
+import com.google.common.collect.*;
+
 
 /**
 *
@@ -131,7 +123,6 @@ public class ApplicationTest {
         Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
         ma.createStory(seg1);
         Result rs = a.index();
-        //System.out.println(contentAsString(rs));
     }
 
     @Test 
@@ -152,9 +143,6 @@ public class ApplicationTest {
     public void offset_renderNotFound() {
         Application app = new Application(connection);
         Result result = app.offset(2);
-        System.out.println(status(result));
-        System.out.println(contentType(result));
-        System.out.println(charset(result));
         assertEquals(404, status(result));
         assertEquals("text/html", contentType(result));
         assertEquals("utf-8", charset(result));
@@ -164,9 +152,6 @@ public class ApplicationTest {
     public void offset_renderIndex() {
         Application app = new Application(connection);
         Result result = app.offset(0);
-        System.out.println(status(result));
-        System.out.println(contentType(result));
-        System.out.println(charset(result));
         assertEquals(200, status(result));
         assertEquals("text/html", contentType(result));
         assertEquals("utf-8", charset(result));
