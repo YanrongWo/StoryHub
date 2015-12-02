@@ -116,7 +116,7 @@ public class ApplicationTest{
 
     @Test 
     public void newStorySubmit_successful(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 Map<String, String> cookies = ImmutableMap.of("name", "Test Name");
                 Map<String, String> formData = ImmutableMap.of("title", "TestTitleSuccess","content","Test Content Success1323","tags","testing test tested");
@@ -134,7 +134,7 @@ public class ApplicationTest{
 
     @Test
     public void newStorySubmit_duplicateStory(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
 
                 //Log in
@@ -149,7 +149,6 @@ public class ApplicationTest{
                 RequestBuilder rb2 = Helpers.fakeRequest("POST", "/NewStory").session(cookies).bodyForm(formData);
                 Result result2 = Helpers.route(rb2);
                 String html = Helpers.contentAsString(result2);
-                System.out.println(html);
                 assertEquals(status(result2),200);
                 assertTrue(html.contains("not found"));            
             }
@@ -158,7 +157,7 @@ public class ApplicationTest{
 
     @Test
     public void newStorySubmit_notLoggedIn(){
-        running(fakeApplication(), new Runnable() {
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
                 Map<String, String> formData = ImmutableMap.of("title", "TestTitle","content","Test Content","tags","testing test tested");
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/NewStory").bodyForm(formData);
@@ -182,16 +181,6 @@ public class ApplicationTest{
         Application a = new Application(connection);
         Result rs= a.error("StoryClosed");
         assertTrue(contentAsString(rs).contains("Error! This story has been closed. Please contibute to another story"));
-    }
-
-    @Test
-    public void renderTemplate() throws SQLException {
-        Application a = new Application(connection);
-        AppController ma = a.getMyAppController();
-        String[] tags1 = {"hi", "ho"};
-        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
-        ma.createStory(seg1);
-        Result rs = a.index();
     }
 
     @Test 
@@ -392,7 +381,7 @@ public class ApplicationTest{
 
     }
 
-        @Test
+    @Test
     public void getStoriesByTags_empty() throws SQLException {
         Application a = new Application(connection);
         AppController ma = a.getMyAppController();
@@ -512,6 +501,18 @@ public class ApplicationTest{
         assertTrue(contentAsString(result).contains("No search results"));
     }
 
+
+    @Test
+    public void getSegmentInfo_noFormData(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/AddSegment");
+                Result result = Helpers.route(rb);
+                assertEquals(400, status(result));
+            }
+        });
+    }
+
     @Test 
     public void story_notFound(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
@@ -526,6 +527,32 @@ public class ApplicationTest{
     }
 
     @Test 
+    public void getSegmentInfo_valid() throws SQLException{
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
+        Story sto = ma.createStory(s1);
+
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("storyId", "1", "segmentId", "0");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/AddSegment").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertEquals(200, status(result));
+                assertTrue(contentAsString(result).contains("Segment 1"));
+                assertTrue(contentAsString(result).contains("Test Author"));
+                assertTrue(contentAsString(result).contains("Some Test Content"));
+                assertTrue(contentAsString(result).contains("tag1"));
+                assertTrue(contentAsString(result).contains("tag2"));
+                assertTrue(contentAsString(result).contains("-1"));
+                assertTrue(contentAsString(result).contains("Segment 1"));
+                assertTrue(contentAsString(result).contains("childrenid\":[]"));
+                assertTrue(contentAsString(result).contains("childrentitle\":[]"));
+            }
+        });
+    }
+
     public void story_segNotFound(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
@@ -556,7 +583,5 @@ public class ApplicationTest{
             };  
         });
     }
-
-
 
 }
