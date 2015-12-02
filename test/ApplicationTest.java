@@ -102,10 +102,27 @@ public class ApplicationTest {
     }
 
     @Test
-    public void error(){    
+    public void error_NewStoryError(){    
         Application a = new Application(connection);
-        Result rs= a.error("error");
+        Result rs= a.error("NewStoryError");
         assertTrue(contentAsString(rs).contains("Error! A story with the same content has already been made!"));
+    }
+
+    @Test
+    public void error_StoryClosed(){    
+        Application a = new Application(connection);
+        Result rs= a.error("StoryClosed");
+        assertTrue(contentAsString(rs).contains("Error! This story has been closed. Please contibute to another story"));
+    }
+
+    @Test
+    public void renderTemplate() throws SQLException {
+        Application a = new Application(connection);
+        AppController ma = a.getMyAppController();
+        String[] tags1 = {"hi", "ho"};
+        Segment seg1 = new Segment("Seg 1", "Auth", "Content", tags1);
+        ma.createStory(seg1);
+        Result rs = a.index();
     }
 
     @Test 
