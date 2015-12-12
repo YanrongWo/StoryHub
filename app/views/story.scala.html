@@ -83,7 +83,7 @@
 	              		addSegment(segments[index], segments[index - 1]);
 	              	}
 	              	global_segmentId = segmentId;
-	              	var share_url = "http://localhost:9000/Story/"+storyId+"/"+global_segmentId;
+	              	var share_url = window.location.href.substring(0, window.location.href.length-1)+global_segmentId;
 	              	var text = "This story is awesome";
 	              	  $("#twitterShare").html('&nbsp;'); 
 					  $("#twitterShare").html('<a href="https://twitter.com/share" class="twitter-share-button" data-url="' + share_url +'" data-size="large" data-text="' + text + '" data-count="none">Tweet</a>');
