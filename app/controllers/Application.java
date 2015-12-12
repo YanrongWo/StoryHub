@@ -49,7 +49,7 @@ public class Application extends Controller {
         try{
             int storySize = myAppController.getStoryListSize();
             // Invalid offset
-            if(i > storySize) {
+            if(i > storySize+1) {
                 String message = "Your offset is larger than the size of the stories library: " + Integer.toString(storySize);
                 return notFound(views.html.error.render("Page Not Found"));
             }
