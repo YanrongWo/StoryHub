@@ -8,14 +8,30 @@
 		
 	</div>
 	<div id="shareButtons">
-		<a class="twitter-share-button"
-		  href="https://twitter.com/intent/tweet?text=Hello%20world&url=http://localhost:9000/Story/5/"+@{global_SegId}
+		<a id="twitterButton" class="twitter-share-button"
+		  href="https://twitter.com/intent/tweet?text=This story is awesome&url=http://www.google.com"
 		  data-size="large">
 		Tweet</a>
 	</div>
 	<script>
 		var storyId = @{myStory};
 		var global_segmentId;
+		window.twttr = (function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0],
+		    t = window.twttr || {};
+		  if (d.getElementById(id)) return t;
+		  js = d.createElement(s);
+		  js.id = id;
+		  js.src = "https://platform.twitter.com/widgets.js";
+		  fjs.parentNode.insertBefore(js, fjs);
+		 
+		  t._e = [];
+		  t.ready = function(f) {
+		    t._e.push(f);
+		  };
+		 
+		  return t;
+		}(document, "script", "twitter-wjs"));
 		/**
 		* Adds segments html to story page by posting AJAX request to back end
 		* param Segment id
@@ -57,6 +73,7 @@
 	              		addSegment(segments[index], segments[index - 1]);
 	              	}
 	              	global_segmentId = segmentId;
+	              	$("twitterButton").attr("href", "https://twitter.com/intent/tweet?text=This story is awesome&url=http://localhost:9000/Story/"+storyId+"/"+global_segmentId);
 	          	}
 	      	});
 		}
