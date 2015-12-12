@@ -348,8 +348,6 @@ public class Application extends Controller {
                 if (mySegment == null){
                     return notFound(views.html.error.render("Page Not Found"));
                 }
-                session("storyId", storyId.toString());
-                session("segmentId", segmentId.toString());
                 int parentSegId = -1;
                 if(mySegment.getParentSeg() != null){
                     parentSegId = mySegment.getParentSeg().getSegmentId();
