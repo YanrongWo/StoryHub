@@ -20,10 +20,12 @@
 		  href="https://twitter.com/intent/tweet?text=This story is awesome&url=http://www.google.com"
 		  data-size="large">
 		Tweet</a>
+		<div style="cursor:pointer;" onclick="exportToPdf();">Export to PDF </span>
 	</div>
 	<script>
 		var storyId = @{myStory};
 		var global_segmentId;
+		var global_story = []; //[{"title": "...", "author": "...",...}, {}]
 		window.twttr = (function(d, s, id) {
 		  var js, fjs = d.getElementsByTagName(s)[0],
 		    t = window.twttr || {};
@@ -40,6 +42,11 @@
 		 
 		  return t;
 		}(document, "script", "twitter-wjs"));
+
+		function exportToPdf(){
+			//TODO
+		}
+
 		/**
 		* Adds segments html to story page by posting AJAX request to back end
 		* param Segment id
@@ -63,6 +70,11 @@
 				//And remove same level segment
 				$(segmentLevel).remove();
 			}
+			//Remove segments that are at or below level
+			while(global_story.length > parentId + 1){
+				global_story.pop();
+			}
+
 			$.ajax({
 	          	type: 'POST',
 	          	url: '/AddSegment',
@@ -76,6 +88,7 @@
 	              	var story = JSON.parse(JSONstory);
 	              	console.log(story);
 	              	addJSONcontent(story, segmentId);
+	              	addStoryGlobal(story);
 	              	index += 1;
 	              	if (index < segments.length){
 	              		addSegment(segments[index], segments[index - 1]);
@@ -84,6 +97,17 @@
 	              	$("twitterButton").attr("href", "https://twitter.com/intent/tweet?text=This story is awesome&url=http://localhost:9000/Story/"+storyId+"/"+global_segmentId);
 	          	}
 	      	});
+		}
+
+		function addStoryGlobal(storyJSON){
+			story = {};
+			story["title"] = storyJSON["title"];
+			story["author"] = storyJSON["author"];
+			story["tags"] = storyJSON["tags"];
+			story["content"] = storyJSON["content"].replace(/\~\|\+\#/g, "\"");
+
+			global_story.push(story);
+			console.log(global_story);
 		}
 
 	   /**
