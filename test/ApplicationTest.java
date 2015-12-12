@@ -270,6 +270,7 @@ public class ApplicationTest{
         assertTrue(contentAsString(result).contains("hi"));
     }
 
+    @Test
     public void newFork_valid(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {
@@ -552,7 +553,7 @@ public class ApplicationTest{
             }
         });
     }
-
+    @Test
     public void story_segNotFound(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
             public void run() {

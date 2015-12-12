@@ -346,6 +346,7 @@ public class AppControllerTest{
     	}
     }
 
+    @Test
     public void storeThenGetStory() throws SQLException, IOException, ClassNotFoundException {
     	AppController a = new AppController(connection);
     	Segment s1 = new Segment("Segment 1", "Test Author", "Some Test Content", new String[]{"tag1", "tag2"});
