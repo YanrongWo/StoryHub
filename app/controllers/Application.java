@@ -10,9 +10,13 @@ import java.util.*;
 import java.io.IOException;
 import play.twirl.api.Html;
 import java.sql.Connection;
+import java.util.concurrent.locks.*;
 
 public class Application extends Controller {
     private AppController myAppController;
+    private Lock storylock = new ReentrantLock();
+    private Lock segmentlock = new ReentrantLock();
+
 
     public Application() {
         this.myAppController = new AppController(play.db.DB.getConnection());
@@ -112,6 +116,7 @@ public class Application extends Controller {
      * Returns the new story id and the root id to the front end
      */
     public Result newStorySubmit(){
+        
         //Check logged in
         try{
             if (session("name") != null){
@@ -121,6 +126,14 @@ public class Application extends Controller {
                 } else {
                     String title = form.get("title").replaceAll("\"", "\'");
                     String content = form.get("content").replaceAll("\"", "\'");
+
+                    // Set a lock so only one person can create a story at a time
+                    System.out.println("Before lock!");
+                    Boolean acquireLock = storylock.tryLock();
+                    while(acquireLock == false) {
+                        acquireLock = storylock.tryLock();
+                    }
+                    System.out.println("Inside lock!!");
                     //Checks that the story doesn't have the same content as 
                     //another root
                     myAppController.loadAll();
@@ -145,6 +158,7 @@ public class Application extends Controller {
                     Segment seg = new Segment(title, session("name"),
                         content, uniqueTags);
                     Story myStory = myAppController.createStory(seg);
+                    System.out.println("Created the story!");
 
                     //Create result with story id, root id
                     String result = Integer.toString(myStory.getStoryId()) + "," + Integer.toString(0);
@@ -154,7 +168,11 @@ public class Application extends Controller {
             return badRequest(error.render("You must be logged in to add a story"));
         } catch ( SQLException|IOException|ClassNotFoundException e){
             return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
+        } finally {
+            System.out.println("Unlocked the lock.");
+            storylock.unlock();
         }
+        
     }
 
     /* Handles GET request from: /Error/ERROR 
@@ -176,6 +194,7 @@ public class Application extends Controller {
         Displays a page to add a new segment */
         public Result newFork(int storyId, int segmentId){
             try{
+                
                 Story myStory = myAppController.getStory(storyId);
                 if (session("name") != null)
                 {
@@ -186,6 +205,7 @@ public class Application extends Controller {
                     }
                     
                 }
+                
                 return badRequest(error.render("You must be logged in to add a segment"));
             } catch ( SQLException|IOException|ClassNotFoundException e){
             return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
@@ -197,6 +217,7 @@ public class Application extends Controller {
         @param segmentId - the segment that you are branching off to add a new segment to
         Returns the page of the new segment created */
     public Result newForkSubmit(int storyId, int segmentId) {
+
         if (session("name") != null) {
             DynamicForm form = Form.form().bindFromRequest();
             if (form.data().size() == 0) {
@@ -214,6 +235,11 @@ public class Application extends Controller {
                     setTags.remove(" ");
                     String[] uniqueTags = setTags.toArray(new String[setTags.size()]);
                     Segment seg = new Segment(title, session("name"), content, uniqueTags);
+                    //Set lock so only one person can create a story at a time
+                    Boolean acquireLock = segmentlock.tryLock();
+                    while(acquireLock == false) {
+                        acquireLock = segmentlock.tryLock();
+                    }
                     //add segment to story
                     myStory = myAppController.getStory(storyId);
                     origStory = myAppController.getStory(storyId);
@@ -240,6 +266,8 @@ public class Application extends Controller {
                 }
                 catch(Exception e){
                     return badRequest(views.html.error.render("Something went wrong! :("));
+                } finally {
+                    segmentlock.unlock();
                 }
             }
             }
