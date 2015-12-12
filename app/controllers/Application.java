@@ -11,6 +11,7 @@ import java.io.IOException;
 import play.twirl.api.Html;
 import java.sql.Connection;
 import java.util.concurrent.locks.*;
+import play.api.libs.iteratee.Enumerator;
 
 public class Application extends Controller {
     private AppController myAppController;
@@ -414,6 +415,27 @@ public class Application extends Controller {
             catch(Exception e){
                 return badRequest(views.html.error.render("Something went wrong! :("));
             }
+        }
+    }
+
+    public Result txt(){
+        System.out.println("in txt function");
+        DynamicForm form = Form.form().bindFromRequest();
+        if (form.data().size() == 0) {
+            return badRequest("Form Error");
+        } 
+        else if (form.get("content") == null){
+            return badRequest(views.html.error.render("Missing content for txt file"));
+        }   
+        else{
+            //myString = form.get("content");
+            // Ok.chunked(Enumerator(myString.getBytes("UTF-8")).andThen(Enumerator.eof))
+            //   .withHeaders("Content-Type" -> "text/csv","Content-Disposition" -> "attachment; filename=story.txt"
+            //   );
+            response().setContentType("application/x-download");  
+            response().setHeader("Content-disposition","attachment; filename=story.txt");
+            //response().setContentType("text/html");
+            return ok(form.get("content"));
         }
     }
 }

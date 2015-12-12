@@ -45,5 +45,8 @@ POST	/SearchTitles/:query							controllers.Application.getStoriesByTitles(query
 
 # Error page
 
-GET 	/Error/:error									controllers.Application.error(error: String)									
+GET 	/Error/:error									controllers.Application.error(error: String)		
+
+# Export To Txt
+POST	/ExportToTxt									controllers.Application.txt()							
 

@@ -32,6 +32,12 @@
 		</div>
 		<div id='fb-button' class="fb-share-button" data-href="https://www.google.com" data-layout="button"></div>
 		<span style="cursor:pointer;" onclick="exportToPdf();">Export to PDF </span>
+		<form id="txtForm" action="/ExportToTxt" method="Post">
+			<input id="content" type="hidden" name="content" value="">
+		  	<input type="submit" onclick="exportToTxt()" value="Export To Txt">
+		</form>
+		<span style="cursor:pointer;" onclick="exportToTxt();">Export to Txt </span>
+		<div id="test"> </div>
 	</div>
 	<script>
 		var storyId = @{myStory};
@@ -56,6 +62,22 @@
 
 		function exportToPdf(){
 			//TODO
+		}
+
+
+		function exportToTxt(){
+			var content = '';
+			for (var i = 0; i < global_story.length; i++){
+				content +=  "Title: " + global_story[i].title + "\n";
+				content += "Author: " + global_story[i].author + "\n";
+				content += "Tags: ";
+				for (var j = 0; j < global_story[i].tags; j++){
+					content += global_story[i].tags[j] + " ";
+				}
+				content += "\n";
+				content += "Content: " + global_story[i].content + "\n\n";
+			}
+			$("#content").attr("value", content);
 		}
 
 		/**
@@ -114,8 +136,6 @@
 	              	var arr = url.split("/");
 	              	$(".fb-share-button").attr('data-href', share_url);
 	              	$(".fb-share-button span iframe").attr("src", "https://www.facebook.com/v2.2/plugins/share_button.php?app_id=1521346481512275&channel=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter%2FTlA_zCeMkxl.js%3Fversion%3D41%23cb%3Df6d84cf78%26domain%3D209.2.226.178%26origin%3Dhttp%253A%252F%252F209.2.226.178%253A9000%252Ff10891c338%26relation%3Dparent.parent&container_width=0&href=" + encodeURIComponent(share_url) + "&layout=button&locale=en_US&sdk=joey");
-	              	// $(".fb-share-button").attr('data-href', arr[0] + "//" + arr[2] + "/Story/"+storyId+"/"+global_segmentId);
-	              	// $(".fb-share-button span iframe").attr("src", "https://www.facebook.com/v2.2/plugins/share_button.php?app_id=1521346481512275&channel=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter%2FTlA_zCeMkxl.js%3Fversion%3D41%23cb%3Df6d84cf78%26domain%3D209.2.226.178%26origin%3Dhttp%253A%252F%252F209.2.226.178%253A9000%252Ff10891c338%26relation%3Dparent.parent&container_width=0&href=" + encodeURIComponent(arr[0] + "//" + arr[2] + "/Story/"+storyId+"/"+global_segmentId) + "&layout=button&locale=en_US&sdk=joey");
 	          	}
 	      	});
 		}
