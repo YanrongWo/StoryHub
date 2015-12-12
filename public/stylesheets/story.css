@@ -21,3 +21,22 @@
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
+
+.fb-share-button {
+	transform: scale(1.39);
+	-ms-transform: scale(1.39);
+	-webkit-transform: scale(1.39);	
+	-o-transform: scale(1.39);
+	-moz-transform: scale(1.39);
+	top: -9px;
+	left: 20px;
+}
+
+#twitterShare{
+	display: inline-block;
+}
+
+#shareButtons{
+  margin:0 auto;
+  width: 80%;
+}

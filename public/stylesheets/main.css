@@ -140,3 +140,6 @@ a,a:hover {
 #all_stories{
   overflow: auto;
 }
+#shareButtons{
+  margin:0 auto;
+}
