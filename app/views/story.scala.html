@@ -5,22 +5,33 @@
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/story.css")">
 } {
 	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
+	<script>
+	function doFacebookStuff(d, s, id){
+		 var js, fjs = d.getElementsByTagName(s)[0];
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+		  fjs.parentNode.insertBefore(js, fjs);
+	}
+	(function(d, s, id) {
 	  var js, fjs = d.getElementsByTagName(s)[0];
 	  if (d.getElementById(id)) return;
 	  js = d.createElement(s); js.id = id;
 	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
 	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
+	}(document, 'script', 'facebook-jssdk'));
+	</script>
 	<div id="all_segments">
 		
 	</div>
 	<div id="shareButtons">
-		<a id="twitterButton" class="twitter-share-button"
-		  href="https://twitter.com/intent/tweet?text=This story is awesome&url=http://www.google.com"
-		  data-size="large">
-		Tweet</a>
-		<div style="cursor:pointer;" onclick="exportToPdf();">Export to PDF </span>
+		<div id="twitterShare">
+			<a class="twitter-share-button"
+			  href="https://twitter.com/intent/tweet?text=This story is awesome"
+			  data-size="large">
+			Tweet</a>
+		</div>
+		<div id='fb-button' class="fb-share-button" data-href="https://www.google.com" data-layout="button"></div>
+		<span style="cursor:pointer;" onclick="exportToPdf();">Export to PDF </span>
 	</div>
 	<script>
 		var storyId = @{myStory};
@@ -94,7 +105,17 @@
 	              		addSegment(segments[index], segments[index - 1]);
 	              	}
 	              	global_segmentId = segmentId;
-	              	$("twitterButton").attr("href", "https://twitter.com/intent/tweet?text=This story is awesome&url=http://localhost:9000/Story/"+storyId+"/"+global_segmentId);
+	              	var share_url = window.location.href.substring(0, window.location.href.length-1)+global_segmentId;
+	              	var text = "This story is awesome";
+	              	  $("#twitterShare").html('&nbsp;'); 
+					  $("#twitterShare").html('<a href="https://twitter.com/share" class="twitter-share-button" data-url="' + share_url +'" data-size="large" data-text="' + text + '" data-count="none">Tweet</a>');
+					twttr.widgets.load();
+	              	var url = window.location.href;
+	              	var arr = url.split("/");
+	              	$(".fb-share-button").attr('data-href', share_url);
+	              	$(".fb-share-button span iframe").attr("src", "https://www.facebook.com/v2.2/plugins/share_button.php?app_id=1521346481512275&channel=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter%2FTlA_zCeMkxl.js%3Fversion%3D41%23cb%3Df6d84cf78%26domain%3D209.2.226.178%26origin%3Dhttp%253A%252F%252F209.2.226.178%253A9000%252Ff10891c338%26relation%3Dparent.parent&container_width=0&href=" + encodeURIComponent(share_url) + "&layout=button&locale=en_US&sdk=joey");
+	              	// $(".fb-share-button").attr('data-href', arr[0] + "//" + arr[2] + "/Story/"+storyId+"/"+global_segmentId);
+	              	// $(".fb-share-button span iframe").attr("src", "https://www.facebook.com/v2.2/plugins/share_button.php?app_id=1521346481512275&channel=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter%2FTlA_zCeMkxl.js%3Fversion%3D41%23cb%3Df6d84cf78%26domain%3D209.2.226.178%26origin%3Dhttp%253A%252F%252F209.2.226.178%253A9000%252Ff10891c338%26relation%3Dparent.parent&container_width=0&href=" + encodeURIComponent(arr[0] + "//" + arr[2] + "/Story/"+storyId+"/"+global_segmentId) + "&layout=button&locale=en_US&sdk=joey");
 	          	}
 	      	});
 		}
