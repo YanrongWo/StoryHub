@@ -9,7 +9,7 @@
 	</div>
 	<script>
 		var storyId = @{myStory};
-
+		var global_segmentId;
 		/**
 		* Adds segments html to story page by posting AJAX request to back end
 		* param Segment id
@@ -50,6 +50,7 @@
 	              	if (index < segments.length){
 	              		addSegment(segments[index], segments[index - 1]);
 	              	}
+	              	global_segmentId = segmentId;
 	          	}
 	      	});
 		}
