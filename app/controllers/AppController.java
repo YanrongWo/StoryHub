@@ -28,7 +28,7 @@ public class AppController{
     
 	
     public AppController(Connection conn) {
-        this.max = 11;
+        this.max = 10;
         this.storyIndex = 0;
         this.connection = conn;
         //this.connection = play.db.DB.getConnection();
@@ -160,8 +160,9 @@ public class AppController{
         int storySize = getStoryListSize();
         int maxLoad = i+this.max;
         if(maxLoad>storySize) {
-            maxLoad = storySize;
-        } else {
+            maxLoad = storySize+1;
+        }
+        else if(maxLoad%this.max==i%this.max) {
             maxLoad--;
         }
         ArrayList<Story> frontStories = new ArrayList<Story>();
