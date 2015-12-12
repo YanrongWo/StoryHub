@@ -146,6 +146,7 @@
 			story["author"] = storyJSON["author"];
 			story["tags"] = storyJSON["tags"];
 			story["content"] = storyJSON["content"].replace(/\~\|\+\#/g, "\"");
+			story["content"] = $(story["content"]).text();
 
 			global_story.push(story);
 			console.log(global_story);
