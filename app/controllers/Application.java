@@ -341,12 +341,19 @@ public class Application extends Controller {
             Integer segmentId = Integer.parseInt(form.get("segmentId"));
             try{
                 Story myStory = myAppController.getStory(Integer.valueOf(storyId));
+                if (myStory == null){
+                    return notFound(views.html.error.render("Page Not Found"));
+                }
                 Segment mySegment = myStory.findSegById((int) segmentId);
+                if (mySegment == null){
+                    return notFound(views.html.error.render("Page Not Found"));
+                }
+                session("storyId", storyId.toString());
+                session("segmentId", segmentId.toString());
                 int parentSegId = -1;
                 if(mySegment.getParentSeg() != null){
                     parentSegId = mySegment.getParentSeg().getSegmentId();
                 }
-
                 result += "\"title\": \"" + mySegment.getTitle() + "\",";
                 result += "\"author\": \"" + mySegment.getAuthor() + "\",";
                 result += "\"tags\": [";
