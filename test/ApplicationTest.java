@@ -543,6 +543,8 @@ public class ApplicationTest{
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/AddSegment");
                 Result result = Helpers.route(rb);
                 assertEquals(400, status(result));
+                System.out.println(contentAsString(result));
+                assertTrue(contentAsString(result).contains("Form Error"));
             }
         });
     }
@@ -586,6 +588,7 @@ public class ApplicationTest{
             }
         });
     }
+
     @Test
     public void story_segNotFound(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
@@ -618,4 +621,43 @@ public class ApplicationTest{
         });
     }
 
+    @Test
+    public void txt_valid(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("content", "Some random ass string.");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/ExportToTxt").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertTrue(contentAsString(result).contains("Some random ass string."));
+                assertEquals(200, status(result));
+
+            };
+        });    
+    }
+
+    @Test
+    public void txt_noForm(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = new HashMap<String, String>();
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/ExportToTxt").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertTrue(contentAsString(result).contains("Form Error"));
+                assertEquals(400, status(result));
+            };
+        });    
+    }
+
+    @Test
+    public void txt_noContent(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("not_content", "Some random ass string.");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/ExportToTxt").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertTrue(contentAsString(result).contains("Missing content for txt file"));
+                assertEquals(400, status(result));
+            };
+        });    
+    }
 }
