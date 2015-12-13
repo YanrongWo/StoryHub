@@ -1,0 +1,8 @@
+[debug] Copy resource mappings: 
+[debug] 	(C:\Users\katie\Documents\GitHub\storyhub\conf\application.conf,C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\classes\application.conf)
+[debug] 	(C:\Users\katie\Documents\GitHub\storyhub\conf\application.test.conf,C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\classes\application.test.conf)
+[debug] 	(C:\Users\katie\Documents\GitHub\storyhub\conf\evolutions,C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\classes\evolutions)
+[debug] 	(C:\Users\katie\Documents\GitHub\storyhub\conf\logback.xml,C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\classes\logback.xml)
+[debug] 	(C:\Users\katie\Documents\GitHub\storyhub\conf\routes,C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\classes\routes)
+[debug] 	(C:\Users\katie\Documents\GitHub\storyhub\conf\evolutions\default,C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\classes\evolutions\default)
+[debug] 	(C:\Users\katie\Documents\GitHub\storyhub\conf\evolutions\default\1.sql,C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\classes\evolutions\default\1.sql)

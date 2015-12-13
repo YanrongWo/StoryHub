@@ -1,0 +1,50 @@
+
+
+.segment{
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin: 0 auto;
+	padding: 2vw;
+	width: 80%
+}
+
+.content{
+	padding-top: 1vw;
+	padding-bottom: 1vw;
+}
+
+.fork{
+	float: right;
+}
+
+.childbtn{
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.fb-share-button {
+	transform: scale(1.39);
+	-ms-transform: scale(1.39);
+	-webkit-transform: scale(1.39);	
+	-o-transform: scale(1.39);
+	-moz-transform: scale(1.39);
+	top: -9px;
+	left: 20px;
+}
+
+#twitterShare{
+	display: inline-block;
+}
+
+#shareButtons{
+  margin:0 auto;
+  width: 80%;
+}
+
+.export{
+	padding-left: 5px;
+    padding-right: 5px;
+    border-left-width: 1px;
+    margin-left: 40px;
+    margin-bottom: 18px;
+}

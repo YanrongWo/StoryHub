@@ -1,0 +1,23 @@
+
+
+.segment{
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin: 0 auto;
+	padding: 2vw;
+	width: 80%
+}
+
+.content{
+	padding-top: 1vw;
+	padding-bottom: 1vw;
+}
+
+.fork{
+	float: right;
+}
+
+.childbtn{
+	margin-right: 10px;
+	margin-bottom: 10px;
+}

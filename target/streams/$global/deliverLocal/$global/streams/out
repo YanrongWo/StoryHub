@@ -1,0 +1,4 @@
+[0m[[0minfo[0m] [0m:: delivering :: firstapp#firstapp_2.11;1.0-SNAPSHOT :: 1.0-SNAPSHOT :: integration :: Sat Dec 12 11:17:25 EST 2015[0m
+[0m[[0mdebug[0m] [0m	options = status=integration pubdate=Sat Dec 12 11:17:25 EST 2015 validate=true resolveDynamicRevisions=true merge=true resolveId=null pubBranch=null[0m
+[0m[[0minfo[0m] [0m	delivering ivy file to C:\Users\katie\Documents\GitHub\storyhub\target\scala-2.11\ivy-1.0-SNAPSHOT.xml[0m
+[0m[[0mdebug[0m] [0m	deliver done (47ms)[0m

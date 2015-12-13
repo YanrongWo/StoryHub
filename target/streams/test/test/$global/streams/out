@@ -1,0 +1,80 @@
+[0m[[0mdebug[0m] [0mForking tests - parallelism = false[0m
+[0m[[0mdebug[0m] [0mCreate a single-thread test executor[0m
+[0m[[0mdebug[0m] [0mRunner for com.novocode.junit.JUnitFramework produced 4 initial tasks for 4 tests.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(SegmentTest, sbt.ForkMain$AnnotatedFingerscan@19efa484, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0m[34mTest run started[0m[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_nullContent[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_nullContent[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mgetParentSegIds_noParent[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mgetParentSegIds_noParent[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_replace_over250[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_replace_over250[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36misLeafNode_branch[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36misLeafNode_branch[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_replace_under250[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_replace_under250[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_noReplace_over250[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_noReplace_over250[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_noReplace_under250[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mdisplayContent_noReplace_under250[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mgetParentSegIds_valid[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36mgetParentSegIds_valid[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36misLeafNode_leaf[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mSegmentTest[0m.[36misLeafNode_leaf[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0m[34mTest run finished: [0m[34m0 failed[0m[34m, [0m[34m0 ignored[0m[34m, 9 total, 0.015s[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 9 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(AppControllerTest, sbt.ForkMain$AnnotatedFingerscan@230a9da5, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0m[34mTest run started[0m[0m
+[0m[[0mdebug[0m] [0mTest [33mAppControllerTest[0m.[36msimpleCheck[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mAppControllerTest[0m.[36msimpleCheck[0m finished, took 5.428 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mAppControllerTest[0m.[36mfork_true[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mAppControllerTest[0m.[36mfork_true[0m finished, took 3.827 sec[0m
+[0m[[0mdebug[0m] [0m[34mTest run finished: [0m[34m0 failed[0m[34m, [0m[34m0 ignored[0m[34m, 2 total, 9.271s[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 2 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(ApplicationTest, sbt.ForkMain$AnnotatedFingerscan@3879e95e, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0m[34mTest run started[0m[0m
+[0m[[0mdebug[0m] [0mTest [33mApplicationTest[0m.[36msimpleCheck[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mApplicationTest[0m.[36msimpleCheck[0m finished, took 4.17 sec[0m
+[0m[[0mdebug[0m] [0m[34mTest run finished: [0m[34m0 failed[0m[34m, [0m[34m0 ignored[0m[34m, 1 total, 4.17s[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 1 events.[0m
+[0m[[0mdebug[0m] [0m  Running TaskDef(StoryTest, sbt.ForkMain$AnnotatedFingerscan@230d541d, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0m[34mTest run started[0m[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdLeaf[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdLeaf[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdNull[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdNull[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdRoot[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdRoot[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsIntermediate[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsIntermediate[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesEmpty[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesEmpty[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsinAll[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsinAll[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsRoot[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsRoot[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesNotFound[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesNotFound[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesCaseContains[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesCaseContains[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsNotFound[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsNotFound[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsinAllCaseTest[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsinAllCaseTest[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesRoot[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesRoot[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdIntermediate[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindSegByIdIntermediate[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesIntermediate[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTitlesIntermediate[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsEmptyString[0m started[0m
+[0m[[0mdebug[0m] [0mTest [33mStoryTest[0m.[36mfindTagsEmptyString[0m finished, took 0.0 sec[0m
+[0m[[0mdebug[0m] [0m[34mTest run finished: [0m[34m0 failed[0m[34m, [0m[34m0 ignored[0m[34m, 15 total, 0.016s[0m[0m
+[0m[[0mdebug[0m] [0m    Produced 0 nested tasks and 15 events.[0m
+[0m[[0mdebug[0m] [0mSummary for JUnit not available.[0m
+[0m[[0minfo[0m] [0mPassed: Total 27, Failed 0, Errors 0, Passed 27[0m
+[0m[[0mdebug[0m] [0mPassed tests:[0m
+[0m[[0mdebug[0m] [0m	SegmentTest[0m
+[0m[[0mdebug[0m] [0m	AppControllerTest[0m
+[0m[[0mdebug[0m] [0m	StoryTest[0m
+[0m[[0mdebug[0m] [0m	ApplicationTest[0m

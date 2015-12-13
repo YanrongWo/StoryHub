@@ -1,0 +1,6 @@
+[0m[[0mdebug[0m] [0mlocal do not support transaction. ivy pattern does not use revision as a directory[0m
+[0m[[0minfo[0m] [0m	published firstapp_2.11 to C:\Users\katie\.ivy2\local\firstapp\firstapp_2.11\1.0-SNAPSHOT\poms\firstapp_2.11.pom[0m
+[0m[[0minfo[0m] [0m	published firstapp_2.11 to C:\Users\katie\.ivy2\local\firstapp\firstapp_2.11\1.0-SNAPSHOT\jars\firstapp_2.11.jar[0m
+[0m[[0minfo[0m] [0m	published firstapp_2.11 to C:\Users\katie\.ivy2\local\firstapp\firstapp_2.11\1.0-SNAPSHOT\srcs\firstapp_2.11-sources.jar[0m
+[0m[[0minfo[0m] [0m	published firstapp_2.11 to C:\Users\katie\.ivy2\local\firstapp\firstapp_2.11\1.0-SNAPSHOT\docs\firstapp_2.11-javadoc.jar[0m
+[0m[[0minfo[0m] [0m	published ivy to C:\Users\katie\.ivy2\local\firstapp\firstapp_2.11\1.0-SNAPSHOT\ivys\ivy.xml[0m

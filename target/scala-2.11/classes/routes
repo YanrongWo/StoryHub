@@ -1,0 +1,56 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+
+GET     /                          						controllers.Application.index()
+GET     /$offset<[0-9]+>                   				controllers.Application.offset(offset:Integer)
+
+# Map static resources from the /public folder to the /assets URL path
+
+GET     /assets/*file               					controllers.Assets.versioned(path="/public", file: Asset)
+
+# Updates user login credentials
+
+POST	/FacebookName									controllers.Application.facebookName()
+POST	/NoFacebookName									controllers.Application.noFacebookName()
+
+# Add a new story
+
+GET		/NewStory										controllers.Application.newStory()
+POST	/NewStory                   					controllers.Application.newStorySubmit()
+
+# Add a new segment
+
+GET		/Story/:storyId/:segmentId/NewSegment			controllers.Application.newFork(storyId: Integer, segmentId: Integer)
+POST	/Story/:storyId/:segmentId/NewSegment			controllers.Application.newForkSubmit(storyId: Integer, segmentId: Integer)
+
+# Renders story with id and segment segid
+
+GET		/Story/$id<[0-9]+>/$segid<[0-9]+> 				controllers.Application.story(id: Integer, segid: Integer)
+
+# Returns JSON for story segment for view
+
+POST	/AddSegment										controllers.Application.getSegmentInfo()
+
+# Search stories by tag
+
+GET		/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
+POST	/SearchTags/:query								controllers.Application.getStoriesByTags(query: String)
+
+# Search stories by title
+
+POST	/SearchTitles/:query							controllers.Application.getStoriesByTitles(query: String)
+
+# Error page
+
+GET 	/Error/:error									controllers.Application.error(error: String)		
+
+# Export To Txt
+
+POST	/ExportToTxt									controllers.Application.txt()							
+
+# Export to Pdf
+
+POST 	/ExportToPdf									controllers.Application.toPdf()

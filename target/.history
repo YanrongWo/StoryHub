@@ -1,0 +1,10 @@
+playVersion
+testOnly AppControllerTest
+run
+testOnly AppControllerTest
+testOnly ApplicationTest
+run
+testOnly ApplicationTest
+play dependencies
+activator run
+run
