@@ -69,11 +69,11 @@
 			for (var i = 0; i < global_story.length; i++){
 				content +=  "<h2>" + global_story[i].title + "</h2>\n";
 				content += "<h3>" + global_story[i].author + "</h3>\n";
-				content += "<h4> Tags: ";
-				for (var j = 0; j < global_story[i].tags; j++){
+				content += "<h4> Tags: <i>";
+				for (var j = 0; j < global_story[i].tags.length; j++){
 					content += global_story[i].tags[j] + " ";
 				}
-				content += "</h4>\n";
+				content += "</i></h4>\n";
 				content += global_story[i].HtmlContent + "<br/><br/>";
 			}
 			$("#pdf-content").attr("value", content);
@@ -86,7 +86,7 @@
 				content +=  "Title: " + global_story[i].title + "\n";
 				content += "Author: " + global_story[i].author + "\n";
 				content += "Tags: ";
-				for (var j = 0; j < global_story[i].tags; j++){
+				for (var j = 0; j < global_story[i].tags.length; j++){
 					content += global_story[i].tags[j] + " ";
 				}
 				content += "\n";

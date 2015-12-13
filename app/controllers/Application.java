@@ -418,6 +418,8 @@ public class Application extends Controller {
          DynamicForm form = Form.form().bindFromRequest();
         if (form.data().size() == 0) {
             return badRequest("Form Error");
+        } else if (form.get("content") == null){
+            return badRequest(views.html.error.render("Missing content for PDF file"));
         } else {
             response().setContentType("application/x-download");
             response().setHeader("Content-Disposition", "attachment;filename=story.pdf");
