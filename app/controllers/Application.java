@@ -117,24 +117,20 @@ public class Application extends Controller {
      * Returns the new story id and the root id to the front end
      */
     public Result newStorySubmit(){
-        
         //Check logged in
-        try{
-            if (session("name") != null){
-                DynamicForm form = Form.form().bindFromRequest();
-                if (form.data().size() == 0) {
-                    return badRequest("Form Error");
-                } else {
-                    String title = form.get("title").replaceAll("\"", "\'");
-                    String content = form.get("content").replaceAll("\"", "\'");
-
+        if (session("name") != null){
+            DynamicForm form = Form.form().bindFromRequest();
+            if (form.data().size() == 0) {
+                return badRequest("Form Error");
+            } else {
+                String title = form.get("title").replaceAll("\"", "\'");
+                String content = form.get("content").replaceAll("\"", "\'");
+                try{
                     // Set a lock so only one person can create a story at a time
-                    System.out.println("Before lock!");
                     Boolean acquireLock = storylock.tryLock();
                     while(acquireLock == false) {
                         acquireLock = storylock.tryLock();
                     }
-                    System.out.println("Inside lock!!");
                     //Checks that the story doesn't have the same content as 
                     //another root
                     myAppController.loadAll();
@@ -164,16 +160,15 @@ public class Application extends Controller {
                     //Create result with story id, root id
                     String result = Integer.toString(myStory.getStoryId()) + "," + Integer.toString(0);
                     return ok(result);
+                } catch ( SQLException|IOException|ClassNotFoundException e){
+                    return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
+                } finally {
+                    storylock.unlock();
                 }
+
             }
-            return badRequest(error.render("You must be logged in to add a story"));
-        } catch ( SQLException|IOException|ClassNotFoundException e){
-            return internalServerError(views.html.error.render("Something went awfully wrong...please contact the website administrator."));
-        } finally {
-            System.out.println("Unlocked the lock.");
-            storylock.unlock();
         }
-        
+        return badRequest(error.render("You must be logged in to add a story"));   
     }
 
     /* Handles GET request from: /Error/ERROR 
