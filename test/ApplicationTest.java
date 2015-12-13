@@ -543,7 +543,6 @@ public class ApplicationTest{
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/AddSegment");
                 Result result = Helpers.route(rb);
                 assertEquals(400, status(result));
-                System.out.println(contentAsString(result));
                 assertTrue(contentAsString(result).contains("Form Error"));
             }
         });
@@ -619,6 +618,47 @@ public class ApplicationTest{
                 assertEquals(200, status(result2));
             };  
         });
+    }
+
+    @Test
+    public void toPdf_valid(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("content", "This is a test story.");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/ExportToPdf").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                // Checking if file created is a PDF file
+                assertTrue(contentAsString(result).contains("PDF-"));
+                assertEquals(200, status(result));
+
+            };
+        });    
+    }
+
+    @Test
+    public void toPdf_noForm(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = new HashMap<String, String>();
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/ExportToPdf").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertTrue(contentAsString(result).contains("Form Error"));
+                assertEquals(400, status(result));
+            };
+        });    
+    }
+
+    @Test
+    public void toPdf_noContent(){
+        running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
+            public void run() {
+                Map<String, String> formData = ImmutableMap.of("not_content", "This is not a story.");
+                RequestBuilder rb = Helpers.fakeRequest("POST", "/ExportToPdf").bodyForm(formData);
+                Result result = Helpers.route(rb);
+                assertTrue(contentAsString(result).contains("Missing content for PDF file"));
+                assertEquals(400, status(result));
+            };
+        });    
     }
 
     @Test
