@@ -54,7 +54,7 @@ public class Application extends Controller {
         try{
             int storySize = myAppController.getStoryListSize();
             // Invalid offset
-            if(i > storySize+1) {
+            if(i > storySize) {
                 String message = "Your offset is larger than the size of the stories library: " + Integer.toString(storySize);
                 return notFound(views.html.error.render("Page Not Found"));
             }
@@ -386,7 +386,7 @@ public class Application extends Controller {
                     result = result.substring(0, result.length() - 1);
                 }
                 result += "],";
-                result += "\"content\": \"" + mySegment.getContent().replace("\"", "~|+#").replace("\\", "\\\\") + "\",";
+                result += "\"content\": \"" + mySegment.getContent().replace("\"", "~|+#").replace("\\", "\\\\").replace("\t", "") + "\",";
                 result += "\"parentSegId\": \"" + parentSegId + "\",";
                 ArrayList<Segment> children = mySegment.getChildSegs();
                 String childrenId = "\"childrenid\":[";

@@ -31,14 +31,14 @@
 			Tweet</a>
 		</div>
 		<div id='fb-button' class="fb-share-button" data-href="https://www.google.com" data-layout="button"></div>
-		<form id="pdfForm" action="/ExportToPdf" method="Post" style="display: inline-block;">
+		<form id="txtForm" action="/ExportToTxt" method="Post" style="position: relative; top: -33px; float: right; display: inline-block;">
+			<input id="content" type="hidden" name="content" value="">
+		  	<input type="submit" class="btn btn-primary export" onclick="exportToTxt();" value="Export To TXT" style="margin-left: 10px;">
+		</form>
+		<form id="pdfForm" action="/ExportToPdf" method="Post" style="position: relative; top: -33px; float: right; display: inline-block;">
 			<input id="pdf-content" type="hidden" name="content" value="">
 			<input type="submit" class="btn btn-primary export" onclick="exportToPdf()" value="Export To PDF">
 		</form>	
-		<form id="txtForm" action="/ExportToTxt" method="Post" style="display: inline-block;">
-			<input id="content" type="hidden" name="content" value="">
-		  	<input type="submit" class="btn btn-primary export" onclick="exportToTxt();" value="Export To Txt" style="margin-left: 10px;">
-		</form>
 	</div>
 	<script>
 		var storyId = @{myStory};
@@ -160,7 +160,7 @@
 			story["author"] = storyJSON["author"];
 			story["tags"] = storyJSON["tags"];
 			story["HtmlContent"] = storyJSON["content"].replace(/\~\|\+\#/g, "\"");
-			story["content"] = $(story["content"]).text();
+			story["content"] = $(story["HtmlContent"]).text();
 
 			global_story.push(story);
 		}

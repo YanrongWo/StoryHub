@@ -178,7 +178,7 @@
 			{
 				//Checks that content isn't just blanks/spaces/new lines
 				var content = fullEditor.getHTML();
-				var checkContent = content.replace(/<div>/g,"").replace(/<\/div>/g,"").replace(/<br>/g,"").replace(/<\/br>/g,"").replace(/&nbsp;/g,"").replace(/^\s+|\s+$/g, "");
+				var checkContent = content.replace(/<div>/g,"").replace(/<\/div>/g,"").replace(/<br>/g,"").replace(/<\/br>/g,"").replace(/&nbsp;/g,"").replace(/^\s+|\s+$/g, "").replace('/\t/g', "");
 				if (checkContent.length == 0)
 				{
 					document.getElementById("errors").innerHTML = "Please enter in story content.";
