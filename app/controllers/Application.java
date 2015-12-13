@@ -155,7 +155,6 @@ public class Application extends Controller {
                     Segment seg = new Segment(title, session("name"),
                         content, uniqueTags);
                     Story myStory = myAppController.createStory(seg);
-                    System.out.println("Created the story!");
 
                     //Create result with story id, root id
                     String result = Integer.toString(myStory.getStoryId()) + "," + Integer.toString(0);
