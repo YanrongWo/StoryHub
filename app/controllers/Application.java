@@ -11,13 +11,13 @@ import java.io.IOException;
 import play.twirl.api.Html;
 import java.sql.Connection;
 import java.util.concurrent.locks.*;
+import util.pdf.PDF;
 import play.api.libs.iteratee.Enumerator;
 
 public class Application extends Controller {
     private AppController myAppController;
     private Lock storylock = new ReentrantLock();
     private Lock segmentlock = new ReentrantLock();
-
 
     public Application() {
         this.myAppController = new AppController(play.db.DB.getConnection());
@@ -409,6 +409,22 @@ public class Application extends Controller {
             catch(Exception e){
                 return badRequest(views.html.error.render("Something went wrong! :("));
             }
+        }
+    }
+
+    /*  Handles POST request from /ExportToPdf 
+    Returns content from the form as a PDF file */
+    public Result toPdf() {
+         DynamicForm form = Form.form().bindFromRequest();
+        if (form.data().size() == 0) {
+            return badRequest("Form Error");
+        } else {
+            response().setContentType("application/x-download");
+            response().setHeader("Content-Disposition", "attachment;filename=story.pdf");
+            
+            Html storyContents = new Html(form.get("content"));
+            byte[] storyPDF = PDF.toBytes(storyContents);
+            return ok(storyPDF);
         }
     }
 

@@ -31,10 +31,13 @@
 			Tweet</a>
 		</div>
 		<div id='fb-button' class="fb-share-button" data-href="https://www.google.com" data-layout="button"></div>
-		<span style="cursor:pointer;" onclick="exportToPdf();">Export to PDF </span>
-		<form id="txtForm" action="/ExportToTxt" method="Post">
+		<form id="pdfForm" action="/ExportToPdf" method="Post" style="display: inline-block;">
+			<input id="pdf-content" type="hidden" name="content" value="">
+			<input type="submit" class="btn btn-primary export" onclick="exportToPdf()" value="Export To PDF">
+		</form>	
+		<form id="txtForm" action="/ExportToTxt" method="Post" style="display: inline-block;">
 			<input id="content" type="hidden" name="content" value="">
-		  	<input type="submit" onclick="exportToTxt()" value="Export To Txt">
+		  	<input type="submit" class="btn btn-primary export" onclick="exportToTxt();" value="Export To Txt" style="margin-left: 10px;">
 		</form>
 	</div>
 	<script>
@@ -58,8 +61,22 @@
 		  return t;
 		}(document, "script", "twitter-wjs"));
 
+		/**
+		* Adds html of segments on page to form with id pdfForm
+		*/
 		function exportToPdf(){
-			//TODO
+			var content = '';
+			for (var i = 0; i < global_story.length; i++){
+				content +=  "<h2>" + global_story[i].title + "</h2>\n";
+				content += "<h3>" + global_story[i].author + "</h3>\n";
+				content += "<h4> Tags: ";
+				for (var j = 0; j < global_story[i].tags; j++){
+					content += global_story[i].tags[j] + " ";
+				}
+				content += "</h4>\n";
+				content += global_story[i].HtmlContent + "<br/><br/>";
+			}
+			$("#pdf-content").attr("value", content);
 		}
 
 
@@ -117,7 +134,6 @@
 	          	success: function(JSONstory) 
 	          	{       
 	              	var story = JSON.parse(JSONstory);
-	              	console.log(story);
 	              	addJSONcontent(story, segmentId);
 	              	addStoryGlobal(story);
 	              	index += 1;
@@ -143,11 +159,10 @@
 			story["title"] = storyJSON["title"];
 			story["author"] = storyJSON["author"];
 			story["tags"] = storyJSON["tags"];
-			story["content"] = storyJSON["content"].replace(/\~\|\+\#/g, "\"");
+			story["HtmlContent"] = storyJSON["content"].replace(/\~\|\+\#/g, "\"");
 			story["content"] = $(story["content"]).text();
 
 			global_story.push(story);
-			console.log(global_story);
 		}
 
 	   /**
