@@ -422,6 +422,8 @@ public class Application extends Controller {
     Returns content from the form as a txt file */
     public Result txt(){
         DynamicForm form = Form.form().bindFromRequest();
+        System.out.println(form);
+        System.out.println(form.data());
         if (form.data().size() == 0) {
             return badRequest("Form Error");
         } 
