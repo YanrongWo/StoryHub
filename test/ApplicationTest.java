@@ -510,6 +510,8 @@ public class ApplicationTest{
                 RequestBuilder rb = Helpers.fakeRequest("POST", "/AddSegment");
                 Result result = Helpers.route(rb);
                 assertEquals(400, status(result));
+                System.out.println(contentAsString(result));
+                assertTrue(contentAsString(result).contains("Form Error"));
             }
         });
     }
@@ -553,6 +555,7 @@ public class ApplicationTest{
             }
         });
     }
+
     @Test
     public void story_segNotFound(){
         running(fakeApplication(additionalConfigurations.asMap()), new Runnable() {
