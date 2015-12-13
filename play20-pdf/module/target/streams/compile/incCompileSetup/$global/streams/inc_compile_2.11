@@ -1,0 +1,104 @@
+format version: 5
+output mode:
+1 items
+0 -> single
+output directories:
+1 items
+output dir -> C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\target\scala-2.11\classes
+compile options:
+4 items
+0 -> -deprecation
+1 -> -unchecked
+2 -> -encoding
+3 -> utf8
+javac options:
+3 items
+0 -> -encoding
+1 -> utf8
+2 -> -g
+compiler version:
+1 items
+0 -> 2.11.7
+compile order:
+1 items
+0 -> Mixed
+name hashing:
+1 items
+0 -> true
+products:
+2 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\target\scala-2.11\classes\util\pdf\PDF$MyUserAgent.class
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\target\scala-2.11\classes\util\pdf\PDF.class
+binary dependencies:
+8 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Program Files\Java\jdk1.8.0_60\jre\lib\rt.jar
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\.ivy2\cache\com.lowagie\itext\jars\itext-2.1.7.jar
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\.ivy2\cache\com.typesafe.play\play_2.11\jars\play_2.11-2.4.4.jar
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\.ivy2\cache\com.typesafe.play\twirl-api_2.11\jars\twirl-api_2.11-1.1.1.jar
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\.ivy2\cache\nu.validator.htmlparser\htmlparser\bundles\htmlparser-1.4.jar
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\.ivy2\cache\org.scala-lang\scala-library\jars\scala-library-2.11.7.jar
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\.ivy2\cache\org.xhtmlrenderer\flying-saucer-core\jars\flying-saucer-core-9.0.8.jar
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\.ivy2\cache\org.xhtmlrenderer\flying-saucer-pdf\jars\flying-saucer-pdf-9.0.8.jar
+direct source dependencies:
+0 items
+direct external dependencies:
+0 items
+public inherited source dependencies:
+0 items
+public inherited external dependencies:
+0 items
+member reference internal dependencies:
+1 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java
+member reference external dependencies:
+0 items
+inheritance internal dependencies:
+0 items
+inheritance external dependencies:
+0 items
+class names:
+2 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> util.pdf.PDF
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> util.pdf.PDF$MyUserAgent
+used names:
+0 items
+product stamps:
+2 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\target\scala-2.11\classes\util\pdf\PDF$MyUserAgent.class -> lastModified(1449939139101)
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\target\scala-2.11\classes\util\pdf\PDF.class -> lastModified(1449939139118)
+source stamps:
+1 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> hash(2131396180e1b542c7df2de93fefabc194a4912a)
+binary stamps:
+8 items
+C:\Program Files\Java\jdk1.8.0_60\jre\lib\rt.jar -> lastModified(1442973217384)
+C:\Users\katie\.ivy2\cache\com.lowagie\itext\jars\itext-2.1.7.jar -> lastModified(1247092750000)
+C:\Users\katie\.ivy2\cache\com.typesafe.play\play_2.11\jars\play_2.11-2.4.4.jar -> lastModified(1447882380000)
+C:\Users\katie\.ivy2\cache\com.typesafe.play\twirl-api_2.11\jars\twirl-api_2.11-1.1.1.jar -> lastModified(1431579649000)
+C:\Users\katie\.ivy2\cache\nu.validator.htmlparser\htmlparser\bundles\htmlparser-1.4.jar -> lastModified(1339095345000)
+C:\Users\katie\.ivy2\cache\org.scala-lang\scala-library\jars\scala-library-2.11.7.jar -> lastModified(1435004218000)
+C:\Users\katie\.ivy2\cache\org.xhtmlrenderer\flying-saucer-core\jars\flying-saucer-core-9.0.8.jar -> lastModified(1441299008000)
+C:\Users\katie\.ivy2\cache\org.xhtmlrenderer\flying-saucer-pdf\jars\flying-saucer-pdf-9.0.8.jar -> lastModified(1441299158000)
+class names:
+8 items
+C:\Program Files\Java\jdk1.8.0_60\jre\lib\rt.jar -> java.lang.Object
+C:\Users\katie\.ivy2\cache\com.lowagie\itext\jars\itext-2.1.7.jar -> com.lowagie.text.DocumentException
+C:\Users\katie\.ivy2\cache\com.typesafe.play\play_2.11\jars\play_2.11-2.4.4.jar -> play.Logger
+C:\Users\katie\.ivy2\cache\com.typesafe.play\twirl-api_2.11\jars\twirl-api_2.11-1.1.1.jar -> play.twirl.api.Html
+C:\Users\katie\.ivy2\cache\nu.validator.htmlparser\htmlparser\bundles\htmlparser-1.4.jar -> nu.validator.htmlparser.dom.HtmlDocumentBuilder
+C:\Users\katie\.ivy2\cache\org.scala-lang\scala-library\jars\scala-library-2.11.7.jar -> scala.Option
+C:\Users\katie\.ivy2\cache\org.xhtmlrenderer\flying-saucer-core\jars\flying-saucer-core-9.0.8.jar -> org.xhtmlrenderer.extend.UserAgentCallback
+C:\Users\katie\.ivy2\cache\org.xhtmlrenderer\flying-saucer-pdf\jars\flying-saucer-pdf-9.0.8.jar -> org.xhtmlrenderer.pdf.ITextUserAgent
+internal apis:
+1 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> 
+rO0ABXNyABB4c2J0aS5hcGkuU291cmNlFlpwRASfbtoCAAZJAAdhcGlIYXNoWgAIaGFzTWFjcm9MABhfaW50ZXJuYWxPbmx5X25hbWVIYXNoZXN0ACRMeHNidGkvYXBpL19pbnRlcm5hbE9ubHlfTmFtZUhhc2hlcztMAANhcGl0ABVMeHNidGkvYXBpL1NvdXJjZUFQSTtMAAtjb21waWxhdGlvbnQAF0x4c2J0aS9hcGkvQ29tcGlsYXRpb247WwAEaGFzaHQAAltCeHB26kd0AHNyACJ4c2J0aS5hcGkuX2ludGVybmFsT25seV9OYW1lSGFzaGVzVNq+mfrU7EwCAAJbAA9pbXBsaWNpdE1lbWJlcnN0ACNbTHhzYnRpL2FwaS9faW50ZXJuYWxPbmx5X05hbWVIYXNoO1sADnJlZ3VsYXJNZW1iZXJzcQB+AAd4cHVyACNbTHhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoO0lagLbdlov0AgAAeHAAAAAAdXEAfgAJAAAAInNyACB4c2J0aS5hcGkuX2ludGVybmFsT25seV9OYW1lSGFzaFsO9SJ2OFfPAgACSQAEaGFzaEwABG5hbWV0ABJMamF2YS9sYW5nL1N0cmluZzt4cB6mnwN0AAZub3RpZnlzcQB+AAzlAM/TdAAPUERGJE15VXNlckFnZW50c3EAfgAMOz9wpHQABHdhaXRzcQB+AAzBnym2dAAKcmVzb2x2ZVVSSXNxAH4ADLi7E510AAZlcXVhbHNzcQB+AAxhluxudAARZ2V0QmluYXJ5UmVzb3VyY2VzcQB+AAwlS/sGdAAKZ2V0QmFzZVVSTHNxAH4ADPf551J0ABFvbkxheW91dEV4Y2VwdGlvbnNxAH4ADGX5+nh0AA9kb2N1bWVudFN0YXJ0ZWRzcQB+AAzHjNgpdAAQYWRkRm9udERpcmVjdG9yeXNxAH4ADA/6Hf90AANQREZzcQB+AAxjKjo8dAAOZG9jdW1lbnRMb2FkZWRzcQB+AAz7ZHkfdAAJbm90aWZ5QWxsc3EAfgAMIJ8BbHQAF3NjYWxlVG9PdXRwdXRSZXNvbHV0aW9uc3EAfgAMEJcAiHQAEGdldEltYWdlUmVzb3VyY2VzcQB+AAxZbPI2dAAGPGluaXQ+c3EAfgAM7FXkzHQACHRvU3RyZWFtc3EAfgAMoF1aYXQAB2dldERhdGFzcQB+AAwl/47JdAAQc2hyaW5rSW1hZ2VDYWNoZXNxAH4ADPxmYjh0AAd0b0J5dGVzc3EAfgAMSGES2nQADmdldFhNTFJlc291cmNlc3EAfgAM6eF73XQABGNvcHlzcQB+AAyrG4WzdAAQUExBWV9ERUZBVUxUX1VSTHNxAH4ADH9PmeB0AAh0b1N0cmluZ3NxAH4ADJtSDK10AAJva3NxAH4ADIJ5X+p0AAhnZXRDbGFzc3NxAH4ADIU8+LZ0ABBzZXRTaGFyZWRDb250ZXh0c3EAfgAMl1riB3QAD2NsZWFySW1hZ2VDYWNoZXNxAH4ADP1uzFt0ABFvblJlbmRlckV4Y2VwdGlvbnNxAH4ADJfZTaJ0AA5nZXRDU1NSZXNvdXJjZXNxAH4ADF6/WKB0AAlpc1Zpc2l0ZWRzcQB+AAzSoygDdAAIaGFzaENvZGVzcQB+AAwab4rkdAAQZ2V0U2hhcmVkQ29udGV4dHNxAH4ADAejLmh0AApzZXRCYXNlVVJMc3IAE3hzYnRpLmFwaS5Tb3VyY2VBUEm5Xqf5KSM4pAIAAlsAC2RlZmluaXRpb25zdAAXW0x4c2J0aS9hcGkvRGVmaW5pdGlvbjtbAAhwYWNrYWdlc3QAFFtMeHNidGkvYXBpL1BhY2thZ2U7eHB1cgAXW0x4c2J0aS5hcGkuRGVmaW5pdGlvbjuIyVzntONeDgIAAHhwAAAAAnNyABN4c2J0aS5hcGkuQ2xhc3NMaWtlgzQcod+wl2wCAARMAA5kZWZpbml0aW9uVHlwZXQAGkx4c2J0aS9hcGkvRGVmaW5pdGlvblR5cGU7WwAQc2F2ZWRBbm5vdGF0aW9uc3QAE1tMamF2YS9sYW5nL1N0cmluZztMAAhzZWxmVHlwZXQAEEx4c2J0aS9hcGkvTGF6eTtMAAlzdHJ1Y3R1cmVxAH4AW3hyACF4c2J0aS5hcGkuUGFyYW1ldGVyaXplZERlZmluaXRpb275EW6x1VA84gIAAVsADnR5cGVQYXJhbWV0ZXJzdAAaW0x4c2J0aS9hcGkvVHlwZVBhcmFtZXRlcjt4cgAUeHNidGkuYXBpLkRlZmluaXRpb26HKhvocULjRgIABEwABmFjY2Vzc3QAEkx4c2J0aS9hcGkvQWNjZXNzO1sAC2Fubm90YXRpb25zdAAXW0x4c2J0aS9hcGkvQW5ub3RhdGlvbjtMAAltb2RpZmllcnN0ABVMeHNidGkvYXBpL01vZGlmaWVycztMAARuYW1lcQB+AA14cHNyABB4c2J0aS5hcGkuUHVibGljulg9rmwtYEICAAB4cgAQeHNidGkuYXBpLkFjY2Vzc91imvgdYzFIAgAAeHB1cgAXW0x4c2J0aS5hcGkuQW5ub3RhdGlvbjvrl+sZEPaNSAIAAHhwAAAAAHNyABN4c2J0aS5hcGkuTW9kaWZpZXJzxxETIWmc3CQCAAFCAAVmbGFnc3hwAHQADHV0aWwucGRmLlBERnVyABpbTHhzYnRpLmFwaS5UeXBlUGFyYW1ldGVyO9ltJg8onfK2AgAAeHAAAAAAfnIAGHhzYnRpLmFwaS5EZWZpbml0aW9uVHlwZQAAAAAAAAAAEgAAeHIADmphdmEubGFuZy5FbnVtAAAAAAAAAAASAAB4cHQACENsYXNzRGVmdXIAE1tMamF2YS5sYW5nLlN0cmluZzut0lbn6R17RwIAAHhwAAAAAXQADHNjYWxhLnRocm93c3NyABN4c2J0aS5TYWZlTGF6eSRJbXBsUAIuk5eXQD8CAANaAAhiaXRtYXAkMEwAAl90dAASTGphdmEvbGFuZy9PYmplY3Q7TAAEZXZhbHQAEUxzY2FsYS9GdW5jdGlvbjA7eHIAFnhzYnRpLmFwaS5BYnN0cmFjdExhennTd7UBX7vnoAIAAHhwAHBzcgAgeHNidGkuU2FmZUxhenkkJGFub25mdW4kc3RyaWN0JDEAAAAAAAAAAAIAAUwAB3ZhbHVlJDFxAH4AdXhwc3IAE3hzYnRpLmFwaS5FbXB0eVR5cGW8/Z5GSTuJJAIAAHhyABR4c2J0aS5hcGkuU2ltcGxlVHlwZXJ4YoghI79AAgAAeHIADnhzYnRpLmFwaS5UeXBlP2rZIRZJqsoCAAB4cHNxAH4AdABwc3EAfgB5c3IAE3hzYnRpLmFwaS5TdHJ1Y3R1cmWpqvmAk2/YAAIAA0wACGRlY2xhcmVkcQB+AFtMAAlpbmhlcml0ZWRxAH4AW0wAB3BhcmVudHNxAH4AW3hxAH4AfXNxAH4AdABwc3EAfgB5dXEAfgBWAAAAAHNxAH4AdABwc3EAfgB5dXEAfgBWAAAAAHNxAH4AdABwc3EAfgB5dXIAEVtMeHNidGkuYXBpLlR5cGU7dP+lWnv56UECAAB4cAAAAAFzcgAUeHNidGkuYXBpLlByb2plY3Rpb27z0o1U6UWkLQIAAkwAAmlkcQB+AA1MAAZwcmVmaXh0ABZMeHNidGkvYXBpL1NpbXBsZVR5cGU7eHEAfgB8dAAGT2JqZWN0c3IAE3hzYnRpLmFwaS5TaW5nbGV0b278p1/4z1bkRgIAAUwABHBhdGh0ABBMeHNidGkvYXBpL1BhdGg7eHEAfgB8c3IADnhzYnRpLmFwaS5QYXRomz1cCM6lJ4QCAAFbAApjb21wb25lbnRzdAAaW0x4c2J0aS9hcGkvUGF0aENvbXBvbmVudDt4cHVyABpbTHhzYnRpLmFwaS5QYXRoQ29tcG9uZW50O0PaCXQtZxZ0AgAAeHAAAAADc3IADHhzYnRpLmFwaS5JZJgybIs3U8RAAgABTAACaWRxAH4ADXhyABd4c2J0aS5hcGkuUGF0aENvbXBvbmVudF+aIlsuhp+8AgAAeHB0AARqYXZhc3EAfgCZdAAEbGFuZ3NyAA54c2J0aS5hcGkuVGhpc9sJ7abMWkBcAgAAeHEAfgCac3EAfgBYcQB+AGVxAH4AZ3EAfgBpcQB+AGpxAH4AbH5xAH4AbXQABk1vZHVsZXVxAH4AcQAAAABzcQB+AHQAcHNxAH4AeXEAfgB+c3EAfgB0AHBzcQB+AHlzcQB+AIFzcQB+AHQAcHNxAH4AeXVxAH4AVgAAAABzcQB+AHQAcHNxAH4AeXVxAH4AVgAAAABzcQB+AHQAcHNxAH4AeXVxAH4AiwAAAAB1cgAUW0x4c2J0aS5hcGkuUGFja2FnZTtbExk3cKcnoQIAAHhwAAAAAXNyABF4c2J0aS5hcGkuUGFja2FnZX5Zj/auzjlYAgABTAAEbmFtZXEAfgANeHB0AAh1dGlsLnBkZnNyABV4c2J0aS5hcGkuQ29tcGlsYXRpb27t+uDDauigQgIAAkoACXN0YXJ0VGltZVsAB291dHB1dHN0ABpbTHhzYnRpL2FwaS9PdXRwdXRTZXR0aW5nO3hwAAABUZcbdTF1cgAaW0x4c2J0aS5hcGkuT3V0cHV0U2V0dGluZzt/asLzp4elQgIAAHhwAAAAAXNyABd4c2J0aS5hcGkuT3V0cHV0U2V0dGluZ3rZmkd0+x17AgACTAAPb3V0cHV0RGlyZWN0b3J5cQB+AA1MAA9zb3VyY2VEaXJlY3RvcnlxAH4ADXhwdABUQzpcVXNlcnNca2F0aWVcRG9jdW1lbnRzXEdpdEh1YlxzdG9yeWh1YlxwbGF5MjAtcGRmXG1vZHVsZVx0YXJnZXRcc2NhbGEtMi4xMVxjbGFzc2VzdAABL3VyAAJbQqzzF/gGCFTgAgAAeHAAAAAUITE5YYDhtULH3y3pP++rwZSkkSo=
+external apis:
+0 items
+source infos:
+1 items
+C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\app\util\pdf\PDF.java -> 
+AAAAAAAAAAA=
+compilations:
+1 items
+0 -> rO0ABXNyABV4c2J0aS5hcGkuQ29tcGlsYXRpb27t+uDDauigQgIAAkoACXN0YXJ0VGltZVsAB291dHB1dHN0ABpbTHhzYnRpL2FwaS9PdXRwdXRTZXR0aW5nO3hwAAABUZcbdTF1cgAaW0x4c2J0aS5hcGkuT3V0cHV0U2V0dGluZzt/asLzp4elQgIAAHhwAAAAAXNyABd4c2J0aS5hcGkuT3V0cHV0U2V0dGluZ3rZmkd0+x17AgACTAAPb3V0cHV0RGlyZWN0b3J5dAASTGphdmEvbGFuZy9TdHJpbmc7TAAPc291cmNlRGlyZWN0b3J5cQB+AAZ4cHQAVEM6XFVzZXJzXGthdGllXERvY3VtZW50c1xHaXRIdWJcc3RvcnlodWJccGxheTIwLXBkZlxtb2R1bGVcdGFyZ2V0XHNjYWxhLTIuMTFcY2xhc3Nlc3QAAS8=

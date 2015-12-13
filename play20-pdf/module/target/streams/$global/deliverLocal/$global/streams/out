@@ -1,0 +1,4 @@
+[0m[[0minfo[0m] [0m:: delivering :: de.joergviola#play-pdf_2.11;0.7-SNAPSHOT :: 0.7-SNAPSHOT :: integration :: Sat Dec 12 11:52:17 EST 2015[0m
+[0m[[0mdebug[0m] [0m	options = status=integration pubdate=Sat Dec 12 11:52:17 EST 2015 validate=true resolveDynamicRevisions=true merge=true resolveId=null pubBranch=null[0m
+[0m[[0minfo[0m] [0m	delivering ivy file to C:\Users\katie\Documents\GitHub\storyhub\play20-pdf\module\target\scala-2.11\ivy-0.7-SNAPSHOT.xml[0m
+[0m[[0mdebug[0m] [0m	deliver done (32ms)[0m

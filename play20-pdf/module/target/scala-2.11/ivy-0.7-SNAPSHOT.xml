@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:e="http://ant.apache.org/ivy/extra">
+	<info organisation="de.joergviola" module="play-pdf_2.11" revision="0.7-SNAPSHOT" status="integration" publication="20151212115217">
+		<description>
+		play-pdf
+		</description>
+	</info>
+	<configurations>
+		<conf name="compile" visibility="public" description=""/>
+		<conf name="runtime" visibility="public" description="" extends="compile"/>
+		<conf name="test" visibility="public" description="" extends="runtime"/>
+		<conf name="provided" visibility="public" description=""/>
+		<conf name="optional" visibility="public" description=""/>
+		
+		
+		
+		
+		<conf name="sources" visibility="public" description=""/>
+		
+		<conf name="pom" visibility="public" description=""/>
+		
+	</configurations>
+	<publications>
+		<artifact name="play-pdf_2.11" type="pom" ext="pom" conf="pom"/>
+		<artifact name="play-pdf_2.11" type="jar" ext="jar" conf="compile"/>
+		<artifact name="play-pdf_2.11" type="src" ext="jar" conf="sources" e:classifier="sources"/>
+	</publications>
+	<dependencies>
+		
+		<dependency org="org.scala-lang" name="scala-library" rev="2.11.7" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="twirl-api_2.11" rev="1.1.1" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-server_2.11" rev="2.4.4" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-test_2.11" rev="2.4.4" conf="test->default(compile)"/>
+		
+		<dependency org="com.typesafe.play" name="play-netty-server_2.11" rev="2.4.4" conf="compile->default(compile)"/>
+		<dependency org="org.xhtmlrenderer" name="flying-saucer-pdf" rev="9.0.8" conf="compile->default(compile)"/>
+		<dependency org="nu.validator.htmlparser" name="htmlparser" rev="1.4" conf="compile->default(compile)"/>
+	</dependencies>
+</ivy-module>
